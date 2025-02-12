@@ -52,7 +52,8 @@
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
-                        </select>
+                        </select> 
+                        
                     </div>
 
                     {{-- <div class="form-group">
