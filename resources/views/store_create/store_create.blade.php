@@ -1,83 +1,117 @@
-@extends('layouts.app')
-
+@extends('layouts.master')
 @section('content')
-<div class="container">
-    <h2 class="mb-4">إنشاء متجر جديد</h2>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('store.ceate') }}" method="POST" enctype="multipart/form-data">
-        @csrf()
-<input type="text" name="template_id" value="{{$template_id}}" hidden>
-        <div class="mb-3">
-            <label for="name" class="form-label">اسم المتجر</label>
-            <input type="text" name="name" id="name" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="active" class="form-label">الحالة</label>
-            <select name="active" id="active" class="form-control">
-                <option value="1">نشط</option>
-                <option value="0">غير نشط</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="logo" class="form-label">شعار المتجر</label>
-            <input type="file" name="logo" id="logo" class="form-control">
-        </div>
-
-        
-
-        <div class="mb-3">
-            <label for="languages" class="form-label">اللغات المدعومة</label>
-            <div id="languages">
-                @foreach($languages as $language)
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="languages[]" value="{{ $language->id }}" id="language_{{ $language->id }}">
-                        <label class="form-check-label" for="language_{{ $language->id }}">
-                            {{ $language->name }}
-                        </label>
+    <div class="container" style="margin-top: 77px;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="store-card shadow-lg rounded-4 overflow-hidden">
+                    <div class="store-header bg-primary text-white text-center py-4">
+                        <h2 class="mb-2 fw-bold">إنشاء متجر جديد</h2>
+                        <p class="mb-0">املأ التفاصيل لإنشاء متجرك الإلكتروني</p>
                     </div>
-                @endforeach
+                    <div class="store-body p-4">
+                        @if ($errors->any())
+                            <div class="alert alert-danger mb-4">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <form action="{{ route('store.create') }}" method="POST" enctype="multipart/form-data"
+                            id="storeForm">
+                            @csrf
+                            <input type="hidden" name="template_id" value="{{ $template_id }}">
+                            <input type="hidden" name="owner_id" value="{{ Auth::user()->id }}">
+                            <!-- اسم المتجر -->
+                            <div class="form-floating mb-4">
+                                <input type="text" name="name" id="name" class="form-control"
+                                    placeholder="اسم المتجر" required>
+                                <label for="name"><i class="fas fa-store me-2"></i>اسم المتجر</label>
+                                <small class="form-text text-muted">يجب أن يكون الاسم فريدًا ويمثل علامتك التجارية</small>
+                                @error('name')
+                                    <div class="invalid-feedback d-block">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <!-- شعار المتجر -->
+                            <div class="text-center mt-2">
+                                <img id="logoPreview" class="img-thumbnail d-none"
+                                    style="max-width: 150px; max-height: 150px;">
+                            </div>
+                            <div class="mb-4">
+                                <label for="logo" class="form-label fw-bold">شعار المتجر</label>
+                                <div class="input-group">
+                                    <!-- زر مخصص لاختيار الملف -->
+                                    <label class="input-group-text btn btn-outline-primary" for="logo">اختر
+                                        الشعار</label>
+                                    <!-- حقل رفع مخفي -->
+                                    <input type="file" name="logo" id="logo" class="d-none" accept="image/*"
+                                        onchange="previewLogo(event)">
+                                    <!-- حقل عرض اسم الملف -->
+                                    <input type="text" class="form-control" id="fileName"
+                                        placeholder="لم يتم اختيار ملف" readonly>
+                                </div>
+                                <small class="form-text text-muted">
+                                    الصيغ المدعومة: JPG, PNG, SVG (الحجم الأقصى: 2MB)
+                                </small>
+                                @error('logo')
+                                    <div class="invalid-feedback d-block">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <!-- اللغات والعملة -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold"> <i class="material-icons">translate</i>اللغات
+                                        المدعومة</label>
+                                    <div class="bg-light p-3 rounded-3">
+                                        @foreach ($languages as $language)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="languages[]"
+                                                    value="{{ $language->id }}" id="language_{{ $language->id }}">
+                                                <label class="form-check-label" for="language_{{ $language->id }}">
+                                                    {{ $language->name }} <span
+                                                        class="text-muted">({{ $language->code }})</span>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @error('languages')
+                                        <div class="invalid-feedback d-block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold"><i class="fas fa-money-bill-wave me-2"></i> العملة
+                                        المدعومة</label>
+                                    <div class="form-floating">
+                                        <select name="currency" id="currency" class="form-select" required>
+                                            <option value="SAR">🇸🇦 الريال السعودي</option>
+                                            <option value="USD">🇺🇸 الدولار الأمريكي</option>
+                                            <option value="YER" selected>🇾🇪 الريال اليمني</option>
+                                        </select>
+                                        <label for="currency"><i class="fas fa-money-bill-wave me-2"></i>العملة</label>
+                                        <small class="form-text text-muted">يمكن تغيير العملة لاحقًا من الإعدادات</small>
+                                        @error('currency')
+                                            <div class="invalid-feedback d-block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- زر الإرسال -->
+                            <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold">
+                                <i class="fas fa-plus-circle me-2"></i>إنشاء المتجر
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="mb-3">
-            <label for="currency" class="form-label">العملة</label>
-            <select name="currency" id="currency" class="form-control" required>
-                <option value="SAR">الريال السعودي</option>
-                <option value="USD">الدولار الأمريكي</option>
-                <option value="YER">الريال اليمني</option>
-            </select>
-        </div>
-        
-
-        <div class="mb-3">
-            <label for="whatsapp_link" class="form-label">رابط واتساب</label>
-            <input type="tel" name="whatsapp_link" id="whatsapp_link" class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="facebook_link" class="form-label">رابط فيسبوك</label>
-            <input type="text" name="facebook_link" id="facebook_link" class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="instagram_link" class="form-label">رابط انستجرام</label>
-            <input type="text" name="instagram_link" id="instagram_link" class="form-control">
-        </div>
-       
-
-        <button type="submit" class="btn btn-primary">إنشاء المتجر</button>
-    </form>
-</div>
+    </div>
 @endsection

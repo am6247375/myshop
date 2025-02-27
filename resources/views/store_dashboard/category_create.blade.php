@@ -1,6 +1,6 @@
 @extends('layouts.master_store_admin')
 @section('content_admin')
-<div class="content-wrapper " style="text-align: center">
+<div style="text-align: center">
 <div class="container mt-5 mb-5">
     <div class="form-container p-4 shadow rounded bg-white">
         <h2 class="form-title text-center">إضافة قسم جديد</h2>
@@ -20,8 +20,9 @@
             </div>
         @endif
 
-        <form action="{{ route('category.ceate') }}" method="POST" enctype="multipart/form-data" id="categoryForm">
+        <form action="{{ route('category.create') }}" method="POST" enctype="multipart/form-data" id="categoryForm">
             @csrf
+            <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
             <input type="text" name="store_id" value="{{ $store->id  }}" hidden>
             {{-- <input type="text" name="store_id" value="{{ Auth::user()->store->id }}" hidden> --}}
             <div class="form-group text-center">

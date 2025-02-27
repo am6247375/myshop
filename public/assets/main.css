@@ -1,0 +1,451 @@
+
+:root {
+    --primary: #2c3e50;
+    --secondary: #195075;
+    --accent: #3498db;
+    --light: #f8f9fa;
+    --dark: #1a1a1a;
+    --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+/* --- أنماط عامة --- */
+body {
+
+    font-family: 'Cairo', sans-serif;
+    background: var(--light);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- شريط التقدّم --- */
+#progress-bar {
+    height: 4px;
+    background: var(--secondary);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    transition: width 0.3s ease;
+}
+
+/* --- شريط التنقّل --- */
+.navbar {
+    background: rgba(44, 62, 80, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 0;
+}
+
+.navbar.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1100;
+}
+
+.navbar-brand {
+    margin-right: 2rem;
+    transition: transform 0.3s ease;
+    width: 80px;
+    height: 80px;
+}
+
+.navbar-brand img {
+    height: 100%;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem !important;
+    margin: 0 0.5rem !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--secondary);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 60%;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: rgba(44, 62, 80, 0.95);
+        backdrop-filter: blur(8px);
+        padding: 1rem;
+        border-radius: 12px;
+        margin-top: 1rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-link {
+        margin: 0.3rem 0 !important;
+    }
+}
+
+/* --- قسم الهيرو --- */
+.hero {
+    background: var(--gradient);
+    color: #fff;
+    padding: 10rem 0 6rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+}
+
+.hero .btn {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+}
+
+.hero-img {
+    max-width: 100%;
+    margin-top: 2rem;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.25));
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* --- بطاقات المميزات --- */
+.feature-card {
+    background: #fff;
+    border: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    padding: 2rem;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.feature-card p {
+    color: #666;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* --- بطاقات الآراء --- */
+.testimonial-card {
+    background: #fff;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.testimonial-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.testimonial-card h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.testimonial-card p {
+    font-style: italic;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.rating {
+    color: var(--secondary);
+    margin-top: 0.5rem;
+}
+
+/* --- قسم الأسئلة المتكررة --- */
+#faq .faq-card {
+    background: #fff;
+    border: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#faq .faq-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+#faq .faq-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-right: 2rem;
+}
+
+#faq .faq-card h3::after {
+    content: '\f107';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+}
+
+#faq .faq-card.active h3::after {
+    transform: rotate(180deg);
+}
+
+#faq .faq-card p {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin: 0;
+    color: #555;
+}
+
+#faq .faq-card.active p {
+    margin-top: 1rem;
+    max-height: 500px;
+}
+
+/* --- الفوتر --- */
+.footer {
+    background: var(--dark);
+    color: #ddd;
+    padding: 3rem 0;
+    position: relative;
+    clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 100%);
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #fff;
+}
+
+.footer .social-icons a {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+    transform: translateY(-3px);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* الصفحة الرئيسية  */
+  /* خلفية عامة للقسم */
+  #faq {
+    background-color: #f9f9f9;
+  }
+
+  /* تنسيق العنوان الرئيسي */
+  #faq .section-title {
+    margin-bottom: 2rem;
+  }
+
+  /* البطاقة الأساسية للسؤال */
+  .faq-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    margin-bottom: 1rem; /* مسافة بين البطاقات */
+  }
+
+  /* التأثير عند التحويم والفتح */
+  .faq-card:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+  .faq-card.active {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+
+  /* تنسيق العنوان الداخلي للسؤال */
+  .faq-card h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.3s ease;
+  }
+
+  /* أيقونة السهم */
+  .toggle-icon {
+    transition: transform 0.3s ease;
+    margin-left: 0.5rem;
+    color: #999;
+  }
+  /* عند الفتح */
+  .faq-card.active .toggle-icon {
+    transform: rotate(180deg);
+    color: #e74c3c; /* مثال على لون مميز */
+  }
+
+  /* نص الإجابة */
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    margin-top: 0;
+    color: #555;
+  }
+  /* عند تفعيل البطاقة */
+  .faq-card.active .faq-answer {
+    max-height: 300px; /* قيمة تكفي لاحتواء النص */
+    margin-top: 1rem;
+  }
+/* نهاية الصفحة الرئيسية */
+
+
+
+
+
+
+
+
+
+/* انشاء المتجر */
+.store-card {
+    border: none;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.store-header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    padding: 2.5rem;
+}
+
+.store-body {
+    background: #ffffff;
+}
+
+.form-floating {
+    position: relative;
+}
+
+.form-floating label {
+    transition: all 0.3s ease;
+}
+
+.form-control:focus~label,
+.form-control:not(:placeholder-shown)~label {
+    transform: translateY(-1.5rem) scale(0.85);
+    opacity: 0.8;
+}
+/*  نهاية انشاء المتجر */

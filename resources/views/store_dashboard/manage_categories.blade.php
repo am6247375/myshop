@@ -5,7 +5,7 @@
     <script src="{{ asset('assets/datatables.min.js') }}"></script>
 
    
-    <div class="content-wrapper " style="text-align: center">
+    <div  style="text-align: center">
         @if (session('success'))
         <div class="alert alert-success text-center text-white" style="background-color: #007910 !important;">
             {{ session('success') }}

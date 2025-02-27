@@ -16,8 +16,9 @@ return
 
 'shop' => 'Shop now ',
 'contact' => 'Contact us',
+'products'=>'products',
 
-
+'all'=>'All',
 'dept' => 'Departments',
 'new' => 'New',
 

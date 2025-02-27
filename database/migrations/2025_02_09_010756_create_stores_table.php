@@ -11,11 +11,10 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100)->unique();
             $table->boolean('active')->default(1);
-            $table->string('logo', 255);
+            $table->string('logo', 255)->nullable();
             $table->string('currency', 10);
             $table->string('whatsapp_link', 255)->nullable();
-            $table->string('facebook_link', 255)->nullable();
-            $table->string('instagram_link', 255)->nullable();
+            $table->string('email_link', 100)->nullable();
             $table->string('about')->nullable();
             $table->foreignId('template_id')->constrained('templates')->onDelete('cascade'); 
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade')->unique();

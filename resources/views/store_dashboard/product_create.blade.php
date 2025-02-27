@@ -1,6 +1,6 @@
 @extends('layouts.master_store_admin')
 @section('content_admin')
-    <div class="content-wrapper text-center">
+    <div class="text-center">
         <div class="container mt-5 mb-5">
             <div class="form-container p-4 shadow rounded bg-white">
                 <h2 class="form-title text-center mb-4">إضافة منتج جديد</h2>
@@ -21,6 +21,7 @@
 
                 <form action="{{ route('product.ceate') }}" method="POST" enctype="multipart/form-data" id="productForm">
                     @csrf
+                    <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
                     <input type="text" name="store_id" value="{{ $store->id }}" hidden>
                     <!-- ✅ تحميل الصورة الرئيسية -->
                     <div class="form-group text-center">

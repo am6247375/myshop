@@ -28,7 +28,8 @@ return
 'name_review'=>'اسمك',
 'relevant'=>'ذات صلة',
 
-
+'all'=>'الكل',
+'products'=>'المنتجات',
 'product-image'=>'صورة المنتج',
 'product-name'=>'اسم المنتج',
 'product-price'=>'سعر المنتج',

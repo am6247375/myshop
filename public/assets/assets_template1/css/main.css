@@ -17,6 +17,81 @@ html {
   line-height: 28px;
   height: 100%;
 }
+.mean-container .mean-nav ul li a.mean-expand {
+    right: 140%;
+    top: 18%;
+}
+
+/* تنسيق الحاوية الرئيسية للقائمة المنسدلة */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* تنسيق الرابط الرئيسي (أيقونة تغيير اللغة) */
+.dropdown>a.shopping-cart {
+    color: #ffffff;
+    /* اللون الأساسي: أسود */
+    font-size: 1.5rem;
+    /* يمكنك تعديل حجم الأيقونة حسب الحاجة */
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+/* تغيير لون الأيقونة عند التحويم */
+.dropdown>a.shopping-cart:hover {
+    color: #F28123;
+}
+
+/* تنسيق القائمة المنسدلة */
+.dropdown .dropdown-menu {
+    display: none;
+    /* مخفية افتراضيًا */
+    position: absolute;
+    left: 56%;
+    transform: translateX(-80%);
+    min-width: 120px;
+}
+
+/* إظهار القائمة عند التحويم على العنصر */
+.dropdown:hover .dropdown-menu {
+    display: block;
+
+}
+
+.header-icons .dropdown-menu li a {
+    display: block;
+    padding: 10px 15px;
+    color: #000000 !important;
+    text-decoration: none;
+    font-size: medium;
+}
+
+/* تنسيق عناصر القائمة */
+.dropdown .dropdown-menu li {
+
+    list-style: none;
+}
+
+.site-logo img {
+    max-height: 60px !important;
+    /* يحدد أقصى ارتفاع */
+    max-width: 150px !important;
+    /* يحدد أقصى عرض */
+    height: auto !important;
+    /* يحافظ على تناسب الأبعاد */
+    width: auto !important;
+    object-fit: contain;
+    /* يحافظ على جودة الصورة */
+}
+
+.logoo {
+    font-weight: 700;
+    color: #ffffff;
+  
+    font-size: x-large;
+}
+
 
 body {
   font-family: "Open Sans", sans-serif;

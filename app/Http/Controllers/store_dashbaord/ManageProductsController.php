@@ -49,8 +49,8 @@ class ManageProductsController extends Controller
         $product->image ='assets/products/'. $imageName;
         $product->category_id=$request->category_id;
         $product->save();
-
-        return redirect()->route('manage.products', ['store_id' => $request->store_id])->with('success', 'تم إنشاء المنتج بنجاح');
+        return redirect($request->previous_url)->with('success', 'تم إنشاء المنتج بنجاح');
+        // return redirect()->b->with('success', 'تم إنشاء المنتج بنجاح');
     }
 
 

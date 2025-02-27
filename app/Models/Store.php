@@ -12,7 +12,7 @@ class Store extends Model
     use HasFactory;
     protected $fillable = [
         'name', 'active', 'logo', 'currency', 'whatsapp_link', 
-        'facebook_link', 'instagram_link', 'template_id', 'owner_id','about'
+        'email_link', 'template_id', 'owner_id','about'
     ];
     public function owner()
     {

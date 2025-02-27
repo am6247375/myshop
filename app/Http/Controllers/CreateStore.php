@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Models\Language;
 use App\Models\languages;
 use App\Models\Store;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 class CreateStore extends Controller
 {
 
@@ -18,55 +20,61 @@ class CreateStore extends Controller
         $templates = Template::all();
         return view('store_create.templates', compact('templates'));
     }
-    public function store_create_view(Request $request)
+    public function template_show($template_id,$page_name)
     {
-        $template_id = $request->template_id;
+        $template = Template::findOrFail($template_id);
+
+        return view($template->path_temp .'.'.$page_name,compact('template'));
+    }
+    public function store_create_view($template_id)
+    {
+        $template_id = $template_id;
         $languages = Language::all();
         return view('store_create.store_create', compact('template_id', 'languages'));
     }
 
-    public function store_create(Request $request)
+    // Controller Method: store_create
+    public function store_create(StoreRequest $request)
     {
-        // التحقق من البيانات المدخلة
-        $request->validate([
-            'name' => 'required|string|max:100|unique:stores,name',
-            'active' => 'boolean',
-           
-            'template_id' => 'required|exists:templates,id',
-            'languages' => 'required|array',
-            'currency' => 'required|string|max:10'
-        ]);
-     
-    
-        // التحقق مما إذا كان المستخدم يمتلك متجرًا بالفعل
-        if (auth()->user()->store) {
-            return redirect()->back()->withErrors(['error' => 'لا يمكنك امتلاك أكثر من متجر.']);
-        }
-        // رفع الشعار إذا كان موجودًا
+        // إنشاء كائن المتجر
+        $store = new Store();
+        $store->name = $request->name;
+        $store->template_id = $request->template_id;
+        $store->currency = $request->currency;
+        $store->owner_id = $request->owner_id;
+        // معالجة رفع الشعار
         $logoPath = null;
         if ($request->hasFile('logo')) {
             $logoPath = Str::uuid()->toString() . '_' . $request->file('logo')->getClientOriginalName();
-        $request->file('logo')->move(public_path('assets/logo'), $logoPath);
-
+            $request->file('logo')->move(public_path('assets/logo'), $logoPath);
+            $store->logo = 'assets/logo/' . $logoPath;
+        } else {
+            $store->logo = $logoPath;
         }
-    
-        // إنشاء المتجر في قاعدة البيانات
-        $store = Store::create([
-            'name' => $request->name,
-            'active' => 1,  // التأكد من أن `active` إما 1 أو 0
-            'logo' => 'assets/logo/'.$logoPath,
-            'template_id' => $request->template_id,
-            'currency' => $request->currency,
-            'whatsapp_link' => $request->whatsapp_link,
-            'facebook_link' => $request->facebook_link,
-            'instagram_link' => $request->instagram_link,
-            'about' => "خييمسىيم",
-            'owner_id' => auth()->id(), // ربط المتجر بالمستخدم الحالي
-        ]);
- $store->languages()->attach($request->languages);
+
+        // حفظ المتجر في قاعدة البيانات
+        $store->save();
+
+        // ربط المتجر باللغات المختارة
+        $store->languages()->attach($request->languages);
+
         $store_id = $store->id;
-        // توجيه المستخدم بعد إنشاء المتجر بنجاح
-        return redirect()->route('manage.categories', compact('store_id'))->with('success', 'تم إنشاء المتجر بنجاح!');
+        return redirect()->route('dashboard.index', compact('store_id'))
+            ->with('success', 'تم إنشاء المتجر بنجاح!');
     }
-    
+
+    public function support_create_view($store_id)
+    {
+        $store=Store::findOrFail($store_id);
+        return view('store_create.support_create', compact('store'));
+    }
+    public function support_create(Request $request, $store_id)
+    {
+        $store=Store::findOrFail($store_id);
+        $store->email_link=$request->email_link;
+        $store->whatsapp_link=$request->whatsapp_link;
+        $store->about=$request->about;
+        $store->save();
+        return redirect($request->previous_url)->with('success', 'تم إنشاء المنتج بنجاح');
+    }
 }

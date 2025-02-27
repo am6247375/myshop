@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <div class="content-wrapper " style="text-align: center">
+    <div style="text-align: center">
         <div class="d-flex  justify-content-between  align-items-center m-4">
             <h2>إدارة المنتجات</h2>
             <a href="{{ route('product.create.view',$store->id)}}" class="btn btn-success btn_add">

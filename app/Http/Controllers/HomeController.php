@@ -17,9 +17,27 @@ class HomeController extends Controller
         $user = Auth::user();
         
         if ($user->store) {
-            return redirect()->route("manage.categories", $user->store->id);
+            return redirect()->route("dashboard.index", $user->store->id);
         }
-        
-        return redirect()->route('templates');
+        $storeHome = session('store_home');
+        if ($storeHome) {
+            return  redirect()->intended($storeHome);
+        $request->session()->forget('store_home');
+
+        }
+        return redirect()->intended('/');
     }
+
+    public function logout(Request $request)
+    {  $storeHome = session('store_home'); // تحقق من وجود الصفحة الرئيسية للمتجر في السيشن
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        if ($storeHome) {
+            return  redirect()->intended($storeHome);
+        }
+        $request->session()->forget('store_home');
+        return redirect('/'); // الصفحة الرئيسية للمنصة
+    }
+    
 }

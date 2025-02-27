@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AdminLTE 3 | Dashboard</title>
-    <!-- Tell the browser to be responsive to screen width -->
+    <!-- جعل التصميم متوافق مع مختلف الشاشات -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('assets_admin/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Tempusdominus Bbootstrap 4 -->
+    <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet"
         href="{{ asset('assets_admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <!-- iCheck -->
@@ -30,178 +30,136 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Bootstrap 4 RTL -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
-    <!-- Custom style for RTL -->
+    <!-- ملف التنسيقات المخصص -->
     <link rel="stylesheet" href="{{ asset('assets_admin/dist/css/custom.css') }}">
+
+    <!-- تنسيقات مخصصة لزيادة وضوح الخطوط في القائمة الجانبية وتغيير ألوان النصوص -->
+    <style>
+        /* جعل نصوص القائمة الجانبية باللون الأبيض */
+        .nav-sidebar .nav-link {
+            color: #fff !important;
+
+        }
+        .nav-sidebar .nav-item:last-child {
+            border-bottom: none;
+        }
+
+        /* تغيير لون العنصر النشط أو عند التمرير (حسب رغبتك) */
+        .nav-sidebar .nav-link.active,
+        .nav-sidebar .nav-link:hover {
+            background-color: #555;
+            color: #fff !important;
+        }
+         .brand-link:hover {
+            background-color: #555;
+            color: #fff !important;
+        }
+
+        .brand-link {
+            font-family: ui-serif !important ;
+            font-size: x-large !important;
+            color: white!important;
+            margin: 22px!important;
+        }
+        #copy-link{
+            direction: ltr !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
-        <!-- Navbar -->
+        <!-- Navbar أعلى الصفحة -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
+            <!-- زر إخفاء وإظهار القائمة الجانبية -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
-                </li>
-            </ul>
-            <!-- Right navbar links -->
-            <ul class="navbar-nav mr-auto-navbav">
-                <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
+                    <a class="nav-link" data-widget="pushmenu" href="#">
+                        <i class="fas fa-bars"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="{{ asset('assets_admin/dist/img/user1-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        {{-- <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="{{ asset('assets_admin/dist/img/user8-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a> --}}
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="{{ asset('assets_admin/dist/img/user3-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i
-                                                class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
                 </li>
-                <!-- Notifications Dropdown Menu -->
-                {{-- <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
+                <li class="nav-item" style="text-align: center; margin: 10px 0;">
+                    <a class="nav-link" id="copy-link" href="#" onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')"
+                       style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #28a745; color: #fff; border-radius: 8px; text-decoration: none; transition: background-color 0.3s ease, box-shadow 0.3s ease; font-weight: bold;">
+                        <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i>
+                        <span>نسخ رابط المتجر</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                    </div>
+                    <p style="margin-top: 8px; color: #6c757d; font-size: 14px;">{{ 'http://127.0.0.1:8000/store/' . $store->name }}</p>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
-                        <i class="fas fa-th-large"></i>
-                    </a>
-                </li> --}}
+                
+                <script>
+                    function copyToClipboard(text) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            const link = document.getElementById('copy-link');
+                            link.style.backgroundColor = '#218838';
+                            link.style.boxShadow = '0 0 12px rgba(40, 167, 69, 0.5)';
+                            link.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i> تم نسخ الرابط!';
+                
+                            setTimeout(() => {
+                                link.style.backgroundColor = '#28a745';
+                                link.style.boxShadow = 'none';
+                                link.innerHTML = '<i class="fas fa-copy" style="margin-right: 8px;"></i> نسخ رابط المتجر';
+                            }, 2000);
+                        }).catch(err => {
+                            alert('حدث خطأ أثناء نسخ الرابط');
+                            console.error('فشل النسخ: ', err);
+                        });
+                    }
+                </script>
+                
+                
             </ul>
         </nav>
         <!-- /.navbar -->
 
-        <!-- Main Sidebar Container -->
+        <!-- القائمة الجانبية -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <span class="brand-text font-weight-light"></span>
+            <!-- معاينة المتجر -->
+            <a href="{{ route('home_store', $store->name) }}" target="_blank" class="brand-link">
+                <i class="fas fa-eye"></i>
+                <span class="brand-text font-weight-light">معاينة المتجر</span>
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="info">
-                        <a href="{{route('home_store',$store->name)}}" class="d-block">معاينة المتجر</a>
-                    </div>
-                </div>
-
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
 
-
-
+                        <!-- الرئيسية -->
                         <li class="nav-item">
-                            <a href="{{ route('manage.categories',$store->id) }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    ادارة الاقسام
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('manage.products',$store->id) }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    ادارة المنتجات
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{-- route('brands_create') --}}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    ادارة البراندات
-                                </p>
+                            <a href="{{ route('dashboard.index', $store->id) }}" class="nav-link">
+                                <i class="fas fa-home nav-icon"></i>
+                                <p>الرئيسية</p>
                             </a>
                         </li>
 
+                        <!-- إدارة الأقسام -->
+                        <li class="nav-item">
+                            <a href="{{ route('manage.categories', $store->id) }}" class="nav-link">
+                                <i class="fas fa-list-alt nav-icon"></i>
+                                <p>إدارة الأقسام</p>
+                            </a>
+                        </li>
+
+                        <!-- إدارة المنتجات -->
+                        <li class="nav-item">
+                            <a href="{{ route('manage.products', $store->id) }}" class="nav-link">
+                                <i class="fas fa-boxes nav-icon"></i>
+                                <p>إدارة المنتجات</p>
+                            </a>
+                        </li>
+
+                        <!-- تسجيل الخروج -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
-                          document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
+                                document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt nav-icon"></i>
+                                <p>تسجيل الخروج</p>
                             </a>
-
                         </li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
@@ -213,21 +171,22 @@
             </div>
             <!-- /.sidebar -->
         </aside>
+        <!-- /القائمة الجانبية -->
 
+        <!-- المحتوى الرئيسي -->
+        <div class="content-wrapper">
+            @yield('content_admin')
+        </div>
+        <!-- /.content-wrapper -->
 
-
-        @yield('content_admin')
-
-
-
-
-        <!-- Control Sidebar -->
+        <!-- Control Sidebar (اختياري) -->
         <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
+            <!-- محتوى جانبي إضافي -->
         </aside>
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
+    <script src="{{ asset('assets_admin/main.js') }}"></script>
 
     <!-- jQuery -->
     <script src="{{ asset('assets_admin/plugins/jquery/jquery.min.js') }}"></script>
@@ -237,35 +196,34 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
+    
     <!-- Bootstrap 4 rtl -->
     <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src=" {{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- ChartJS -->
-    <script src=" {{ asset('assets_admin/plugins/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/chart.js/Chart.min.js') }}"></script>
     <!-- Sparkline -->
-    <script src=" {{ asset('assets_admin/plugins/sparklines/sparkline.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/sparklines/sparkline.js') }}"></script>
     <!-- JQVMap -->
-    <script src=" {{ asset('assets_admin/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-    <script src=" {{ asset('assets_admin/plugins/jqvmap/maps/jquery.vmap.world.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/jqvmap/maps/jquery.vmap.world.js') }}"></script>
     <!-- jQuery Knob Chart -->
-    <script src=" {{ asset('assets_admin/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
     <!-- daterangepicker -->
-    <script src=" {{ asset('assets_admin/plugins/moment/moment.min.js') }}"></script>
-    <script src=" {{ asset('assets_admin/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- Tempusdominus Bootstrap 4 -->
-    <script src=" {{ asset('assets_admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
+    <script src="{{ asset('assets_admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
     </script>
     <!-- Summernote -->
-    <script src=" {{ asset('assets_admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- overlayScrollbars -->
-    <script src=" {{ asset('assets_admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
-    <script src=" {{ asset('assets_admin/dist/js/adminlte.js') }}"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src=" {{ asset('assets_admin/dist/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('assets_admin/dist/js/adminlte.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src=" {{ asset('assets_admin/dist/js/demo.js') }}"></script>
+    <script src="{{ asset('assets_admin/dist/js/demo.js') }}"></script>
 </body>
 
 </html>

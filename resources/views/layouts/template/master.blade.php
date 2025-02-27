@@ -46,137 +46,144 @@
     </div>
     <!--PreLoader Ends-->
 
-    <style>
-        .mean-container .mean-nav ul li a.mean-expand {
-            right: 140%;
-            top: 18%;
-        }
-
-        /* تنسيق الحاوية الرئيسية للقائمة المنسدلة */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* تنسيق الرابط الرئيسي (أيقونة تغيير اللغة) */
-        .dropdown>a.shopping-cart {
-            color: #ffffff;
-            /* اللون الأساسي: أسود */
-            font-size: 1.5rem;
-            /* يمكنك تعديل حجم الأيقونة حسب الحاجة */
-            transition: color 0.3s ease;
-            text-decoration: none;
-        }
-
-        /* تغيير لون الأيقونة عند التحويم */
-        .dropdown>a.shopping-cart:hover {
-            color: #F28123;
-        }
-
-        /* تنسيق القائمة المنسدلة */
-        .dropdown .dropdown-menu {
-            display: none;
-            /* مخفية افتراضيًا */
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            min-width: 120px;
-        }
-
-        /* إظهار القائمة عند التحويم على العنصر */
-        .dropdown:hover .dropdown-menu {
-            display: block;
-
-        }
-
-        .header-icons .dropdown-menu li a {
-            display: block;
-            padding: 10px 15px;
-            color: #000000 !important;
-            text-decoration: none;
-
-            font-size: medium;
-        }
-
-        /* تنسيق عناصر القائمة */
-        .dropdown .dropdown-menu li {
-
-            list-style: none;
-        }
-        .site-logo img {
-    max-height: 50px !important; /* يحدد أقصى ارتفاع */
-    max-width: 150px !important; /* يحدد أقصى عرض */
-    height: auto !important; /* يحافظ على تناسب الأبعاد */
-    width: auto !important; 
-    object-fit: contain; /* يحافظ على جودة الصورة */
-}
-
-    </style>
+  
     <!-- header -->
     <div class="top-header-area" id="sticker" style="height: 100px;">
-        <div class="container">
+        <div class="container-fluid ">
             <div class="row">
                 <div class="col-lg-12 col-sm-12 text-center">
                     <div class="main-menu-wrap">
                         <!-- logo -->
-                        <div class="site-logo">
-                            <a href="index.html">
-                                <img src="{{ asset($store->logo) }}" alt="">
-                            </a>
+                        <div class="site-logo" style="    width: 250px !important;     max-width: 250px !important; ">
+                            @isset($store)
+                                @if ($store->logo)
+                                    <a href="{{  route('home_store', $store->name) }}">
+                                        <img src="{{ asset($store->logo) }}" alt="">
+                                    </a>
+                                @else
+                                    <li style="    text-align: left;">
+                                        <a href={{  route('home_store', $store->name) }}" class="logoo">
+                                            {{ $store->name }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @else
+                                <li style="    text-align: left;">
+                                    <a href="#" class="logoo">متجري
+                                    </a>
+                                </li>
+                            @endisset
+
                         </div>
                         <!-- logo -->
 
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul dir="{{ trans('string.dir') }}">
-                                <li><a href="/"> {{ trans('string.home') }} </a></li>
-                                <li><a href="{{-- route('product_all') --}}"> المنتجات</a></li>
-                                <li><a href="#brandd">{{ trans('string.brand') }}</a></li>
-                                <li><a href="#abut">{{ trans('string.about') }}</a></li>
+                                @isset($store)
+                                    <li><a href="{{  route('home_store', $store->name) }}"> {{ trans('string.home') }} </a>
+                                    </li>
+                                    <li><a href="{{ route('products', $store->name) }}"> {{ trans('string.products') }}
+                                        </a></li>
+                                    <li><a href="#brandd">{{ trans('string.brand') }}</a></li>
+                                    <li><a href="#abut">{{ trans('string.about') }}</a></li>
 
-                                <li>
-                                    <div class="header-icons" style="text-align:center;">
-                                        <a class="shopping-cart" href="{{-- route('cart') --}}"><i
-                                                class="fas fa-shopping-cart"></i></a>
-                                        <a class="mobile-hide search-bar-icon" href="#"><i
-                                                class="fas fa-search"></i></a>
+                                    <li>
+                                        <div class="header-icons" style="text-align:center;">
+                                            <a class="shopping-cart" href="{{-- route('cart') --}}"><i
+                                                    class="fas fa-shopping-cart"></i></a>
+                                            <a class="mobile-hide search-bar-icon" href="#"><i
+                                                    class="fas fa-search"></i></a>
 
-                                        @guest
-                                            @if (Route::has('login'))
-                                                <a class="shopping-cart" href="{{-- route('login') --}}"><i
-                                                        class="fas fa-user"></i></a>
-                                            @endif
-                                        @else
-                                            <a class="shopping-cart" href="{{-- route('logout') --}}"
-                                                onclick="event.preventDefault();
+                                            @guest
+                                                @if (Route::has('login'))
+                                                    <a class="shopping-cart" href="{{ route('login') }}"><i
+                                                            class="fas fa-user"></i></a>
+                                                @endif
+                                            @else
+                                                <a class="shopping-cart" href="{{-- route('logout') --}}"
+                                                    onclick="event.preventDefault();
 																	 document.getElementById('logout-form').submit();">
-                                                <i class="fas fa-sign-out-alt"></i>
-                                            </a>
-                                            <form id="logout-form" action="{{-- route('logout') --}}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                            </form>
+                                                    <i class="fas fa-sign-out-alt"></i>
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                    class="d-none">
+                                                    @csrf
+                                                </form>
 
 
-                                        @endguest
-                                        <!-- تغيير اللغة -->
-                                        <div class="dropdown">
-                                            <a class="shopping-cart" href="#" title="تغيير اللغة">
-                                                <i class="fas fa-globe"></i>
-                                            </a>
-                                            <ul class="dropdown-menu" style="text-align:center">
-                                                <li>
-                                                    <a style="color: #000" class="lang"
-                                                        href="{{ route('lang', ['locale' => 'en']) }}">English</a>
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        href="{{ route('lang', ['locale' => 'ar']) }}">العربية</a>
-                                                </li>
-                                            </ul>
+                                            @endguest
+                                            <!-- تغيير اللغة -->
+                                            <div class="dropdown">
+                                                <a class="shopping-cart" href="#" title="تغيير اللغة">
+                                                    <i class="fas fa-globe"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" style="text-align:center">
+                                                    <li>
+                                                        <a style="color: #000" class="lang"
+                                                            href="{{ route('lang', ['locale' => 'en']) }}">English</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('lang', ['locale' => 'ar']) }}">العربية</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                @else
+                                <li><a href="{{ route('template.show', [$template->id, 'welcome']) }}">
+                                    {{ trans('string.home') }}
+                                </a></li>
+                                    <li><a href="{{ route('template.show', [$template->id, 'products_all']) }}">
+                                        {{ trans('string.products') }}
+                                    </a></li>
+                                    <li><a href="#brandd">{{ trans('string.brand') }}</a></li>
+                                    <li><a href="#abut">{{ trans('string.about') }}</a></li>
+
+                                    <li>
+                                        <div class="header-icons" style="text-align:center;">
+                                            <a class="shopping-cart" href="{{-- route('cart') --}}"><i
+                                                    class="fas fa-shopping-cart"></i></a>
+                                            <a class="mobile-hide search-bar-icon" href="#"><i
+                                                    class="fas fa-search"></i></a>
+
+                                            @guest
+                                                @if (Route::has('login'))
+                                                    <a class="shopping-cart" href="{{-- route('login') --}}"><i
+                                                            class="fas fa-user"></i></a>
+                                                @endif
+                                            @else
+                                                <a class="shopping-cart" href="{{-- route('logout') --}}"
+                                                    onclick="event.preventDefault();
+																	 document.getElementById('logout-form').submit();">
+                                                    <i class="fas fa-sign-out-alt"></i>
+                                                </a>
+                                                <form id="logout-form" hidden action="{{-- route('logout') --}}" method="POST"
+                                                    class="d-none">
+                                                    @csrf
+                                                </form>
+
+
+                                            @endguest
+                                            <!-- تغيير اللغة -->
+                                            <div class="dropdown">
+                                                <a class="shopping-cart" href="#" title="تغيير اللغة">
+                                                    <i class="fas fa-globe"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" style="text-align:center">
+                                                    <li>
+                                                        <a style="color: #000" class="lang"
+                                                            href="{{ route('lang', ['locale' => 'en']) }}">English</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('lang', ['locale' => 'ar']) }}">العربية</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endisset
+
                             </ul>
                         </nav>
                         <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
@@ -302,8 +309,16 @@
                     <div class="footer-box get-in-touch">
                         <h2 class="widget-title">{{ trans('string.contact') }}</h2>
                         <ul>
-                            <li>support@fruitkha.com</li>
-                            <li> 777 777 777 967+ </li>
+                            @isset($store)
+                                <li><a href="#">{{ $store->whatsapp_link}}</a></li>
+                                <li><a href="#">{{ $store->facebook_link}}</a></li>
+                                <li><a href="#">{{ $store->instagram_link}}</a></li>
+                            @else
+                                <li><a href="#"></a></li>
+                                <li><a href="#"></a></li>
+                                <li><a href="#"></a></li>
+                            @endisset
+
                         </ul>
                     </div>
                 </div>

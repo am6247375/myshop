@@ -38,8 +38,8 @@ class ManageCategoriesController extends Controller
         $category->image ='assets/category/'. $imageName;
         $category->store_id = $request->store_id;
         $category->save();
-
-        return redirect()->route('manage.categories', ['store_id' => $request->store_id])->with('success', 'تم إنشاء القسم بنجاح');
+        return redirect($request->previous_url, compact('store'))->with('success', 'تم إنشاء المنتج بنجاح');
+        // return redirect()->back()->with('success', 'تم إنشاء القسم بنجاح');
     }
 
 }
