@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class CreateStore extends Controller
+class CreateStoreController extends Controller
 {
 
     public function templates()

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CreateStore;
+use App\Http\Controllers\CreateStoreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\store\StoreController;
 use App\Http\Controllers\store_dashbaord\DashbaordStoreController;
@@ -46,14 +46,14 @@ Route::post('/logout', [HomeController::class, 'logout'])->middleware('auth')->n
 // Route::post('/login', [HomeController::class, 'login'])->middleware('auth')->name('login');
 Route::middleware(['auth'])->group(function () {
     
-Route::get('/templates', [CreateStore::class, 'templates'])->name('templates');
-Route::get('/template/show/{template_id}/{page_name}', [CreateStore::class, 'template_show'])->name('template.show');
-Route::get('/store/create/view/{template_id}', [CreateStore::class, 'store_create_view'])->name('store.create.view');
-Route::post('/store/create', [CreateStore::class, 'store_create'])->name('store.create');
+Route::get('/templates', [CreateStoreController::class, 'templates'])->name('templates');
+Route::get('/template/show/{template_id}/{page_name}', [CreateStoreController::class, 'template_show'])->name('template.show');
+Route::get('/store/create/view/{template_id}', [CreateStoreController::class, 'store_create_view'])->name('store.create.view');
+Route::post('/store/create', [CreateStoreController::class, 'store_create'])->name('store.create');
 
 
-Route::get('/support/create/{store_id}', [CreateStore::class, 'support_create_view'])->name('support.create.view');
-Route::post('/support/create/{store_id}', [CreateStore::class, 'support_create'])->name('support.create');
+Route::get('/support/create/{store_id}', [CreateStoreController::class, 'support_create_view'])->name('support.create.view');
+Route::post('/support/create/{store_id}', [CreateStoreController::class, 'support_create'])->name('support.create');
 
 
 Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])->name('dashboard.index');

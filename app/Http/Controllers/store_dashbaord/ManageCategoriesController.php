@@ -11,16 +11,16 @@ use Illuminate\Support\Str;
 
 class ManageCategoriesController extends Controller
 {
-    public function index($store_id=null)
+    public function index($store_id = null)
     {
-        $store=Store::find($store_id);
+        $store = Store::find($store_id);
         $categories = category::where('store_id', $store_id)->get();
-        return view('store_dashboard.manage_categories', compact('categories','store',));
+        return view('store_dashboard.manage_categories', compact('categories', 'store',));
     }
-    public function category_create_view($store_id=null)
+    public function category_create_view($store_id = null)
     {
-        $store=Store::find($store_id);
-        return view('store_dashboard.category_create' , compact('store')); 
+        $store = Store::find($store_id);
+        return view('store_dashboard.category_create', compact('store'));
     }
     public function category_create(Request $request)
     {
@@ -35,11 +35,11 @@ class ManageCategoriesController extends Controller
         $category = new category();
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->image ='assets/category/'. $imageName;
+        $category->image = 'assets/category/' . $imageName;
         $category->store_id = $request->store_id;
         $category->save();
-        return redirect($request->previous_url, compact('store'))->with('success', 'تم إنشاء المنتج بنجاح');
+        $store_id = $request->store_id;
+        return redirect($request->previous_url, compact('store_id'))->with('success', 'تم إنشاء المنتج بنجاح');
         // return redirect()->back()->with('success', 'تم إنشاء القسم بنجاح');
     }
-
 }

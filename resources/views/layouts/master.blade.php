@@ -45,14 +45,14 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            الأسعار
+                            المميزات
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">الآراء</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">الدعم</a>
+                        <a class="nav-link" href="#use">الدعم</a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-md-3">
                     <h4 class="mb-3">الدعم</h4>
-                    <ul class="list-unstyled">
+                    <ul id="use" class="list-unstyled">
                         <li class="mb-2"><a href="#">الأسئلة الشائعة</a></li>
                         <li class="mb-2"><a href="#">الدردشة المباشرة</a></li>
                         <li class="mb-2"><a href="#">تواصل معنا</a></li>

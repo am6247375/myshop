@@ -17,7 +17,7 @@
         } else {
             $legalCreated = false;
         }
-       
+
         // حساب عدد الخطوات المكتملة (يعتبر إنشاء المتجر خطوة ثابتة)
         $completedSteps =
             1 +

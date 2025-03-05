@@ -4,7 +4,7 @@
   <!-- قسم الهيرو -->
   <section class="hero text-white">
     <div class="container">
-      <div class="row align-items-center g-5">
+      <div class="row align-items-center g-5"  >
         <div class="col-lg-6">
           <h1 class="display-4 fw-bold animate__animated animate__fadeInUp">
             أنشئ متجرك الإلكتروني خلال دقائق!
@@ -27,7 +27,7 @@
   <!-- قسم المميزات (Features) الجديد -->
   <section id="features" class="py-5">
     <div class="container">
-      <div class="text-center mb-5">
+      <div id="" class="text-center mb-5">
         <h2 class="display-5 fw-bold">مميزات منصتنا</h2>
         <p class="text-muted">كل ما تحتاجه لبناء وإدارة متجرك الإلكتروني بنجاح</p>
       </div>
