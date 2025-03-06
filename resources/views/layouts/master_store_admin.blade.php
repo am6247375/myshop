@@ -32,39 +32,10 @@
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
     <!-- ملف التنسيقات المخصص -->
     <link rel="stylesheet" href="{{ asset('assets_admin/dist/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets_admin/css/main.css') }}">
 
     <!-- تنسيقات مخصصة لزيادة وضوح الخطوط في القائمة الجانبية وتغيير ألوان النصوص -->
-    <style>
-        /* جعل نصوص القائمة الجانبية باللون الأبيض */
-        .nav-sidebar .nav-link {
-            color: #fff !important;
-
-        }
-        .nav-sidebar .nav-item:last-child {
-            border-bottom: none;
-        }
-
-        /* تغيير لون العنصر النشط أو عند التمرير (حسب رغبتك) */
-        .nav-sidebar .nav-link.active,
-        .nav-sidebar .nav-link:hover {
-            background-color: #555;
-            color: #fff !important;
-        }
-         .brand-link:hover {
-            background-color: #555;
-            color: #fff !important;
-        }
-
-        .brand-link {
-            font-family: ui-serif !important ;
-            font-size: x-large !important;
-            color: white!important;
-            margin: 22px!important;
-        }
-        #copy-link{
-            direction: ltr !important;
-        }
-    </style>
+  
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -151,6 +122,18 @@
                                 <p>إدارة المنتجات</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('support.create.view', $store->id) }}" class="nav-link">
+                                <i class="fas fa-headset nav-icon"></i>
+                                <p>الدعم الفني و وصف المتجر</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('conditions.create.view', $store->id) }}" class="nav-link">
+                                <i class="fas fa-balance-scale-left nav-icon"></i>
+                                <p>الشروط والاحكام</p>
+                            </a>
+                        </li>
 
                         <!-- تسجيل الخروج -->
                         <li class="nav-item">
@@ -198,7 +181,9 @@
     </script>
     
     <!-- Bootstrap 4 rtl -->
-    <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets/bootstrap.min.css') }}"></script>
+    <script src="{{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.js') }}" ></script>
+    <script src="{{ asset('assets/bootstrap.bundle.min.js') }}" ></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- ChartJS -->

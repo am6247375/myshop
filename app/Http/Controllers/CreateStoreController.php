@@ -20,11 +20,11 @@ class CreateStoreController extends Controller
         $templates = Template::all();
         return view('store_create.templates', compact('templates'));
     }
-    public function template_show($template_id,$page_name)
+    public function template_show($template_id, $page_name)
     {
         $template = Template::findOrFail($template_id);
 
-        return view($template->path_temp .'.'.$page_name,compact('template'));
+        return view($template->path_temp . '.' . $page_name, compact('template'));
     }
     public function store_create_view($template_id)
     {
@@ -65,16 +65,37 @@ class CreateStoreController extends Controller
 
     public function support_create_view($store_id)
     {
-        $store=Store::findOrFail($store_id);
+        $store = Store::findOrFail($store_id);
         return view('store_create.support_create', compact('store'));
     }
     public function support_create(Request $request, $store_id)
     {
-        $store=Store::findOrFail($store_id);
-        $store->email_link=$request->email_link;
-        $store->whatsapp_link=$request->whatsapp_link;
-        $store->about=$request->about;
+        $store = Store::findOrFail($store_id);
+        $store->email_link = $request->email_link;
+        $store->whatsapp_link = $request->whatsapp_link;
+        $store->about = $request->about;
         $store->save();
-        return redirect($request->previous_url)->with('success', 'تم إنشاء المنتج بنجاح');
+        
+        return redirect()->route('dashboard.index', compact('store_id'))->with('success', 'تم الامر بنجاح');
+    }
+
+
+
+
+
+    public function conditions_create_view($store_id)
+    {
+        $store = Store::findOrFail($store_id);
+        return view('store_create.conditions_create', compact('store'));
+    }
+
+    public function conditions_create(Request $request, $store_id)
+    {
+        $store = Store::findOrFail($store_id);
+        $store->privacy_policy = $request->privacy_policy;
+        $store->terms_and_conditions = $request->terms_and_conditions;
+        $store->return__policy = $request->return__policy;
+        $store->save();
+        return redirect()->route('dashboard.index', compact('store_id'))->with('success', 'تم الامر بنجاح');
     }
 }

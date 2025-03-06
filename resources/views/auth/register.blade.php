@@ -49,7 +49,7 @@
                             </div>
 
                             <div class="form-floating mb-4">
-                                <input type="email" name="email" id="email"
+                                <input style="text-align: right" type="email" name="email" id="email"
                                     class="form-control @error('email') is-invalid @enderror"
                                     placeholder="البريد الإلكتروني" value="{{ old('email') }}">
                                 <label for="email" class="text-secondary">

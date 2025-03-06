@@ -4,7 +4,7 @@
   <!-- قسم الهيرو -->
   <section class="hero text-white">
     <div class="container">
-      <div class="row align-items-center g-5"  >
+      <div class="row align-items-center g-5 mt-1"  >
         <div class="col-lg-6">
           <h1 class="display-4 fw-bold animate__animated animate__fadeInUp">
             أنشئ متجرك الإلكتروني خلال دقائق!

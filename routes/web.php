@@ -52,10 +52,6 @@ Route::get('/store/create/view/{template_id}', [CreateStoreController::class, 's
 Route::post('/store/create', [CreateStoreController::class, 'store_create'])->name('store.create');
 
 
-Route::get('/support/create/{store_id}', [CreateStoreController::class, 'support_create_view'])->name('support.create.view');
-Route::post('/support/create/{store_id}', [CreateStoreController::class, 'support_create'])->name('support.create');
-
-
 Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])->name('dashboard.index');
 Route::get('/management/products/{store_id}', [ManageProductsController::class, 'index'])->name('manage.products');
 Route::get('/product/create/{store_id}', [ManageProductsController::class, 'product_create_view'])->name('product.create.view');
@@ -70,6 +66,11 @@ Route::post('/category/edit', [ManageCategoriesController::class, 'category_edit
 Route::get('/category/delete/{category_id}', [ManageCategoriesController::class, 'category_delete'])->name('category.delete');
 
 
+Route::get('/support/create/{store_id}', [CreateStoreController::class, 'support_create_view'])->name('support.create.view');
+Route::post('/support/create/{store_id}', [CreateStoreController::class, 'support_create'])->name('support.create');
+
+Route::get('/conditions/create/{store_id}', [CreateStoreController::class, 'conditions_create_view'])->name('conditions.create.view');
+Route::post('/conditions/create/{store_id}', [CreateStoreController::class, 'conditions_create'])->name('conditions.create');
 
 });
 Route::get('/store/{name}', [StoreController::class, 'home_store'])->name('home_store');

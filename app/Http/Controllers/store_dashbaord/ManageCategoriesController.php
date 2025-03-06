@@ -35,11 +35,10 @@ class ManageCategoriesController extends Controller
         $category = new category();
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->image = 'assets/category/' . $imageName;
+        $category->image = 'assets/category/'. $imageName;
         $category->store_id = $request->store_id;
         $category->save();
-        $store_id = $request->store_id;
-        return redirect($request->previous_url, compact('store_id'))->with('success', 'تم إنشاء المنتج بنجاح');
+        return redirect($request->previous_url)->with('success', 'تم إنشاء المنتج بنجاح');
         // return redirect()->back()->with('success', 'تم إنشاء القسم بنجاح');
     }
 }
