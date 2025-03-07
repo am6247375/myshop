@@ -1,7 +1,5 @@
 @extends('layouts.master')
 @section('content')
-  <!-- مثال على استدعاء Bootstrap وFont Awesome -->
-  <!-- قسم الهيرو -->
   <section class="hero text-white">
     <div class="container">
       <div class="row align-items-center g-5 mt-1"  >

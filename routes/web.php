@@ -50,7 +50,8 @@ Route::get('/templates', [CreateStoreController::class, 'templates'])->name('tem
 Route::get('/template/show/{template_id}/{page_name}', [CreateStoreController::class, 'template_show'])->name('template.show');
 Route::get('/store/create/view/{template_id}', [CreateStoreController::class, 'store_create_view'])->name('store.create.view');
 Route::post('/store/create', [CreateStoreController::class, 'store_create'])->name('store.create');
-
+Route::get('/store/settings/{store_id}', [CreateStoreController::class, 'store_settings_view'])->name('store.settings.view');
+Route::post('/store/settings', [CreateStoreController::class, 'store_settings'])->name('store.settings');
 
 Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])->name('dashboard.index');
 Route::get('/management/products/{store_id}', [ManageProductsController::class, 'index'])->name('manage.products');

@@ -63,19 +63,41 @@ class CreateStoreController extends Controller
             ->with('success', 'تم إنشاء المتجر بنجاح!');
     }
 
+    public function store_settings_view($store_id)
+    {
+        $store = Store::findOrFail($store_id);
+        $languages = Language::all();
+        return view('store_dashboard.store_settings', compact('store','languages'));
+    }
+
     public function support_create_view($store_id)
     {
         $store = Store::findOrFail($store_id);
-        return view('store_create.support_create', compact('store'));
+        $languages = Language::all();
+        return view('store_create.support_create', compact('store','languages'));
     }
-    public function support_create(Request $request, $store_id)
+    public function store_settings(Request $request)
     {
-        $store = Store::findOrFail($store_id);
+        $store = Store::findOrFail($request->store_id);
         $store->email_link = $request->email_link;
         $store->whatsapp_link = $request->whatsapp_link;
         $store->about = $request->about;
+        $store->name = $request->name;
+        $store->currency = $request->currency;
+        // معالجة رفع الشعار
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $logoPath = Str::uuid()->toString() . '_' . $request->file('logo')->getClientOriginalName();
+            $request->file('logo')->move(public_path('assets/logo'), $logoPath);
+            $store->logo = 'assets/logo/' . $logoPath;
+        } else {
+            $store->logo = $logoPath;
+        }
+        // حفظ المتجر في قاعدة البيانات
         $store->save();
-        
+        // ربط المتجر باللغات المختارة
+        $store->languages()->attach($request->languages);
+        $store_id=$store->id;
         return redirect()->route('dashboard.index', compact('store_id'))->with('success', 'تم الامر بنجاح');
     }
 

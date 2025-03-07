@@ -146,7 +146,6 @@
 
 <script>
     window.StoreName = "{{ $store->name }}";
-    
 </script>
 
 @endsection

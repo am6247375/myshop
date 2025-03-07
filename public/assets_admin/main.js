@@ -1,4 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const stepItems = document.querySelectorAll('li[data-step]');
+    const autoStep =window.nextStep ;
+
+    function hideAllCards() {
+        document.querySelectorAll('.step-card').forEach(card => card.style.display = 'none');
+    }
+
+    if (autoStep) {
+        hideAllCards();
+        document.getElementById(`card-${autoStep}`).style.display = 'block';
+    }
+
+    stepItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // إذا كان العنصر غير قابل للنقر، لا يتم تنفيذ الإجراء
+            if (this.style.cursor === 'not-allowed') return;
+            hideAllCards();
+            document.getElementById(`card-${this.getAttribute('data-step')}`).style.display = 'block';
+        });
+    });
+
     // التأكد من تعريف اسم المتجر
     const storeName = window.StoreName ;
 
@@ -88,3 +109,4 @@ about: `مرحبًا بكم في متجر ${storeName} نسعى دائمًا ل�
     });
 
 });
+

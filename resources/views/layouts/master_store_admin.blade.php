@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="{{ asset('assets_admin/css/main.css') }}">
 
     <!-- تنسيقات مخصصة لزيادة وضوح الخطوط في القائمة الجانبية وتغيير ألوان النصوص -->
-  
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -51,14 +51,16 @@
                     </a>
                 </li>
                 <li class="nav-item" style="text-align: center; margin: 10px 0;">
-                    <a class="nav-link" id="copy-link" href="#" onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')"
-                       style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #28a745; color: #fff; border-radius: 8px; text-decoration: none; transition: background-color 0.3s ease, box-shadow 0.3s ease; font-weight: bold;">
+                    <a class="nav-link" id="copy-link" href="#"
+                        onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')"
+                        style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #28a745; color: #fff; border-radius: 8px; text-decoration: none; transition: background-color 0.3s ease, box-shadow 0.3s ease; font-weight: bold;">
                         <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i>
                         <span>نسخ رابط المتجر</span>
                     </a>
-                    <p style="margin-top: 8px; color: #6c757d; font-size: 14px;">{{ 'http://127.0.0.1:8000/store/' . $store->name }}</p>
+                    <p style="margin-top: 8px; color: #6c757d; font-size: 14px;">
+                        {{ 'http://127.0.0.1:8000/store/' . $store->name }}</p>
                 </li>
-                
+
                 <script>
                     function copyToClipboard(text) {
                         navigator.clipboard.writeText(text).then(() => {
@@ -66,11 +68,12 @@
                             link.style.backgroundColor = '#218838';
                             link.style.boxShadow = '0 0 12px rgba(40, 167, 69, 0.5)';
                             link.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i> تم نسخ الرابط!';
-                
+
                             setTimeout(() => {
                                 link.style.backgroundColor = '#28a745';
                                 link.style.boxShadow = 'none';
-                                link.innerHTML = '<i class="fas fa-copy" style="margin-right: 8px;"></i> نسخ رابط المتجر';
+                                link.innerHTML =
+                                    '<i class="fas fa-copy" style="margin-right: 8px;"></i> نسخ رابط المتجر';
                             }, 2000);
                         }).catch(err => {
                             alert('حدث خطأ أثناء نسخ الرابط');
@@ -78,8 +81,8 @@
                         });
                     }
                 </script>
-                
-                
+
+
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -106,7 +109,6 @@
                                 <p>الرئيسية</p>
                             </a>
                         </li>
-
                         <!-- إدارة الأقسام -->
                         <li class="nav-item">
                             <a href="{{ route('manage.categories', $store->id) }}" class="nav-link">
@@ -123,15 +125,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('support.create.view', $store->id) }}" class="nav-link">
-                                <i class="fas fa-headset nav-icon"></i>
-                                <p>الدعم الفني و وصف المتجر</p>
+                            <a href="{{ route('conditions.create.view', $store->id) }}" class="nav-link">
+                                <i class="fas fa-balance-scale-left nav-icon"></i>
+                                <p>الصفحات القانونية</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('conditions.create.view', $store->id) }}" class="nav-link">
-                                <i class="fas fa-balance-scale-left nav-icon"></i>
-                                <p>الشروط والاحكام</p>
+                            <a href="{{ route('support.create.view', $store->id) }}" class="nav-link">
+                                <i class="fas fa-cogs nav-icon"></i>
+                                <p>الاعدادات</p>
                             </a>
                         </li>
 
@@ -179,11 +181,11 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
-    
+
     <!-- Bootstrap 4 rtl -->
     <script src="{{ asset('assets/bootstrap.min.css') }}"></script>
-    <script src="{{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.js') }}" ></script>
-    <script src="{{ asset('assets/bootstrap.bundle.min.js') }}" ></script>
+    <script src="{{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('assets/bootstrap.bundle.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets_admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- ChartJS -->

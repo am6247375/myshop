@@ -13,9 +13,9 @@
             $supportCreated = false;
         }
         if ($store->privacy_policy != null && $store->terms_and_conditions != null && $store->return__policy != null) {
-            $legalCreated = true;
+            $conditionsCreated = true;
         } else {
-            $legalCreated = false;
+            $conditionsCreated = false;
         }
 
         // حساب عدد الخطوات المكتملة (يعتبر إنشاء المتجر خطوة ثابتة)
@@ -24,7 +24,7 @@
             ($categoryCreated ? 1 : 0) +
             ($productCreated ? 1 : 0) +
             ($supportCreated ? 1 : 0) +
-            ($legalCreated ? 1 : 0);
+            ($conditionsCreated ? 1 : 0);
         // إجمالي الخطوات هو 5 (المتجر + 4 خطوات إضافية)
         $totalSteps = 5;
 
@@ -36,8 +36,8 @@
                 ? 'product'
                 : (!$supportCreated
                     ? 'support'
-                    : (!$legalCreated
-                        ? 'legal'
+                    : (!$conditionsCreated
+                        ? 'conditions'
                         : '')));
     @endphp
 
@@ -61,7 +61,7 @@
             'category' => 'إنشاء المجموعة الأولى',
             'product' => 'إضافة المنتج الأول',
             'support' => 'الدعم الفني ونبذة عن المتجر',
-            'legal' => 'الصفحات القانونية',
+            'conditions' => 'الصفحات القانونية',
         ] as $step => $label)
                                     @php
                                         if ($step == 'store') {
@@ -73,7 +73,7 @@
                                                 ($step == 'category' && $categoryCreated) ||
                                                 ($step == 'product' && $productCreated) ||
                                                 ($step == 'support' && $supportCreated) ||
-                                                ($step == 'legal' && $legalCreated);
+                                                ($step == 'conditions' && $conditionsCreated);
                                             if ($completed) {
                                                 // إذا كانت الخطوة مكتملة، نجعلها غير قابلة للنقر
                                                 $disabled = true;
@@ -82,7 +82,7 @@
                                                 $disabled =
                                                     ($step == 'product' && !$categoryCreated) ||
                                                     ($step == 'support' && !$productCreated) ||
-                                                    ($step == 'legal' && !$supportCreated);
+                                                    ($step == 'conditions' && !$supportCreated);
                                             }
                                         }
                                     @endphp
@@ -130,7 +130,7 @@
                 'text' => 'قم بإعداد صفحة الدعم الفني وإضافة نبذة عن متجرك لتعزيز ثقة عملائك و لتوفير المعلومات والدعم لعملائك.',
                 'route' => route('support.create.view', $store->id),
             ],
-            'legal' => [
+            'conditions' => [
                 'icon' => 'file-contract',
                 'title' => 'سياسات و شروط واحكام متجرك',
                 'text' => 'قم بإنشاء صفحات الشروط والأحكام لتعزيز الثقة والشفافية.',

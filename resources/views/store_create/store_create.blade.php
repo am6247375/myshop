@@ -86,7 +86,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold"><i class="fas fa-money-bill-wave me-2"></i> العملة
+                                    <label class="form-label fw-bold"><i class="fas fa-money-bill-wave me-2"></i> العملات
                                         المدعومة</label>
                                     <div class="form-floating">
                                         <select name="currency" id="currency" class="form-select" required>
