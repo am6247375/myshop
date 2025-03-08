@@ -4,7 +4,7 @@
     <div class="container py-5">
         <div class="card shadow-lg border-0">
             <!-- Card Header -->
-            <div class="card-header bg-gradient-primary text-white py-4" id='card-header'>
+            <div class="card-header bg-gradient-primary text-white py-4" id="card-header">
                 <h2 class="mb-0 fw-bold">
                     <i class="fas fa-sliders-h me-2"></i>
                     إدارة إعدادات المتجر
@@ -22,7 +22,7 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#contact" type="button">
                         <i class="fas fa-headset me-2"></i>
-                        معلومات التواصل
+                        معلومات الدعم الفني
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -37,7 +37,7 @@
             <div class="card-body px-4">
                 <form action="{{ route('store.settings') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                 
+
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
 
                     <!-- Error Messages -->
@@ -57,57 +57,47 @@
                         <!-- General Settings Tab -->
                         <div class="tab-pane fade show active" id="general" role="tabpanel">
                             <div class="settings-section">
-                                <!-- Store Name -->
-                                <div class="form-group mb-4">
-                                    <label class="form-label fw-bold text-primary">
-                                        <i class="fas fa-store me-2"></i>
-                                        اسم المتجر الرسمي
-                                    </label>
-                                    <input type="text" name="name" class="form-control form-control-lg border-primary"
-                                        value="{{ old('name', $store->name) }}" required>
-                                </div>
-
-                                <!-- Store Logo -->
-                                <div class="form-group mb-4">
-                                    <label class="form-label fw-bold text-primary">
-                                        <i class="fas fa-camera-retro me-2"></i>
-                                        شعار المتجر
-                                    </label>
-                                    <div class="logo-uploader card border-dashed">
-                                        <div class="card-body">
-                                            <div class="d-flex flex-column align-items-center gap-3">
-                                                <div class="position-relative">
-                                                    @if ($store->logo)
-                                                        <img src="{{ asset($store->logo) }}" class="store-logo-preview"
-                                                            alt="شعار المتجر">
-                                                    @else
-                                                        <div class="store-logo-placeholder">
-                                                            <i class="fas fa-cloud-upload-alt"></i>
-                                                        </div>
-                                                    @endif
+                                <div class="row g-4">
+                                    <!-- العمود الأيسر - المعلومات الأساسية -->
+                                    <div class="col-md-7">
+                                        <!-- اسم المتجر -->
+                                        <div class="card config-card mb-4">
+                                            <div class="card-header bg-light">
+                                                <div class="form-group mb-4">
+                                                    <h5 class="mb-0">
+                                                        <i class="fas fa-store me-2 text-primary"></i>
+                                                        اسم المتجر الرسمي
+                                                    </h5>
                                                 </div>
-                                                <div class="text-center">
-                                                    <input type="file" name="logo" class="form-control d-none"
-                                                        accept="image/*" onchange="previewLogo(event)">
-                                                    <button type="button" class="btn btn-primary btn-lg"
-                                                        onclick="document.querySelector('input[name=logo]').click()">
-                                                        <i class="fas fa-upload me-2"></i>
-                                                        اختر صورة
-                                                    </button>
-                                                    <p class="text-muted mt-2 mb-0">
-                                                        المقاسات الموصى بها: 500x500 بكسل<br>
-                                                        الحد الأقصى: 2MB
-                                                    </p>
-                                                </div>
+                                                <input type="text" name="name"
+                                                    class="form-control form-control-lg border-primary"
+                                                    value="{{ old('name', $store->name) }}" required>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <!-- Languages & Currency -->
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <div class="card config-card h-100">
+
+                                        <!-- العملة -->
+                                        <div class="card config-card mb-4">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">
+                                                    <i class="fas fa-coins me-2 text-warning"></i>
+                                                    العملة الأساسية
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <select name="currency" class="form-select" required>
+                                                    @foreach (['SAR' => 'الريال السعودي', 'USD' => 'الدولار الأمريكي', 'YER' => 'الريال اليمني'] as $code => $name)
+                                                        <option value="{{ $code }}"
+                                                            {{ $store->currency == $code ? 'selected' : '' }}>
+                                                            {{ $name }} ({{ $code }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- اللغات -->
+                                        <div class="card config-card">
                                             <div class="card-header bg-light">
                                                 <h5 class="mb-0">
                                                     <i class="fas fa-globe me-2 text-success"></i>
@@ -129,41 +119,67 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="card config-card h-100">
+                                    <!-- العمود الأيمن - الشعار -->
+                                    <div class="col-md-5">
+                                        <div class="card config-card">
+
                                             <div class="card-header bg-light">
                                                 <h5 class="mb-0">
-                                                    <i class="fas fa-coins me-2 text-warning"></i>
-                                                    العملة الأساسية
+                                                    <i class="fas fa-camera-retro me-2 text-success"></i>
+                                                    شعار المتجر
                                                 </h5>
                                             </div>
-                                            <div class="card-body">
-                                                <select name="currency" class="form-select" required>
-                                                    @foreach (['SAR' => 'الريال السعودي', 'USD' => 'الدولار الأمريكي', 'YER' => 'الريال اليمني'] as $code => $name)
-                                                        <option value="{{ $code }}"
-                                                            {{ $store->currency == $code ? 'selected' : '' }}>
-                                                            {{ $name }} ({{ $code }})
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="logo-uploader card border-2 border-dashed border-primary-hover">
+                                                <div class="card-body p-3 text-center">
+                                                    <div id="logoPreviewContainer" class="position-relative mb-3">
+                                                        @if ($store->logo)
+                                                            <div class="logo-preview-wrapper">
+                                                                <img src="{{ asset($store->logo) }}"
+                                                                    class="store-logo-preview img-thumbnail rounded"
+                                                                    alt="شعار المتجر">
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 shadow"
+                                                                    onclick="removeLogo()" title="حذف الشعار">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        @else
+                                                            <div class="upload-placeholder" onclick="triggerUpload()">
+                                                                <div
+                                                                    class="store-logo-placeholder d-flex flex-column align-items-center justify-content-center">
+                                                                    <i
+                                                                        class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i>
+                                                                    <span class="text-muted">اختر صورة الشعار</span>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <input type="file" name="logo" id="logoInput"
+                                                        class="form-control d-none" accept="image/*"
+                                                        onchange="previewLogo(event)">
+                                                    <input type="hidden" name="delete_logo" id="deleteLogo"
+                                                        value="0">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Contact Information Tab -->
                         <div class="tab-pane fade" id="contact" role="tabpanel">
+                            <h5 class="mb-5">أضف معلومات الاتصال حتى يتمكن الأشخاص من التواصل معك.
+                            </h5>
                             <div class="settings-section">
                                 <div class="row g-4">
+
                                     <!-- WhatsApp -->
                                     <div class="col-md-6">
                                         <div class="card contact-card">
                                             <div class="card-header bg-light">
                                                 <h5 class="mb-0">
                                                     <i class="fab fa-whatsapp me-2 text-success"></i>
-                                                    دعم الواتساب
+                                                    رقم الواتساب الخاص بالدعم
                                                 </h5>
                                             </div>
                                             <div class="card-body">
@@ -211,7 +227,8 @@
                                     <div class="card-header bg-light">
                                         <h5 class="mb-0">
                                             <i class="fas fa-info-circle me-2 text-info"></i>
-                                            الهوية الرقمية للمتجر
+                                            قم بإضافة وصف لمتجرك
+                                            اجعل زوار متجرك يعرفون عن المتجر أكثر
                                         </h5>
                                     </div>
                                     <div class="card-body position-relative">
@@ -223,7 +240,7 @@
                                     </div>
                                     <div class="card-footer bg-transparent">
                                         <button type="button" onclick="fillDefault('about')"
-                                          class="btn btn-outline-primary btn-sm">
+                                            class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-magic me-2"></i>
                                             استخدام النص الافتراضي
                                         </button>
@@ -245,6 +262,6 @@
         </div>
     </div>
     <script>
-        
-    </script>
+    window.StoreName = "{{ $store->name }}";
+</script>
 @endsection

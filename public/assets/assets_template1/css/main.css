@@ -11,6 +11,45 @@ Version: 1.0
 # Base - Genral & Typography
 
 ----------------------------------------------------------------------------- */
+.get-in-touch ul {
+  list-style: none;
+  padding: 0;
+}
+
+.get-in-touch ul li {
+  margin: 10px 0;
+  /* تباعد بين العناصر */
+}
+
+.get-in-touch ul li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* تباعد بين الأيقونة والنص */
+  font-size: 18px;
+  /* حجم النص */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.get-in-touch ul li a i {
+  font-size: 28px;
+  /* تكبير الأيقونات */
+  color: #25D366;
+  /* لون واتساب */
+}
+
+.get-in-touch ul li a:hover i {
+  font-size: 48px;
+  color: #128C7E;
+  /* تغيير لون الأيقونة عند تمرير الماوس */
+}
+
+
+
+
+
+
 html {
   font-size: 14px;
   font-weight: 400;

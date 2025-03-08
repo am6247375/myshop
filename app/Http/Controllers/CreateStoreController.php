@@ -42,19 +42,8 @@ class CreateStoreController extends Controller
         $store->template_id = $request->template_id;
         $store->currency = $request->currency;
         $store->owner_id = $request->owner_id;
-        // معالجة رفع الشعار
-        $logoPath = null;
-        if ($request->hasFile('logo')) {
-            $logoPath = Str::uuid()->toString() . '_' . $request->file('logo')->getClientOriginalName();
-            $request->file('logo')->move(public_path('assets/logo'), $logoPath);
-            $store->logo = 'assets/logo/' . $logoPath;
-        } else {
-            $store->logo = $logoPath;
-        }
-
         // حفظ المتجر في قاعدة البيانات
         $store->save();
-
         // ربط المتجر باللغات المختارة
         $store->languages()->attach($request->languages);
 
@@ -96,7 +85,12 @@ class CreateStoreController extends Controller
         // حفظ المتجر في قاعدة البيانات
         $store->save();
         // ربط المتجر باللغات المختارة
-        $store->languages()->attach($request->languages);
+        if ($request->has('languages')) {
+            $store->languages()->sync($request->languages);
+        } else {
+            // في حال لم يتم تحديد أية لغة، يمكن إلغاء جميع اللغات المرتبطة
+            $store->languages()->sync([]);
+        }
         $store_id=$store->id;
         return redirect()->route('dashboard.index', compact('store_id'))->with('success', 'تم الامر بنجاح');
     }

@@ -46,7 +46,7 @@
     </div>
     <!--PreLoader Ends-->
 
-  
+
     <!-- header -->
     <div class="top-header-area" id="sticker" style="height: 100px;">
         <div class="container-fluid ">
@@ -57,12 +57,12 @@
                         <div class="site-logo" style="    width: 250px !important;     max-width: 250px !important; ">
                             @isset($store)
                                 @if ($store->logo)
-                                    <a href="{{  route('home_store', $store->name) }}">
+                                    <a href="{{ route('home_store', $store->name) }}">
                                         <img src="{{ asset($store->logo) }}" alt="">
                                     </a>
                                 @else
                                     <li style="    text-align: left;">
-                                        <a href={{  route('home_store', $store->name) }}" class="logoo">
+                                        <a href={{ route('home_store', $store->name) }}" class="logoo">
                                             {{ $store->name }}
                                         </a>
                                     </li>
@@ -81,7 +81,7 @@
                         <nav class="main-menu">
                             <ul dir="{{ trans('string.dir') }}">
                                 @isset($store)
-                                    <li><a href="{{  route('home_store', $store->name) }}"> {{ trans('string.home') }} </a>
+                                    <li><a href="{{ route('home_store', $store->name) }}"> {{ trans('string.home') }} </a>
                                     </li>
                                     <li><a href="{{ route('products', $store->name) }}"> {{ trans('string.products') }}
                                         </a></li>
@@ -119,24 +119,25 @@
                                                     <i class="fas fa-globe"></i>
                                                 </a>
                                                 <ul class="dropdown-menu" style="text-align:center">
-                                                    <li>
-                                                        <a style="color: #000" class="lang"
-                                                            href="{{ route('lang', ['locale' => 'en']) }}">English</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('lang', ['locale' => 'ar']) }}">العربية</a>
-                                                    </li>
+                                                    @foreach ($store->languages as $lang)
+                                                        <li>
+                                                            <a href="{{ route('lang', $lang->code) }}">
+                                                                {{ $lang->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
                                                 </ul>
+                                                
                                             </div>
                                         </div>
                                     </li>
                                 @else
-                                <li><a href="{{ route('template.show', [$template->id, 'welcome']) }}">
-                                    {{ trans('string.home') }}
-                                </a></li>
+                                    <li><a href="{{ route('template.show', [$template->id, 'welcome']) }}">
+                                            {{ trans('string.home') }}
+                                        </a></li>
                                     <li><a href="{{ route('template.show', [$template->id, 'products_all']) }}">
-                                        {{ trans('string.products') }}
-                                    </a></li>
+                                            {{ trans('string.products') }}
+                                        </a></li>
                                     <li><a href="#brandd">{{ trans('string.brand') }}</a></li>
                                     <li><a href="#abut">{{ trans('string.about') }}</a></li>
 
@@ -146,7 +147,6 @@
                                                     class="fas fa-shopping-cart"></i></a>
                                             <a class="mobile-hide search-bar-icon" href="#"><i
                                                     class="fas fa-search"></i></a>
-
                                             @guest
                                                 @if (Route::has('login'))
                                                     <a class="shopping-cart" href="{{-- route('login') --}}"><i
@@ -162,8 +162,6 @@
                                                     class="d-none">
                                                     @csrf
                                                 </form>
-
-
                                             @endguest
                                             <!-- تغيير اللغة -->
                                             <div class="dropdown">
@@ -299,42 +297,95 @@
     <div id="contact" class="footer-area">
         <div class="container" dir="rtl">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-box about-widget">
-                        <h2 class="widget-title">{{ trans('string.about') }}</h2>
-                        <p style="text-align: center">{{ trans('string.text_about') }}</p>
+                @if (isset($store) && $store->about !== null)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-box about-widget">
+                            <h2 class="widget-title">{{ trans('string.about') }}</h2>
+                            <p style="text-align: center">{{ $store->about }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6" id="abut">
-                    <div class="footer-box get-in-touch">
-                        <h2 class="widget-title">{{ trans('string.contact') }}</h2>
-                        <ul>
-                            @isset($store)
-                                <li><a href="#">{{ $store->whatsapp_link}}</a></li>
-                                <li><a href="#">{{ $store->facebook_link}}</a></li>
-                                <li><a href="#">{{ $store->instagram_link}}</a></li>
-                            @else
-                                <li><a href="#"></a></li>
-                                <li><a href="#"></a></li>
-                                <li><a href="#"></a></li>
-                            @endisset
-
-                        </ul>
+                    <div class="col-lg-4 col-md-6" id="abut">
+                        <div class="footer-box get-in-touch">
+                            <h2 class="widget-title">{{ trans('string.contact') }}</h2>
+                            <ul>
+                                @if (isset($store) && ($store->email_link !== null || $store->whatsapp_link !== null))
+                                    @if ($store->email_link !== null)
+                                        <li>
+                                            <a href="mailto:{{ $store->email_link }}">
+                                                <i class="fas fa-envelope"></i>
+                                                {{ $store->email_link }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if ($store->whatsapp_link !== null)
+                                        <li>
+                                            <a href="https://wa.me/967{{ $store->whatsapp_link }}">
+                                                <i class="fab fa-whatsapp"></i>
+                                                {{ $store->whatsapp_link }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @else
+                                    <li>لايوجد معلومات لتواصل</li>
+                                @endif
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-box subscribe">
-                        <h2 class="widget-title">{{ trans('string.review_add') }}</h2>
-                        <form action="{{-- route('review_add') --}}" method="POST" style="text-align: center">
-                            @csrf()
-                            <input class="name_review" type="text" name="name"
-                                placeholder="{{ trans('string.name_review') }}">
-                            <textarea class="review" name="review" id="" cols="30" placeholder="{{ trans('string.review') }}"
-                                rows="3"></textarea>
-                            <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                        </form>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-box subscribe">
+                            <h2 class="widget-title">{{ trans('string.review_add') }}</h2>
+                            <form action="{{-- route('review_add') --}}" method="POST" style="text-align: center">
+                                @csrf()
+                                <input class="name_review" type="text" name="name"
+                                    placeholder="{{ trans('string.name_review') }}">
+                                <textarea class="review" name="review" id="" cols="30" placeholder="{{ trans('string.review') }}"
+                                    rows="3"></textarea>
+                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="col-lg-6 col-md-6" id="abut">
+                        <div class="footer-box get-in-touch">
+                            <h2 class="widget-title">{{ trans('string.contact') }}</h2>
+                            <ul>
+                                @if (isset($store) && ($store->email_link !== null || $store->whatsapp_link !== null))
+                                    @if ($store->email_link !== null)
+                                        <li>
+                                            <a href="mailto:{{ $store->email_link }}">
+                                                <i class="fas fa-envelope"></i>
+                                                {{ $store->email_link }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if ($store->whatsapp_link !== null)
+                                        <li>
+                                            <a href="https://wa.me/967{{ $store->whatsapp_link }}">
+                                                <i class="fab fa-whatsapp"></i>
+                                                {{ $store->whatsapp_link }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @else
+                                    <li>لايوجد معلومات لتواصل</li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="footer-box subscribe">
+                            <h2 class="widget-title">{{ trans('string.review_add') }}</h2>
+                            <form action="{{-- route('review_add') --}}" method="POST" style="text-align: center">
+                                @csrf()
+                                <input class="name_review" type="text" name="name"
+                                    placeholder="{{ trans('string.name_review') }}">
+                                <textarea class="review" name="review" id="" cols="30" placeholder="{{ trans('string.review') }}"
+                                    rows="3"></textarea>
+                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

@@ -110,3 +110,54 @@ about: `مرحبًا بكم في متجر ${storeName} نسعى دائمًا ل�
 
 });
 
+function triggerUpload() {
+    document.getElementById('logoInput').click();
+}
+
+function previewLogo(event) {
+    const input = event.target;
+    const container = document.getElementById('logoPreviewContainer');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            container.innerHTML = `
+            <div class="logo-preview-wrapper">
+                <img src="${e.target.result}" 
+                     class="store-logo-preview img-thumbnail rounded" 
+                     alt="شعار المتجر">
+                <button type="button" 
+                        class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 shadow"
+                        onclick="removeLogo()"
+                        title="حذف الشعار">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+            document.getElementById('deleteLogo').value = '0';
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function removeLogo() {
+    const container = document.getElementById('logoPreviewContainer');
+    const logoInput = document.getElementById('logoInput');
+    const deleteInput = document.getElementById('deleteLogo');
+
+    // Reset file input
+    logoInput.value = '';
+
+    // Set delete flag
+    deleteInput.value = '1';
+
+    // Show upload placeholder
+    container.innerHTML = `
+    <div class="upload-placeholder" onclick="triggerUpload()">
+        <div class="store-logo-placeholder d-flex flex-column align-items-center justify-content-center">
+            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i>
+            <span class="text-muted">اختر صورة الشعار</span>
+        </div>
+    </div>
+`;
+}
