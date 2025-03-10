@@ -14,8 +14,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
-       
+        $user = Auth::user(); 
         if ($user->store) {
             return redirect()->route("dashboard.index", $user->store->id);
         }elseif ( $user->stores->first()) {
