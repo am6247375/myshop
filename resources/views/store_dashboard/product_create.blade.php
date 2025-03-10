@@ -88,14 +88,6 @@
     </div>
 
     <script>
-        // ✅ عرض الصورة المحددة قبل الرفع
-        function previewImage(event, targetId) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById(targetId).src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
 
         // ✅ إخفاء رسائل التنبيه بعد 2 ثانية
         document.addEventListener("DOMContentLoaded", function() {

@@ -35,36 +35,8 @@
                                     </div>
                                 @enderror
                             </div>
-                            <!-- شعار المتجر -->
-                            <div class="text-center mt-2">
-                                <img id="logoPreview" class="img-thumbnail d-none"
-                                    style="max-width: 150px; max-height: 150px;">
-                            </div>
-                            <div class="mb-4">
-                                <label for="logo" class="form-label fw-bold">شعار المتجر</label>
-                                <div class="input-group">
-                                    <!-- زر مخصص لاختيار الملف -->
-                                    <label class="input-group-text btn btn-outline-primary" for="logo">اختر
-                                        الشعار</label>
-                                    <!-- حقل رفع مخفي -->
-                                    <input type="file" name="logo" id="logo" class="d-none" accept="image/*"
-                                        onchange="previewLogo(event)">
-                                    <!-- حقل عرض اسم الملف -->
-                                    <input type="text" class="form-control" id="fileName"
-                                        placeholder="لم يتم اختيار ملف" readonly>
-                                </div>
-                                <small class="form-text text-muted">
-                                    الصيغ المدعومة: JPG, PNG, SVG (الحجم الأقصى: 2MB)
-                                </small>
-                                @error('logo')
-                                    <div class="invalid-feedback d-block">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
                             <!-- اللغات والعملة -->
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-6">
+                                <div class=" mb-3 " >
                                     <label class="form-label fw-bold"> <i class="material-icons">translate</i>اللغات
                                         المدعومة</label>
                                     <div class="bg-light p-3 rounded-3">
@@ -85,7 +57,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class=" mb-4 ">
                                     <label class="form-label fw-bold"><i class="fas fa-money-bill-wave me-2"></i> العملات
                                         المدعومة</label>
                                     <div class="form-floating">
@@ -103,7 +75,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
                             <!-- زر الإرسال -->
                             <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold">
                                 <i class="fas fa-plus-circle me-2"></i>إنشاء المتجر

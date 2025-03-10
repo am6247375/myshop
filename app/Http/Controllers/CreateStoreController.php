@@ -8,7 +8,7 @@ use App\Models\languages;
 use App\Models\Store;
 use App\Models\Template;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -46,7 +46,6 @@ class CreateStoreController extends Controller
         $store->save();
         // ربط المتجر باللغات المختارة
         $store->languages()->attach($request->languages);
-
         $store_id = $store->id;
         return redirect()->route('dashboard.index', compact('store_id'))
             ->with('success', 'تم إنشاء المتجر بنجاح!');
@@ -107,6 +106,9 @@ class CreateStoreController extends Controller
 
     public function conditions_create(Request $request, $store_id)
     {
+        $request->validate([
+            'privacy_policy' => 'required',
+        ]);
         $store = Store::findOrFail($store_id);
         $store->privacy_policy = $request->privacy_policy;
         $store->terms_and_conditions = $request->terms_and_conditions;

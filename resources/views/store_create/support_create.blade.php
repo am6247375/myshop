@@ -39,19 +39,6 @@
                     @csrf
 
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
-
-                    <!-- Error Messages -->
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show mb-4">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
-
                     <!-- Tab Contents -->
                     <div class="tab-content mt-4">
                         <!-- General Settings Tab -->
@@ -262,6 +249,6 @@
         </div>
     </div>
     <script>
-    window.StoreName = "{{ $store->name }}";
-</script>
+        window.StoreName = "{{ $store->name }}";
+    </script>
 @endsection

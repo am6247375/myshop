@@ -34,8 +34,8 @@
     <link rel="stylesheet" href="{{ asset('assets_admin/dist/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets_admin/css/main.css') }}">
 
-    <!-- تنسيقات مخصصة لزيادة وضوح الخطوط في القائمة الجانبية وتغيير ألوان النصوص -->
-
+    <link rel="stylesheet" href="{{ asset('assets/datatables.min.css') }}" />
+  
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -45,42 +45,24 @@
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- زر إخفاء وإظهار القائمة الجانبية -->
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#">
+                <li class="nav-item"  style="text-align: center; margin: 10px 10px;">
+                    <a  class="nav-link menuu" data-widget="pushmenu" href="#">
                         <i class="fas fa-bars"></i>
                     </a>
                 </li>
-                <li class="nav-item" style="text-align: center; margin: 10px 0;">
+                <li class="nav-item"  style="text-align: center; margin: 10px 0;">
                     <a class="nav-link" id="copy-link" href="#"
-                        onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')"
-                        style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #28a745; color: #fff; border-radius: 8px; text-decoration: none; transition: background-color 0.3s ease, box-shadow 0.3s ease; font-weight: bold;">
+                        onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')">
                         <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i>
-                        <span>نسخ رابط المتجر</span>
+                        <span>
+                            {{ 'http://127.0.0.1:8000/store/' . $store->name }}
+                            نسخ رابط المتجر
+                        </span>
                     </a>
-                    <p style="margin-top: 8px; color: #6c757d; font-size: 14px;">
-                        {{ 'http://127.0.0.1:8000/store/' . $store->name }}</p>
+                  
                 </li>
 
-                <script>
-                    function copyToClipboard(text) {
-                        navigator.clipboard.writeText(text).then(() => {
-                            const link = document.getElementById('copy-link');
-                            link.style.backgroundColor = '#218838';
-                            link.style.boxShadow = '0 0 12px rgba(40, 167, 69, 0.5)';
-                            link.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i> تم نسخ الرابط!';
-
-                            setTimeout(() => {
-                                link.style.backgroundColor = '#28a745';
-                                link.style.boxShadow = 'none';
-                                link.innerHTML =
-                                    '<i class="fas fa-copy" style="margin-right: 8px;"></i> نسخ رابط المتجر';
-                            }, 2000);
-                        }).catch(err => {
-                            alert('حدث خطأ أثناء نسخ الرابط');
-                            console.error('فشل النسخ: ', err);
-                        });
-                    }
-                </script>
+               
 
 
             </ul>
@@ -88,12 +70,17 @@
         <!-- /.navbar -->
 
         <!-- القائمة الجانبية -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" id="uu">
             <!-- معاينة المتجر -->
-            <a href="{{ route('home_store', $store->name) }}" target="_blank" class="brand-link">
-                <i class="fas fa-eye"></i>
-                <span class="brand-text font-weight-light">معاينة المتجر</span>
-            </a>
+            <div class="brand-container text-center py-3">
+                <div class="mt-2">
+                    <a href="{{ route('home_store', $store->name) }}" target="_blank" class="btn btn-outline-light btn-med ">
+                        <i class="fas fa-eye mr-1"></i>
+                        معاينة المتجر
+                    </a>
+                </div>
+            </div>
+        
 
             <!-- Sidebar -->
             <div class="sidebar">
@@ -160,6 +147,19 @@
 
         <!-- المحتوى الرئيسي -->
         <div class="content-wrapper">
+            @if (session('success'))
+            <div class="alert alert-success text-center fade show">{{ session('success') }}</div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger text-center fade show">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
             @yield('content_admin')
         </div>
         <!-- /.content-wrapper -->
@@ -180,6 +180,9 @@
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button)
+    </script>
+     <script>
+        window.StoreName = "{{ $store->name }}";
     </script>
 
     <!-- Bootstrap 4 rtl -->
@@ -211,6 +214,9 @@
     <script src="{{ asset('assets_admin/dist/js/adminlte.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('assets_admin/dist/js/demo.js') }}"></script>
+    <script src="{{ asset('assets/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/datatables.min.js') }}"></script>
+
 </body>
 
 </html>

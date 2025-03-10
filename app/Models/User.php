@@ -54,6 +54,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Permission::class, 'store_management');
     }
+    public function stores()
+    {
+        return $this->belongsToMany(store::class, 'store_management');
+    }
 
     
 }

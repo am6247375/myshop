@@ -53,7 +53,7 @@ Route::post('/store/create', [CreateStoreController::class, 'store_create'])->na
 Route::get('/store/settings/{store_id}', [CreateStoreController::class, 'store_settings_view'])->name('store.settings.view');
 Route::post('/store/settings', [CreateStoreController::class, 'store_settings'])->name('store.settings');
 
-Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])->name('dashboard.index')->middleware('store');
 Route::get('/management/products/{store_id}', [ManageProductsController::class, 'index'])->name('manage.products');
 Route::get('/product/create/{store_id}', [ManageProductsController::class, 'product_create_view'])->name('product.create.view');
 Route::post('/product/create', [ManageProductsController::class, 'product_create'])->name('product.ceate');
@@ -76,3 +76,4 @@ Route::post('/conditions/create/{store_id}', [CreateStoreController::class, 'con
 });
 Route::get('/store/{name}', [StoreController::class, 'home_store'])->name('home_store');
 Route::get('/store/{name}/products/{category_id?}', [StoreController::class, 'products'])->name('products');
+Route::get('/store/{name}/conditions', [StoreController::class, 'conditions'])->name('conditions');

@@ -18,6 +18,11 @@ class Store extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+    public function storeManagement()
+{
+    return $this->hasMany(StoreManagement::class);
+}
+
 
     // العلاقة مع اللغات عبر `store_language`
     public function languages()

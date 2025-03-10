@@ -43,7 +43,7 @@
 
     <section class="content-header">
         <div class="container-fluid text-center">
-            <h2 class="mt-4 font-weight-bold">إعداد متجرك الإلكتروني</h2>
+            {{-- <h2 class="mt-4 font-weight-bold">إعداد متجرك الإلكتروني</h2> --}}
         </div>
     </section>
 
@@ -58,9 +58,9 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ([
             'store' => 'إنشاء المتجر',
-            'category' => 'إنشاء المجموعة الأولى',
-            'product' => 'إضافة المنتج الأول',
-            'support' => 'الدعم الفني ونبذة عن المتجر',
+            'category' => 'إنشاء القسم الأول لمتجرك',
+            'product' => 'إضافة المنتج الأول لمتجرك',
+            'support' => 'الدعم الفني ونبذة عن متجرك',
             'conditions' => 'الصفحات القانونية',
         ] as $step => $label)
                                     @php
@@ -90,8 +90,9 @@
                                         data-step="{{ $step }}"
                                         style="cursor: {{ $disabled ? 'not-allowed' : 'pointer' }}">
                                         <span>
-                                            <i
-                                                class="fas {{ $completed ? 'fa-check-circle text-success' : 'fa-circle text-secondary' }} mr-2"></i>
+                                            <i class="fas {{ $completed ? 'fa-check-circle' : 'fa-circle' }} mr-2"
+                                            style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); -webkit-background-clip: text; color: transparent;"></i>
+                                         
                                             {{ $label }}
                                         </span>
                                     </li>
@@ -104,17 +105,18 @@
                 <!-- نسبة الإنجاز والبطاقات -->
                 <div class="col-md-6 mb-4">
                     <div class="progress mb-3" style="height: 50px; border-radius: 25px;">
-                        <div class="progress-bar bg-success" role="progressbar"
-                            style="width: {{ ($completedSteps / $totalSteps) * 100 }}%;"
+                        <div class="progress-bar" role="progressbar"
+                            style="width: {{ ($completedSteps / $totalSteps) * 100 }}%; " id="sj"
                             aria-valuenow="{{ $completedSteps }}" aria-valuemin="0" aria-valuemax="{{ $totalSteps }}">
                             <h5> {{ $completedSteps }}/{{ $totalSteps }} مكتمل</h5>
                         </div>
                     </div>
+                    
                     <div id="cards-container">
                         @foreach ([
             'category' => [
                 'icon' => 'layer-group',
-                'title' => 'إنشاء الأقسام',
+                'title' => 'إنشاء القسم الأول',
                 'text' => 'قم بإنشاء أول قسم لمتجرك.',
                 'route' => route('category.create.view', $store->id),
             ],
@@ -139,10 +141,12 @@
         ] as $step => $data)
                             <div id="card-{{ $step }}"
                                 class="step-card card shadow-sm border-0 rounded-lg text-center p-4" style="display: none;">
-                                <i class="fas fa-{{ $data['icon'] }} text-success" style="font-size: 40px;"></i>
+                               <i class="fas fa-{{ $data['icon'] }}" id="icons"></i>
+
+
                                 <h5 class="mt-3 font-weight-bold">{{ $data['title'] }}</h5>
                                 <p class="text-muted">{{ $data['text'] }}</p>
-                                <a href="{{ $data['route'] }}" class="btn btn-success rounded-pill">متابعة</a>
+                                <a href="{{ $data['route'] }}"  class="btn rounded-pill menuu">متابعة</a>
                             </div>
                         @endforeach
                     </div>

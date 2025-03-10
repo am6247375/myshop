@@ -1,6 +1,41 @@
 document.addEventListener('DOMContentLoaded', function () {
+    setupDataTable();
+    setupStepNavigation();
+    setupDefaultTemplates();
+    setupCharCounters();
+});
+
+function setupDataTable() {
+    let table = new DataTable('#myTable', {
+        "dom": 'Bfrtip',
+        "language": {
+            "search": "🔍 ابحث: ",
+            "lengthMenu": "عرض _MENU_ سجل لكل صفحة",
+            "info": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
+            "infoEmpty": "لا توجد سجلات متاحة",
+            "zeroRecords": "لم يتم العثور على نتائج",
+            "paginate": {
+                "first": "الأول",
+                "last": "الأخير",
+                "next": "التالي",
+                "previous": "السابق"
+            }
+        }
+    });
+    setTimeout(() => {
+        document.querySelector('.dataTables_filter').style.textAlign = "center";
+    }, 500);
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.style.opacity = "0";
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 2000);
+}
+
+function setupStepNavigation() {
     const stepItems = document.querySelectorAll('li[data-step]');
-    const autoStep =window.nextStep ;
+    const autoStep = window.nextStep;
 
     function hideAllCards() {
         document.querySelectorAll('.step-card').forEach(card => card.style.display = 'none');
@@ -12,18 +47,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     stepItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // إذا كان العنصر غير قابل للنقر، لا يتم تنفيذ الإجراء
+        item.addEventListener('click', function () {
             if (this.style.cursor === 'not-allowed') return;
             hideAllCards();
             document.getElementById(`card-${this.getAttribute('data-step')}`).style.display = 'block';
         });
     });
+}
 
-    // التأكد من تعريف اسم المتجر
-    const storeName = window.StoreName ;
-
-    // قوالب السياسات الافتراضية
+function setupDefaultTemplates() {
+    const storeName = window.StoreName;
     const defaultTemplates = {
         privacy_policy: `تلتزم ${storeName} بحماية خصوصية عملائها بشكل كامل. 
 1. نقوم بجمع المعلومات الشخصية فقط لأغراض تقديم الخدمات وتحسين التجربة.
@@ -46,52 +79,33 @@ document.addEventListener('DOMContentLoaded', function () {
 4. يتم معالجة طلبات الاسترجاع خلال 3-5 أيام عمل كحد أقصى.
 5. يتم استرداد المبالغ عبر نفس طريقة الدفع الأصلية خلال 10 أيام.`,
 
-about: `مرحبًا بكم في متجر ${storeName} نسعى دائمًا لتقديم أفضل المنتجات والخدمات لعملائنا الكرام، مع التزامنا بمعايير الجودة العالية وخدمة العملاء المتميزة.
+        about: `مرحبًا بكم في متجر ${storeName} نسعى دائمًا لتقديم أفضل المنتجات والخدمات لعملائنا الكرام، مع التزامنا بمعايير الجودة العالية وخدمة العملاء المتميزة.
 نحرص على توفير تجربة تسوق فريدة من خلال: تشكيلة منتجات متنوعة ومميزة عروض وتخفيضات حصرية دعم فني متاح على مدار الساعة
 سياسة إرجاع مرنة شكرًا لثقتكم بنا، فريق ${storeName} دائمًا بخدمتكم. `,
 
     };
-   
-    // دالة تعبئة النصوص الافتراضية
-    function fillDefault(fieldId) {
+
+    window.fillDefault = function (fieldId) {
         const field = document.getElementById(fieldId);
-        if (!field) {
-            console.error(`❌ خطأ: العنصر ذو المعرف '${fieldId}' غير موجود في DOM.`);
-            return;
-        }
+        if (!field) return console.error(`❌ العنصر '${fieldId}' غير موجود.`);
 
         const content = defaultTemplates[fieldId];
-        if (!content) {
-            console.error(`❌ خطأ: لا يوجد قالب افتراضي لـ '${fieldId}'.`);
-            return;
-        }
+        if (!content) return console.error(`❌ لا يوجد قالب افتراضي لـ '${fieldId}'.`);
 
         field.value = content;
-        field.dispatchEvent(new Event('input')); // تفعيل الحدث ليتم تحديث العداد
+        field.dispatchEvent(new Event('input'));
         field.focus();
-    }
+    };
 
-    // جعل الدالة متاحة عالميًا
-    window.fillDefault = fillDefault;
-
-    // إضافة الحدث لجميع الأزرار تلقائيًا
     document.querySelectorAll('.btn-outline-primary').forEach(button => {
         button.addEventListener('click', function () {
             const fieldId = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-            if (fieldId) fillDefault(fieldId);
+            if (fieldId) window.fillDefault(fieldId);
         });
     });
+}
 
-    // تحديث عداد الأحرف لكل الحقول تلقائيًا
-    function updateCharCount(fieldId, counterId) {
-        const field = document.getElementById(fieldId);
-        const counter = document.getElementById(counterId);
-        if (field && counter) {
-            counter.textContent = field.value.length;
-        }
-    }
-
-    // قائمة الحقول التي تحتاج إلى عداد
+function setupCharCounters() {
     const fields = [
         { fieldId: "privacy_policy", counterId: "charCountPrivacy" },
         { fieldId: "terms_and_conditions", counterId: "charCountTerms" },
@@ -99,19 +113,30 @@ about: `مرحبًا بكم في متجر ${storeName} نسعى دائمًا ل�
         { fieldId: "return__policy", counterId: "charCountReturn" }
     ];
 
-    // ربط الأحداث بكل حقل نصي
+    function updateCharCount(fieldId, counterId) {
+        const field = document.getElementById(fieldId);
+        const counter = document.getElementById(counterId);
+        if (field && counter) counter.textContent = field.value.length;
+    }
+
     fields.forEach(({ fieldId, counterId }) => {
         const field = document.getElementById(fieldId);
         if (field) {
             field.addEventListener('input', () => updateCharCount(fieldId, counterId));
-            updateCharCount(fieldId, counterId); // تحديث العداد عند تحميل الصفحة
+            updateCharCount(fieldId, counterId);
         }
     });
-
-});
+}
 
 function triggerUpload() {
     document.getElementById('logoInput').click();
+}
+function previewImage(event, targetId) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        document.getElementById(targetId).src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
 }
 
 function previewLogo(event) {
@@ -120,38 +145,25 @@ function previewLogo(event) {
 
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = e => {
             container.innerHTML = `
             <div class="logo-preview-wrapper">
-                <img src="${e.target.result}" 
-                     class="store-logo-preview img-thumbnail rounded" 
-                     alt="شعار المتجر">
-                <button type="button" 
-                        class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 shadow"
-                        onclick="removeLogo()"
-                        title="حذف الشعار">
+                <img src="${e.target.result}" class="store-logo-preview img-thumbnail rounded" alt="شعار المتجر">
+                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 shadow" onclick="removeLogo()" title="حذف الشعار">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
             document.getElementById('deleteLogo').value = '0';
-        }
+        };
         reader.readAsDataURL(input.files[0]);
     }
 }
 
 function removeLogo() {
     const container = document.getElementById('logoPreviewContainer');
-    const logoInput = document.getElementById('logoInput');
-    const deleteInput = document.getElementById('deleteLogo');
-
-    // Reset file input
-    logoInput.value = '';
-
-    // Set delete flag
-    deleteInput.value = '1';
-
-    // Show upload placeholder
+    document.getElementById('logoInput').value = '';
+    document.getElementById('deleteLogo').value = '1';
     container.innerHTML = `
     <div class="upload-placeholder" onclick="triggerUpload()">
         <div class="store-logo-placeholder d-flex flex-column align-items-center justify-content-center">
@@ -160,4 +172,23 @@ function removeLogo() {
         </div>
     </div>
 `;
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const link = document.getElementById('copy-link');
+        link.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i> تم نسخ الرابط';
+        setTimeout(() => {
+            link.innerHTML =` <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i> <span>${text} نسخ رابط المتجر</span>`;
+        }, 2000);
+    }).catch(err => {
+        alert('حدث خطأ أثناء نسخ الرابط');
+        console.error('فشل النسخ: ', err);
+    });
+}
+
+function confirmDelete(event, categoryName) {
+    if (!confirm(`هل أنت متأكد أنك تريد حذف المنتج "${categoryName}"؟`)) {
+        event.preventDefault();
+    }
 }

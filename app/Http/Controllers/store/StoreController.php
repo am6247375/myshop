@@ -66,4 +66,15 @@ class StoreController extends Controller
         // عرض صفحة المنتجات حسب الفئة إذا وُجدت
         return view($category_id ? "{$template}.products_all" : "{$template}.products_all", compact('store', 'category_id'));
     }
+    public function conditions($name)
+    {
+        // جلب بيانات المتجر مع القالب
+        $store = Store::with('template')->where('name', $name)->firstOrFail();
+
+        // جلب مسار القالب
+        $template = $store->template->path_temp;
+
+        // عرض صفحة المنتجات حسب الفئة إذا وُجدت
+        return view("{$template}.conditions", compact('store'));
+    }
 }

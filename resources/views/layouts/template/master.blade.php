@@ -85,7 +85,7 @@
                                     </li>
                                     <li><a href="{{ route('products', $store->name) }}"> {{ trans('string.products') }}
                                         </a></li>
-                                    <li><a href="#brandd">{{ trans('string.brand') }}</a></li>
+                                    <li><a href="{{ route('conditions',$store->name) }}">سياسة الخصوصية</a></li>
                                     <li><a href="#abut">{{ trans('string.about') }}</a></li>
 
                                     <li>
