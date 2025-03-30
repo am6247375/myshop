@@ -11,17 +11,24 @@ class Store extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'active', 'logo', 'currency', 'whatsapp_link', 
-        'email_link', 'template_id', 'owner_id','about'
+        'name',
+        'active',
+        'logo',
+        'currency',
+        'whatsapp_link',
+        'email_link',
+        'template_id',
+        'owner_id',
+        'about'
     ];
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
     public function storeManagement()
-{
-    return $this->hasMany(StoreManagement::class);
-}
+    {
+        return $this->hasMany(StoreManagement::class);
+    }
 
 
     // العلاقة مع اللغات عبر `store_language`
@@ -38,5 +45,4 @@ class Store extends Model
     {
         return $this->hasMany(Category::class);
     }
-    
 }

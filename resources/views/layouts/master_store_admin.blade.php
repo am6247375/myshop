@@ -29,7 +29,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Bootstrap 4 RTL -->
-    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('assets_admin/plugins/bootstrap/bootstrap.min.css') }}">
     <!-- ملف التنسيقات المخصص -->
     <link rel="stylesheet" href="{{ asset('assets_admin/dist/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets_admin/css/main.css') }}">
@@ -55,7 +55,7 @@
                         onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')">
                         <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i>
                         <span>
-                            {{ 'http://127.0.0.1:8000/store/' . $store->name }}
+                            {{ 'http://127.0.0.1:]/store/' . $store->name }}
                             نسخ رابط المتجر
                         </span>
                     </a>
@@ -118,12 +118,17 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('manage.admin', $store->id) }}" class="nav-link">
+                                <i class="fas fa-users nav-icon"></i>
+                                <p>ادارة الموظفين</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('support.create.view', $store->id) }}" class="nav-link">
                                 <i class="fas fa-cogs nav-icon"></i>
                                 <p>الاعدادات</p>
                             </a>
                         </li>
-
                         <!-- تسجيل الخروج -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('logout') }}"

@@ -45,7 +45,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/logout', [HomeController::class, 'logout'])->middleware('auth')->name('logout');
 // Route::post('/login', [HomeController::class, 'login'])->middleware('auth')->name('login');
 Route::middleware(['auth'])->group(function () {
-    
 Route::get('/templates', [CreateStoreController::class, 'templates'])->name('templates');
 Route::get('/template/show/{template_id}/{page_name}', [CreateStoreController::class, 'template_show'])->name('template.show');
 Route::get('/store/create/view/{template_id}', [CreateStoreController::class, 'store_create_view'])->name('store.create.view');
@@ -57,6 +56,11 @@ Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])-
 Route::get('/management/products/{store_id}', [ManageProductsController::class, 'index'])->name('manage.products');
 Route::get('/product/create/{store_id}', [ManageProductsController::class, 'product_create_view'])->name('product.create.view');
 Route::post('/product/create', [ManageProductsController::class, 'product_create'])->name('product.ceate');
+
+
+Route::get('/management/manage_admin/{store_id}', [DashbaordStoreController::class, 'manage_admin'])->name('manage.admin');
+
+
 
 
 Route::get('/management/categories/{store_id}', [ManageCategoriesController::class, 'index'])->name('manage.categories');
