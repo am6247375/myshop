@@ -59,9 +59,8 @@ Route::post('/product/create', [ManageProductsController::class, 'product_create
 
 
 Route::get('/management/manage_admin/{store_id}', [DashbaordStoreController::class, 'manage_admin'])->name('manage.admin');
-
-
-
+Route::get('/management/manage_admin/{store_id}/create', [DashbaordStoreController::class, 'admin_create_view'])->name('admin.create.view');
+Route::get('/manage_admin/{store_id}', [DashbaordStoreController::class, 'admin_create_view'])->name('admin.create');
 
 Route::get('/management/categories/{store_id}', [ManageCategoriesController::class, 'index'])->name('manage.categories');
 Route::get('/category/create/{store_id}', [ManageCategoriesController::class, 'category_create_view'])->name('category.create.view');

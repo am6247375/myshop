@@ -4,7 +4,7 @@
 <div class="container py-5">
     <div class="card shadow-lg border-0">
         <!-- Card Header -->
-        <div class="card-header bg-gradient-primary text-white py-4" id="card-header">
+        <div class="card-header text-white py-4" id="card-header">
             <h2 class="mb-0 fw-bold">
                 <i class="fas fa-cogs me-2"></i>
                 إدارة سياسات المتجر
