@@ -60,7 +60,9 @@ Route::post('/product/create', [ManageProductsController::class, 'product_create
 
 Route::get('/management/manage_admin/{store_id}', [DashbaordStoreController::class, 'manage_admin'])->name('manage.admin');
 Route::get('/management/manage_admin/{store_id}/create', [DashbaordStoreController::class, 'admin_create_view'])->name('admin.create.view');
-Route::get('/manage_admin/{store_id}', [DashbaordStoreController::class, 'admin_create_view'])->name('admin.create');
+Route::post('/manage_admin', [DashbaordStoreController::class, 'admin_create'])->name('admin.create');
+Route::get('/manage_admin/{store_id}/edit/{admin_id}', [DashbaordStoreController::class, 'admin_edit_view'])->name('admin.edit.view');
+Route::post('/manage_admin/edit', [DashbaordStoreController::class, 'admin_edit'])->name('admin.edit');
 
 Route::get('/management/categories/{store_id}', [ManageCategoriesController::class, 'index'])->name('manage.categories');
 Route::get('/category/create/{store_id}', [ManageCategoriesController::class, 'category_create_view'])->name('category.create.view');

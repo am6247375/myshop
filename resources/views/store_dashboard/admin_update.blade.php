@@ -76,14 +76,13 @@
         border-radius: 0.5rem 0.5rem 0 0 !important;
     }
 </style>
-
 <div class="container-fluid py-4">
     <div class="card border-0 shadow-lg">
         <!-- Header with Gradient Background -->
         <div class="card-header header-card text-white py-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="h5 fw-bold mb-0">
-                    <i class="fas fa-user-plus me-2"></i> إضافة عضو جديد للفريق
+                    <i class="fas fa-user-edit me-2"></i> تعديل بيانات العضو
                 </h2>
             </div>
         </div>
@@ -104,9 +103,13 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.create') }}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('admin.edit') }}" method="POST" class="needs-validation" novalidate>
                 @csrf
-<input type="text" hidden name="store_id" value="{{ $store->id }}">
+               
+
+                <input type="hidden" name="store_id" value="{{ $store->id }}">
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+
                 <div class="row g-3">
                     <!-- First Name -->
                     <div class="col-md-6">
@@ -115,10 +118,10 @@
                             <i class="fas fa-user"></i>
                             <input type="text" name="first_name"
                                 class="form-control-custom @error('first_name') is-invalid @enderror"
-                                value="{{ old('first_name') }}" required placeholder="أدخل الاسم الأول">
+                                value="{{ old('first_name', $user->first_name) }}" required>
                         </div>
                         @error('first_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                           <span>{{$message}}</span>
                         @enderror
                     </div>
 
@@ -129,10 +132,10 @@
                             <i class="fas fa-user"></i>
                             <input type="text" name="last_name"
                                 class="form-control-custom @error('last_name') is-invalid @enderror"
-                                value="{{ old('last_name') }}" required placeholder="أدخل الاسم الأخير">
+                                value="{{ old('last_name', $user->last_name) }}" required>
                         </div>
                         @error('last_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                           <span>{{$message}}</span>
                         @enderror
                     </div>
 
@@ -143,25 +146,21 @@
                             <i class="fas fa-at"></i>
                             <input type="email" name="email"
                                 class="form-control-custom @error('email') is-invalid @enderror"
-                                value="{{ old('email') }}" required placeholder="example@domain.com">
+                                value="{{ old('email', $user->email) }}" required>
                         </div>
                         @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                           <span>{{$message}}</span>
                         @enderror
                     </div>
 
-                    <!-- Password -->
+                    <!-- Password (اختياري) -->
                     <div class="col-md-6">
-                        <label class="form-label">كلمة المرور</label>
+                        <label class="form-label">كلمة المرور (اتركها فارغة إذا لم ترغب في تغييرها)</label>
                         <div class="input-field">
                             <i class="fas fa-key"></i>
-                            <input type="password" name="password"
-                                class="form-control-custom @error('password') is-invalid @enderror" required
+                            <input type="password" name="password" class="form-control-custom"
                                 placeholder="••••••••">
                         </div>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <!-- Phone Number -->
@@ -171,10 +170,10 @@
                             <span style="color: #17a2b8; margin-right: 0.75rem;">+967</span>
                             <input type="tel" name="phone"
                                 class="form-control-custom @error('phone') is-invalid @enderror"
-                                value="{{ old('phone') }}" required placeholder="5XXXXXXXX">
+                                value="{{ old('phone', $user->phone) }}" required>
                         </div>
                         @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                           <span>{{$message}}</span>
                         @enderror
                     </div>
 
@@ -184,8 +183,8 @@
                         <div class="input-field">
                             <i class="fas fa-venus-mars"></i>
                             <select name="sex" class="form-select-custom" required>
-                                <option value="male" {{ old('sex') == 'male' ? 'selected' : '' }}>ذكر</option>
-                                <option value="female" {{ old('sex') == 'female' ? 'selected' : '' }}>أنثى</option>
+                                <option value="male" {{ old('sex', $user->sex) == 'male' ? 'selected' : '' }}>ذكر</option>
+                                <option value="female" {{ old('sex', $user->sex) == 'female' ? 'selected' : '' }}>أنثى</option>
                             </select>
                         </div>
                     </div>
@@ -196,19 +195,18 @@
                         <div class="input-field">
                             <i class="fas fa-user-shield"></i>
                             <select name="role_id" class="form-select-custom" required>
-                                <option value="">اختر الدور...</option>
                                 @foreach ($roles as $role)
-                                <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                <option value="{{ $role->id }}" {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>
                                     {{ $role->name }}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
                         @error('role_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                           <span>{{$message}}</span>
                         @enderror
                     </div>
-                    
+
                     <!-- Permissions -->
                     <div class="col-12">
                         <label class="form-label">الصلاحيات</label>
@@ -216,30 +214,27 @@
                             <i class="fas fa-user-shield"></i>
                             <div class="w-100 permissions-container">
                                 @foreach ($permissions as $permission)
-                                    <div class="permission-item">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="permissions[]" 
-                                                value="{{ $permission->id }}" id="perm-{{ $permission->id }}"
-                                                {{ in_array($permission->id, old('permissions', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="perm-{{ $permission->id }}">
-                                                <span class="fw-medium">{{ $permission->name }}</span>
-                                                <small class="d-block text-muted">{{ $permission->description }}</small>
-                                            </label>
-                                        </div>
+                                <div class="permission-item">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="permissions[]" 
+                                            value="{{ $permission->id }}" id="perm-{{ $permission->id }}"
+                                            {{ in_array($permission->id, old('permissions', $storeManagement->pluck('permission_id')->toArray())) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="perm-{{ $permission->id }}">
+                                            <span class="fw-medium">{{ $permission->name }}</span>
+                                        </label>
                                     </div>
-                                @endforeach
+                                </div>
+                            @endforeach
+                            
                             </div>
                         </div>
-                        @error('permissions')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
                 </div>
 
                 <!-- Submit Button -->
                 <div class="text-end mt-4">
                     <button type="submit" class="btn btn-submit">
-                        <i class="fas fa-save me-2"></i> حفظ العضو الجديد
+                        <i class="fas fa-save me-2"></i> حفظ التعديلات
                     </button>
                 </div>
             </form>

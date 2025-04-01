@@ -22,6 +22,7 @@
                                     <table id="myTable"class="table table-striped table-bordered text-center mt-2 mb-4">
                                         <thead>
                                             <tr>
+                                                <th>id</th>
                                                 <th>الاسم</th>
                                                 <th>الجنس</th>
                                                 <th>الهاتف</th>
@@ -38,15 +39,18 @@
                                                     $permissions = $adminGroup->pluck('permission.name')->filter()->unique()->join(' , ');
                                                 @endphp
                                                 <tr>
+                                                    <td>{{ $user->id }}</td>
                                                     <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                                                     <td>{{ $user->sex }}</td>
                                                     <td style="text-align: center">{{ $user->phone }}</td>
                                                     <td>{{ $roles ?: 'بدون دور' }}</td>
                                                     <td>{{ $permissions ?: 'بدون صلاحيات' }}</td>
                                                     <td>
-                                                        <button class="btn btn-danger btn-sm">
+                                                        <a class="btn btn-danger btn-sm">
                                                             <i class="fas fa-trash-alt"></i> إزالة
-                                                        </button>
+                                                        </a>
+                                                        <a href="{{ route('admin.edit.view', ['store_id' => $store->id, 'admin_id' => $user->id]) }}" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-user-edit"></i> تعديل
                                                     </td>
                                                 </tr>
                                             @endforeach
