@@ -160,5 +160,15 @@ class DashbaordStoreController extends Controller
         return redirect()->route('admin.edit.view', [$request->store_id, $request->user_id])
             ->with('success', 'تم تحديث بيانات المستخدم بنجاح');
     }
+    public function admin_delete($store_id, $admin_id)
+    {
+        // حذف الإدخالات المرتبطة بالمستخدم في جدول StoreManagement
+        StoreManagement::where('user_id', $admin_id)
+            ->where('store_id', $store_id)
+            ->delete();
+    
+        return redirect()->route('manage.admin', $store_id)
+            ->with('success', 'تم حذف المستخدم بنجاح');
+    }
 
 }    

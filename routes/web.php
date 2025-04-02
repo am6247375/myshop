@@ -12,25 +12,27 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| روابط الويب
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| هنا يمكنك تسجيل روابط الويب لتطبيقك. يتم تحميل هذه الروابط
+| عبر RouteServiceProvider ضمن مجموعة تحتوي على وسيط "web"
+| الآن قم ببناء شيء رائع!
 |
 */
 
+// الروابط العامة (لا تتطلب تسجيل دخول)
 Route::get('/', function () {
     session(['store_home' => route('welcome')]);
-
     return view('welcome');
 })->name('welcome');
 
+// رابط تجريبي (ربما لأغراض التطوير)
 Route::get('/اسامة', function () {
     return view('store_create.os');
 });
 
+// رابط تغيير اللغة
 Route::get('lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar'])) {
         session(['locale' => $locale]);
@@ -38,47 +40,83 @@ Route::get('lang/{locale}', function ($locale) {
     return back();
 })->name('lang');
 
+// روابط المصادقة (تسجيل دخول، تسجيل حساب، إلخ)
 Auth::routes();
 
+// الرابط الرئيسي بعد المصادقة
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::post('/logout', [HomeController::class, 'logout'])->middleware('auth')->name('logout');
-// Route::post('/login', [HomeController::class, 'login'])->middleware('auth')->name('login');
+// الروابط التي تتطلب تسجيل الدخول
 Route::middleware(['auth'])->group(function () {
-Route::get('/templates', [CreateStoreController::class, 'templates'])->name('templates');
-Route::get('/template/show/{template_id}/{page_name}', [CreateStoreController::class, 'template_show'])->name('template.show');
-Route::get('/store/create/view/{template_id}', [CreateStoreController::class, 'store_create_view'])->name('store.create.view');
-Route::post('/store/create', [CreateStoreController::class, 'store_create'])->name('store.create');
-Route::get('/store/settings/{store_id}', [CreateStoreController::class, 'store_settings_view'])->name('store.settings.view');
-Route::post('/store/settings', [CreateStoreController::class, 'store_settings'])->name('store.settings');
 
-Route::get('/dashboard/{store_id}', [DashbaordStoreController::class, 'index'])->name('dashboard.index')->middleware('store');
-Route::get('/management/products/{store_id}', [ManageProductsController::class, 'index'])->name('manage.products');
-Route::get('/product/create/{store_id}', [ManageProductsController::class, 'product_create_view'])->name('product.create.view');
-Route::post('/product/create', [ManageProductsController::class, 'product_create'])->name('product.ceate');
+    // رابط معاينة القالب
+    Route::prefix('/templates')->controller(CreateStoreController::class)->group(function () {
+        Route::get('/', 'templates')->name('templates');
+        Route::get('/show/{template_id}/{page_name}', 'template_show')->name('template.show');
+    });
 
+    // روابط إنشاء المتجر 
+    Route::prefix('/store')->controller(CreateStoreController::class)->group(function () {
+        Route::get('/create/view/{template_id}', 'store_create_view')->name('store.create.view');
+        Route::post('/create', 'store_create')->name('store.create');
+        Route::get('/settings/{store_id}', 'store_settings_view')->name('store.settings.view');
+        Route::post('/settings', 'store_settings')->name('store.settings');
+    });
 
-Route::get('/management/manage_admin/{store_id}', [DashbaordStoreController::class, 'manage_admin'])->name('manage.admin');
-Route::get('/management/manage_admin/{store_id}/create', [DashbaordStoreController::class, 'admin_create_view'])->name('admin.create.view');
-Route::post('/manage_admin', [DashbaordStoreController::class, 'admin_create'])->name('admin.create');
-Route::get('/manage_admin/{store_id}/edit/{admin_id}', [DashbaordStoreController::class, 'admin_edit_view'])->name('admin.edit.view');
-Route::post('/manage_admin/edit', [DashbaordStoreController::class, 'admin_edit'])->name('admin.edit');
+    // روابط لوحة تحكم المتجر
+    Route::prefix('/dashboard')->group(function () {
+        Route::get('/{store_id}', [DashbaordStoreController::class, 'index'])
+            ->name('dashboard.index');
 
-Route::get('/management/categories/{store_id}', [ManageCategoriesController::class, 'index'])->name('manage.categories');
-Route::get('/category/create/{store_id}', [ManageCategoriesController::class, 'category_create_view'])->name('category.create.view');
-Route::post('/category/create', [ManageCategoriesController::class, 'category_create'])->name('category.create');
-Route::get('/category/edit/{category_id}', [ManageCategoriesController::class, 'category_edit_view'])->name('category.edit.view');
-Route::post('/category/edit', [ManageCategoriesController::class, 'category_edit'])->name('category.edit');
-Route::get('/category/delete/{category_id}', [ManageCategoriesController::class, 'category_delete'])->name('category.delete');
+        // إدارة المنتجات
+        Route::prefix('/management/products')->controller(ManageProductsController::class)
+            ->middleware('store_manage:إدارة المنتجات')
+            ->group(function () {
+                Route::get('/{store_id}', 'index')->name('manage.products');
+                Route::get('/create/{store_id}', 'product_create_view')->name('product.create.view');
+                Route::post('/create', 'product_create')->name('product.create');
+            });
+        // إدارة المشرفين
+        Route::prefix('/management/manage_admin')->controller(DashbaordStoreController::class)
+            ->middleware('store_manage:ادارة الاقسام')
+            ->group(function () {
+                Route::get('/{store_id}', 'manage_admin')->name('manage.admin');
+                Route::get('/{store_id}/create', 'admin_create_view')->name('admin.create.view');
+                Route::post('/', 'admin_create')->name('admin.create');
+                Route::get('/{store_id}/edit/{admin_id}', 'admin_edit_view')->name('admin.edit.view');
+                Route::post('/edit', 'admin_edit')->name('admin.edit');
+                Route::get('/{store_id}/delete/{admin_id}', 'admin_delete')->name('admin.delete');
+            });
 
+        // إدارة الأقسام
+        Route::prefix('/management/categories')->controller(ManageCategoriesController::class)
+            ->middleware('store_manage:ادارة الاقسام')
+            ->group(function () {
+                Route::get('/{store_id}', 'index')->name('manage.categories');
+                Route::get('/create/{store_id}', 'category_create_view')->name('category.create.view');
+                Route::post('/create', 'category_create')->name('category.create');
+                Route::get('/edit/{category_id}', 'category_edit_view')->name('category.edit.view');
+                Route::post('/edit', 'category_edit')->name('category.edit');
+                Route::get('/delete/{category_id}', 'category_delete')->name('category.delete');
+            });
 
-Route::get('/support/create/{store_id}', [CreateStoreController::class, 'support_create_view'])->name('support.create.view');
-Route::post('/support/create/{store_id}', [CreateStoreController::class, 'support_create'])->name('support.create');
+        // الدعم والشروط
+        Route::prefix('/support')->controller(CreateStoreController::class)
+        ->middleware('store_manage:ادارة الاعدادات')
+        ->group(function () {
+            Route::get('/create/{store_id}', 'support_create_view')->name('support.create.view');
+            Route::post('/create/{store_id}', 'support_create')->name('support.create');
+        });
 
-Route::get('/conditions/create/{store_id}', [CreateStoreController::class, 'conditions_create_view'])->name('conditions.create.view');
-Route::post('/conditions/create/{store_id}', [CreateStoreController::class, 'conditions_create'])->name('conditions.create');
-
+        Route::prefix('/conditions')->controller(CreateStoreController::class)->group(function () {
+            Route::get('/create/{store_id}', 'conditions_create_view')->name('conditions.create.view');
+            Route::post('/create/{store_id}', 'conditions_create')->name('conditions.create');
+        });
+    });
 });
-Route::get('/store/{name}', [StoreController::class, 'home_store'])->name('home_store');
-Route::get('/store/{name}/products/{category_id?}', [StoreController::class, 'products'])->name('products');
-Route::get('/store/{name}/conditions', [StoreController::class, 'conditions'])->name('conditions');
+
+// روابط المتجر العامة
+Route::prefix('/store')->controller(StoreController::class)->group(function () {
+    Route::get('/{name}', 'home_store')->name('home_store');
+    Route::get('/{name}/products/{category_id?}', 'products')->name('products');
+    Route::get('/{name}/conditions', 'conditions')->name('conditions');
+});

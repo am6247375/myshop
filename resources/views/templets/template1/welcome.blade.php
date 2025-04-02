@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="roww">
                 @isset($store)
                     @foreach ($store->categories as $category)
                         <div class="col-lg-4 col-md-6">
@@ -113,7 +113,7 @@
 
     <div class="latest-news pt-100 pb-10">
         <div class="container">
-            <div class="row">
+            <div class="row" >
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="section-title">
                         <h3>
@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row product-lists">
+            <div class="row product-lists" id="roww">
                 @isset($new_products)
                     @foreach ($new_products as $new)
                         <div class="col-lg-4 col-md-6 text-center">
@@ -198,15 +198,6 @@
             </div>
         </div>
     </div>
-    <style>
-        .category {
-            border: 1px solid #ddd !important;
-            padding: 15px !important;
-            margin-bottom: 30px !important;
-            border-radius: 5px !important;
-            background-color: #fff !important;
-            text-align: center !important;
-        }
-    </style>
+
     <!-- نهاية قسم آخر الأخبار -->
 @endsection

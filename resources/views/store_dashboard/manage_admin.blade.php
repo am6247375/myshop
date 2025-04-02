@@ -13,7 +13,7 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
                                     <h3 class="fw-bold mb-0">قائمة الموظفين</h3>
                                     <a href="{{ route('admin.create.view', ['store_id' => $store->id])}}" class="btn btn-success btn-lg">
-                                        <i class="fas fa-plus"></i> إضافة موظف جديد
+                                        <i class="fas fa-user-plus"></i> إضافة موظف جديد
                                     </a>
                                 </div>  
 
@@ -26,6 +26,7 @@
                                                 <th>الاسم</th>
                                                 <th>الجنس</th>
                                                 <th>الهاتف</th>
+                                                <th>البريد الالكتروني</th>
                                                 <th>الدور</th>
                                                 <th>الصلاحيات</th>
                                                 <th>الإجراء</th>
@@ -43,15 +44,22 @@
                                                     <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                                                     <td>{{ $user->sex }}</td>
                                                     <td style="text-align: center">{{ $user->phone }}</td>
+                                                    <td>{{ $user->email}}</td>
                                                     <td>{{ $roles ?: 'بدون دور' }}</td>
                                                     <td>{{ $permissions ?: 'بدون صلاحيات' }}</td>
                                                     <td>
-                                                        <a class="btn btn-danger btn-sm">
-                                                            <i class="fas fa-trash-alt"></i> إزالة
-                                                        </a>
-                                                        <a href="{{ route('admin.edit.view', ['store_id' => $store->id, 'admin_id' => $user->id]) }}" class="btn btn-primary btn-sm">
-                                                            <i class="fas fa-user-edit"></i> تعديل
+                                                        <div class="d-flex gap-2">
+                                                            <a href="{{ route('admin.delete', ['store_id' => $store->id, 'admin_id' => $user->id]) }}" 
+                                                               class="btn btn-danger btn-sm w-100   m-1 text-center">
+                                                                <i class="fas fa-user-slash"></i> حذف
+                                                            </a>
+                                                            <a href="{{ route('admin.edit.view', ['store_id' => $store->id, 'admin_id' => $user->id]) }}" 
+                                                               class="btn btn-primary btn-sm w-100 m-1 text-center">
+                                                                <i class="fas fa-user-edit"></i> تعديل
+                                                            </a>
+                                                        </div>
                                                     </td>
+                                                    
                                                 </tr>
                                             @endforeach
                                         </tbody>

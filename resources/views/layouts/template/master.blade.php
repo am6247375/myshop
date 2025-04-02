@@ -97,7 +97,7 @@
 
                                             @guest
                                                 @if (Route::has('login'))
-                                                    <a class="shopping-cart" href="{{ route('login') }}"><i
+                                                    <a class="shopping-cart" href="{{ route('login', ['redirectTo' => url()->current()]) }}"><i
                                                             class="fas fa-user"></i></a>
                                                 @endif
                                             @else
@@ -109,6 +109,7 @@
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                                     class="d-none">
                                                     @csrf
+                                                    <input type="hidden" name="redirectTo" value="{{ route('home_store', ['name' => $store->name]) }}">
                                                 </form>
 
 
