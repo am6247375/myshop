@@ -106,9 +106,6 @@ class CreateStoreController extends Controller
 
     public function conditions_create(Request $request, $store_id)
     {
-        $request->validate([
-            'privacy_policy' => 'required',
-        ]);
         $store = Store::findOrFail($store_id);
         $store->privacy_policy = $request->privacy_policy;
         $store->terms_and_conditions = $request->terms_and_conditions;

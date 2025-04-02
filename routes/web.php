@@ -4,6 +4,7 @@ use App\Http\Controllers\CreateStoreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\store\StoreController;
 use App\Http\Controllers\store_dashbaord\DashbaordStoreController;
+use App\Http\Controllers\store_dashbaord\ManageAdminController;
 use App\Http\Controllers\store_dashbaord\ManageCategoriesController;
 use App\Http\Controllers\store_dashbaord\ManageProductsController;
 use GuzzleHttp\Psr7\Request;
@@ -69,15 +70,15 @@ Route::middleware(['auth'])->group(function () {
 
         // إدارة المنتجات
         Route::prefix('/management/products')->controller(ManageProductsController::class)
-            ->middleware('store_manage:إدارة المنتجات')
+            ->middleware('store_manage:ادارة المنتجات')
             ->group(function () {
                 Route::get('/{store_id}', 'index')->name('manage.products');
                 Route::get('/create/{store_id}', 'product_create_view')->name('product.create.view');
                 Route::post('/create', 'product_create')->name('product.create');
             });
         // إدارة المشرفين
-        Route::prefix('/management/manage_admin')->controller(DashbaordStoreController::class)
-            ->middleware('store_manage:ادارة الاقسام')
+        Route::prefix('/management/manage_admin')->controller(ManageAdminController::class)
+            ->middleware('store_manage:ادارة الموظفين')
             ->group(function () {
                 Route::get('/{store_id}', 'manage_admin')->name('manage.admin');
                 Route::get('/{store_id}/create', 'admin_create_view')->name('admin.create.view');

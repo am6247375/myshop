@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('product.ceate') }}" method="POST" enctype="multipart/form-data" id="productForm">
+                <form action="{{ route('product.create') }}" method="POST" enctype="multipart/form-data" id="productForm">
                     @csrf
                     <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
                     <input type="text" name="store_id" value="{{ $store->id }}" hidden>
