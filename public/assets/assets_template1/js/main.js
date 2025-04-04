@@ -1,3 +1,4 @@
+
 (function ($) {
     "use strict";
 
@@ -23,7 +24,7 @@
                     loop:true
                 }
             }
-        });
+        }); 
 
         // homepage slider
         $(".homepage-slider").owlCarousel({
