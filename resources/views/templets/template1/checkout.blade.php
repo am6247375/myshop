@@ -10,7 +10,7 @@
                         <div class="accordion" id="accordionExample">
                             <div class="card single-accordion">
                                 <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
+                                    <h5 class="mb-0" style="    width: 100%;">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
                                             data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         {{ trans('string.shipping-data') }} 
@@ -22,7 +22,7 @@
                                     data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="billing-address-form">
-                                            <form id="addorder"  action="{{ route('store_order') }}" method="POST">
+                                            <form id="addorder"  action="{{-- route('store_order') --}}" method="POST">
                                                 @csrf
                                                 {{-- <input type="text" name="color" value="{{ $item->color ?? '' }}" hidden> --}}
                                                 {{-- <input type="text" name="product_color" value="{{ $product_color }}" hidden> --}}
@@ -75,7 +75,7 @@
                             </div>
                             <div class="card single-accordion">
                                 <div class="card-header" id="headingThree">
-                                    <h5 class="mb-0">
+                                    <h5 class="mb-0" style="    width: 100%;">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                                             data-target="#collapseThree" aria-expanded="false"
                                             aria-controls="collapseThree">   {{ trans('string.order-detals') }}
@@ -109,18 +109,7 @@
                                                             @endphp
                                                             <tr class="table-body-row">
                                                                 <td class="product-image">
-                                                                    @php
-                                                                        $productImage = $item->product->image; // الصورة الافتراضية
-                                                                        $colorImage = $item->product->colorImages
-                                                                            ->where('color_name', $item->color)
-                                                                            ->first(); // جلب صورة اللون المحدد
-                                                                        if ($colorImage) {
-                                                                            $productImage = $colorImage->image;
-                                                                            $product_color = $colorImage->color_name;
-
-                                                                        }
-                                                                    @endphp
-                                                                    <img id="cartProductImage-{{ $item->id }}" src="{{ asset($productImage) }}"
+                                                                    <img id="cartProductImage-{{ $item->id }}" src="{{ asset($item->product->image) }}"
                                                                         alt="">
                                                                 </td>
                                                                 <td class="product-name">{{ $item->product->name }}</td>

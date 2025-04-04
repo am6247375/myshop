@@ -1,3 +1,44 @@
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.quantity-input').forEach(function(input) {
+        input.addEventListener('change', function() {
+            var cartId = this.dataset.cartId;
+            var quantity = this.value;
+            var price = this.dataset.price;
+            var storeId = this.dataset.store;
+            var totalCell = this.closest('tr').querySelector('.product-total');
+
+            var totalPrice = quantity * price;
+            totalCell.textContent = '$' + totalPrice;
+
+            var csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                console.error("CSRF token not found.");
+                return;
+            }
+
+            $.ajax({
+                url: updateCartUrl, // <-- نستخدم متغير معرف مسبقاً
+                method: "POST",
+                data: {
+                    _token: csrfToken.getAttribute('content'),
+                    cart_id: cartId,
+                    quantity: quantity,
+                    store_id: storeId
+                },
+                success: function(data) {
+                    if (data.success) {
+                        document.querySelector('.total-price').textContent = data.newSubtotal;
+                        document.querySelector('.shipping-price').textContent =  data.shipping;
+                        document.querySelector('.final-total').textContent =  data.newTotal;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                }
+            });
+        });
+    });
+});
 
 (function ($) {
     "use strict";

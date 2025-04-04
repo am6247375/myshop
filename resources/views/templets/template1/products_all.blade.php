@@ -58,7 +58,7 @@
             </div> --}}
 
 
-            <div class="row product-lists">
+            <div class="row product-lists" >
                 @isset($store)
                     @foreach ($store->categories as $category)
                         @foreach ($category->products as $item)

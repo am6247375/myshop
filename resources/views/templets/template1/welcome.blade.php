@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="roww">
+            <div class="row"  >
                 @isset($store)
                     @foreach ($store->categories as $category)
                         <div class="col-lg-4 col-md-6">
@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row product-lists" id="roww">
+            <div class="row product-lists"  >
                 @isset($new_products)
                     @foreach ($new_products as $new)
                         <div class="col-lg-4 col-md-6 text-center">

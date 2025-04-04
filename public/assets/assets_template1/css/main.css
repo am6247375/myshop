@@ -11,23 +11,7 @@ Version: 1.0
 # Base - Genral & Typography
 
 ----------------------------------------------------------------------------- */
-#roww {
-  display: flex !important
-  ;
-      flex-wrap: nowrap !important;
-      flex-direction: row-reverse !important;
-      justify-content: center !important;
-      gap: 15px !important;
-      padding: 0 15px !important;
-}
 
-/* تحسين التناسق على الشاشات الصغيرة */
-@media (max-width: 768px) {
-  #roww {
-      flex-direction: column !important; /* جعل العناصر تتجه لأسفل على الشاشات الصغيرة */
-      align-items: center !important; /* محاذاة العناصر إلى المنتصف */
-  }
-}
 .category {
   border: 1px solid #ddd !important;
   padding: 15px !important;

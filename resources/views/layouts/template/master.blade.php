@@ -411,6 +411,11 @@
     <script src="{{ asset('assets/assets_template1/js/sticker.js') }}"></script>
     <!-- main js -->
     <script src="{{ asset('assets/assets_template1/js/main.js') }}"></script>
+<script>
+    var updateCartUrl = "{{ route('update.cart') }}";
+</script>
+
+
 
 </body>
 
