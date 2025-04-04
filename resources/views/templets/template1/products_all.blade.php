@@ -71,22 +71,17 @@
                                         </a>
                                     </div>
                                     <h3>{{ $item->name }}</h3>
-                                    <form hidden action="{{--  --}}" method="POST"
-                                        id="aaddtocart-{{ $item->id }}">
+                                    <form hidden action="{{ route('add.cart') }}" method="POST" id="addtocart-{{ $item['id'] }}">
                                         @csrf
-                                        <input type="hidden" name="color" id="selectedColor-{{ $item->id }}"
-                                            value="اللون">
-                                        <input type="hidden" name="price" id="selectedPrice-{{ $item->id }}"
-                                            value="{{ $item->price }}">
-                                        <input type="hidden" name="product_id" value="{{ $item->id }}">
-                                        <select id="colorSelect-{{ $item->id }}" class="form-control">
-                                        </select>
+                                        <input type="hidden" name="store_id" id="selectedColor" value="{{ $store->id }}">
+                                        {{-- <input type="hidden" name="price" id="selectedPrice" value="{{ $new['price'] }}"> --}}
+                                        <input type="hidden" name="product_id" value="{{ $item['id'] }}">
+                                        {{-- <select id="colorSelect" class="form-control"></select> --}}
                                     </form>
-
                                     <p class="product-price">${{ $item->price }} </p>
                                     <a href="#"
                                         onclick="event.preventDefault(); 
-                      document.getElementById('aaddtocart-{{ $item->id }}').submit();"
+                      document.getElementById('addtocart-{{ $item->id }}').submit();"
                                         class="cart-btn">
                                         <i class="fas fa-shopping-cart"></i> {{ trans('string.cart') }}
                                     </a>

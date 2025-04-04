@@ -24,35 +24,23 @@
                                 @endphp
                                 @foreach ($cart as $item)
                                     @php
-                                        $subtotal += $item->quantity * $item->price;
+                                        $subtotal += $item->quantity * $item->product->price;
                                     @endphp
                                     <td class="product-image">
-                                        @php
-                                            $productImage = $item->product->image; // الصورة الافتراضية
-                                            $colorImage = $item->product->colorImages
-                                                ->where('color_name', $item->color)
-                                                ->first(); // جلب صورة اللون المحدد
-                                            if ($colorImage) {
-                                                $productImage = $colorImage->image;
-                                            }
-                                        @endphp
-                                        <img id="cartProductImage-{{ $item->id }}" src="{{ asset($productImage) }}"
+                                     
+                                        <img id="cartProductImage-{{ $item->id }}" src="{{ asset($item->product->image) }}"
                                             alt="">
                                     </td>
-
-
-
-
                                     <td class="product-name">{{ $item->product->name }}</td>
-                                    <td class="product-price">${{ $item->price }}</td>
+                                    <td class="product-price">${{ $item->product->price }}</td>
                                     <td class="product-quantity">
                                         <input type="number" class="quantity-input" min="1"
                                             value="{{ $item->quantity }}" data-cart-id="{{ $item->id }}"
-                                            data-price="{{ $item->price }}">
+                                            data-price="{{ $item->product->price }}" data-store="{{ $store->id }}">
                                     </td>
-                                    <td class="product-total">${{ $item->quantity * $item->price }}</td>
+                                    <td class="product-total">${{ $item->quantity * $item->product->price }}</td>
                                     <td>
-                                        <form action="{{ route('delete_cart') }}" method="POST" style="display: inline;">
+                                        <form action="{{--  --}}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="cart_id" value="{{ $item->id }}">
@@ -96,8 +84,8 @@
                             </tbody>
                         </table>
                         <div class="cart-buttons" style="text-align: center">
-                            <a href="{{ route('checkout') }}" class="boxed-btn black">{{ trans('string.checkout') }}</a>
-                            <a href="{{ route('orders') }}"
+                            <a href="{{--  --}}" class="boxed-btn black">{{ trans('string.checkout') }}</a>
+                            <a href="{{--  --}}"
                                 class="boxed-btn black">{{ trans('string.previous-orders') }}</a>
                         </div>
                     </div>
@@ -112,18 +100,19 @@
                     let cartId = this.dataset.cartId;
                     let quantity = this.value;
                     let price = this.dataset.price;
+                    let storeId = this.dataset.store;
                     let totalCell = this.closest('tr').querySelector('.product-total');
-
+    
                     let totalPrice = quantity * price;
                     totalCell.textContent = `$${totalPrice}`;
-
+    
                     let csrfToken = document.querySelector('meta[name="csrf-token"]');
                     if (!csrfToken) {
                         console.error("CSRF token not found.");
                         return;
                     }
-
-                    fetch("{{ route('cart_update') }}", {
+    
+                    fetch("{{ route('update.cart') }}", {
                             method: "POST",
                             headers: {
                                 "X-CSRF-TOKEN": csrfToken.getAttribute('content'),
@@ -131,24 +120,16 @@
                             },
                             body: JSON.stringify({
                                 cart_id: cartId,
-                                quantity: quantity
+                                quantity: quantity,
+                                store_id: storeId
                             })
                         })
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                document.querySelector('.total-price').textContent =
-                                    `$${data.newSubtotal}`;
-                                document.querySelector('.shipping-price').textContent =
-                                    `$${data.shipping}`;
-                                document.querySelector('.final-total').textContent =
-                                    `$${data.newTotal}`;
-
-                                let imgElement = document.getElementById(
-                                    `cartProductImage-${cartId}`);
-                                if (imgElement && data.image) {
-                                    imgElement.src = data.image;
-                                }
+                                document.querySelector('.total-price').textContent = `$${data.newSubtotal}`;
+                                document.querySelector('.shipping-price').textContent = `$${data.shipping}`;
+                                document.querySelector('.final-total').textContent = `$${data.newTotal}`;
                             }
                         })
                         .catch(error => console.error("Error:", error));
@@ -156,6 +137,6 @@
             });
         });
     </script>
-
+    
     <!-- end cart -->
 @endsection

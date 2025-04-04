@@ -26,13 +26,13 @@ class RequestAdminEdit extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->route('user'),
+            // 'email' => 'required|email|unique:users,email,' . $this->route('user'),
             'phone' => 'required|string|max:9|regex:/^\+?[0-9\s\-]+$/',
             'sex' => 'required|in:male,female',
             'role_id' => 'required|exists:roles,id',
             'permissions' => 'required|array|min:1',
             'permissions.*' => 'exists:permissions,id',
-            'password' => $this->isMethod('post') ? 'required|min:6' : 'nullable|min:6',
+            'nullable|min:6',
         ];
     }
     

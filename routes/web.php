@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CreateStoreController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\store\CartController;
 use App\Http\Controllers\store\StoreController;
 use App\Http\Controllers\store_dashbaord\DashbaordStoreController;
 use App\Http\Controllers\store_dashbaord\ManageAdminController;
@@ -78,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
             });
         // إدارة المشرفين
         Route::prefix('/management/manage_admin')->controller(ManageAdminController::class)
-            ->middleware('store_manage:ادارة الموظفين')
+            ->middleware('store_manage: الموظفين')
             ->group(function () {
                 Route::get('/{store_id}', 'manage_admin')->name('manage.admin');
                 Route::get('/{store_id}/create', 'admin_create_view')->name('admin.create.view');
@@ -120,4 +121,10 @@ Route::prefix('/store')->controller(StoreController::class)->group(function () {
     Route::get('/{name}', 'home_store')->name('home_store');
     Route::get('/{name}/products/{category_id?}', 'products')->name('products');
     Route::get('/{name}/conditions', 'conditions')->name('conditions');
+});
+Route::controller(CartController::class)->middleware('auth')->group(function(){
+    Route::get('/store/{name}/cart','cart_view')->name('cart.view');
+    Route::post('/store','addcart')->name('add.cart');
+    Route::post('/store/cart/update','update_cart')->name('update.cart');
+
 });

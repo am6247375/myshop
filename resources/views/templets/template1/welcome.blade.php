@@ -134,13 +134,13 @@
                                     </a>
                                 </div>
                                 <h3>{{ $new['name'] }}</h3>
-                                <form hidden action="#" method="POST" id="addtocart_{{ $new['id'] }}">
-                                    @csrf
-                                    <input type="hidden" name="color" id="selectedColor" value="اللون الافتراضي">
-                                    <input type="hidden" name="price" id="selectedPrice" value="{{ $new['price'] }}">
-                                    <input type="hidden" name="product_id" value="{{ $new['id'] }}">
-                                    <select id="colorSelect" class="form-control"></select>
-                                </form>
+                                    <form hidden action="{{ route('add.cart') }}" method="POST" id="addtocart_{{ $new['id'] }}">
+                                        @csrf
+                                        <input type="hidden" name="store_id" id="selectedColor" value="{{ $store->id }}">
+                                        {{-- <input type="hidden" name="price" id="selectedPrice" value="{{ $new['price'] }}"> --}}
+                                        <input type="hidden" name="product_id" value="{{ $new['id'] }}">
+                                        {{-- <select id="colorSelect" class="form-control"></select> --}}
+                                    </form>
                                 <p class="product-price">${{ $new['price'] }}</p>
                                 <a href='#'
                                     onclick="event.preventDefault(); 
