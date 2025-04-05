@@ -37,7 +37,6 @@
                                                 @php
                                                     $user = $adminGroup->first()->user; // الحصول على المستخدم الفعلي
                                                     $roles = $adminGroup->pluck('role.name')->filter()->unique()->join(', ');
-                                                    $permissions = $adminGroup->pluck('permission.name')->filter()->unique()->join(' , ');
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $user->id }}</td>
@@ -46,7 +45,13 @@
                                                     <td style="text-align: center">{{ $user->phone }}</td>
                                                     <td>{{ $user->email}}</td>
                                                     <td>{{ $roles ?: 'بدون دور' }}</td>
-                                                    <td>{{ $permissions ?: 'بدون صلاحيات' }}</td>
+                                                    <td>
+                                                        @foreach ($adminGroup->pluck('permission.name') as $prm)
+                                                             <span class="badge bg-info">
+                                                                {{ $prm}}
+                                                             </span>
+                                                        @endforeach
+                    
                                                     <td>
                                                         <div class="d-flex gap-2">
                                                             <a href="{{ route('admin.delete', ['store_id' => $store->id, 'admin_id' => $user->id]) }}" 

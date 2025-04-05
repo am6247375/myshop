@@ -14,18 +14,17 @@ class HomeController extends Controller
 
     public function index()
     {
-        $user = Auth::user(); 
+        $user = Auth::user();
         if ($user->store) {
             return redirect()->route("dashboard.index", $user->store->id);
-        }elseif ( $user->stores->first()) {
+        } elseif ($user->stores->first()) {
             return redirect()->route("dashboard.index", $user->stores->first()->id);
-        }   
+        }
         $storeHome = session('store_home');
         if ($storeHome) {
+            session()->forget('store_home');
             return  redirect()->intended($storeHome);
-        $request->session()->forget('store_home');
-
         }
         return redirect()->intended('/');
-    }    
+    }
 }

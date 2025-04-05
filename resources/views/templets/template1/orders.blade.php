@@ -8,13 +8,13 @@
                 <div class="col-lg-12">
                     <div class="checkout-accordion-wrap">
                         <div class="accordion" id="accordionExample">
-                            @foreach ($orders as $item => $group)
+                            @foreach ($orders as $order)
                                 <div class="card single-accordion">
                                     <div class="card-header" id="heading{{ $loop->index }}">
-                                        <h5 class="mb-0">
+                                        <h5 class="mb-0" style="width: 100%" >
                                             <button class="btn btn-link" type="button" data-toggle="collapse"
                                                 data-target="#collapse{{ $loop->index }}" aria-expanded="true"
-                                                aria-controls="collapse{{ $loop->index }}" style="direction: ltr"> <h5>{{ trans('string.order-date') }}</h5> {{ $item }}
+                                                aria-controls="collapse{{ $loop->index }}" style="direction: ltr"> <h5>{{ trans('string.order-date') }}</h5> {{ $order->created_at }}
                                             </button>
                                             
                                         </h5>
@@ -36,26 +36,13 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @php
-                                                                $subtotal = 0;
-                                                            @endphp
-                                                            @foreach ($group as $item)
-                                                                @php
-                                                                    $subtotal +=
-                                                                        $item->quantity * $item->product->price;
-                                                                @endphp
+                                                          
+                                                            @foreach ($order->orderItems as $item)
+                                                               
                                                                 <tr class="table-body-row">
                                                                     <td class="product-image">
-                                                                        @php
-                                                                            $productImage = $item->product->image; // الصورة الافتراضية
-                                                                            $colorImage = $item->product->colorImages
-                                                                                ->where('color_name', $item->color)
-                                                                                ->first(); // جلب صورة اللون المحدد
-                                                                            if ($colorImage) {
-                                                                                $productImage = $colorImage->image;
-                                                                            }
-                                                                        @endphp
-                                                                        <img id="cartProductImage-{{ $item->id }}" src="{{ asset($productImage) }}"
+                                                                      
+                                                                        <img  src="{{ asset($item->product->image) }}"
                                                                             alt="">
                                                                     </td>
                                                                     <td class="product-name">{{ $item->product->name }}</td>
@@ -65,7 +52,7 @@
                                                                         {{ $item->quantity }}
                                                                     </td>
                                                                     <td class="product-total">
-                                                                        ${{ $item->quantity * $item->product->price }}</td>
+                                                                        ${{ $item->total_price }}</td>
 
                                                                 </tr>
                                                             @endforeach
@@ -86,43 +73,33 @@
                                                         <tbody>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.name') }}</strong></td>
-                                                                <td>{{ $item->name }}</td>
+                                                                <td>{{ $order->recipient_name }}</td>
                                                             </tr>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.phone') }}</strong></td>
-                                                                <td>{{ $item->phone }}</td>
+                                                                <td>{{ $order->recipient_phone }}</td>
                                                             </tr>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.address') }}</strong></td>
-                                                                <td>{{ $item->address }}</td>
+                                                                <td>{{ $order->recipient_address }}</td>
                                                             </tr>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.order-status') }}</strong></td>
-                                                                <td>{{ $item->status }}</td>
+                                                                <td>{{ $order->status }}</td>
                                                             </tr>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.sub-total') }}</strong></td>
-                                                                <td>${{ $subtotal }}</td>
+                                                                <td>${{ $order->total_price }}</td>
                                                             </tr>
-                                                            @php
-                                                                $shipping;
-                                                                if ($subtotal >= 250) {
-                                                                    $shipping = 0;
-                                                                } elseif ($subtotal == 0) {
-                                                                    $shipping = 0;
-                                                                } else {
-                                                                    $shipping = 100;
-                                                                }
-
-                                                            @endphp
-                                                            <tr class="total-data">
+                                                           
+                                                            {{-- <tr class="total-data">
                                                                 <td><strong>{{ trans('string.shipping') }}</strong></td>
-                                                                <td>${{ $shipping }}</td>
+                                                                <td>${{  $order->total_price  }}</td>
                                                             </tr>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.total') }}</strong></td>
-                                                                <td>${{ $shipping + $subtotal }}</td>
-                                                            </tr>
+                                                                <td>${{ $order->total_price }}</td>
+                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                    

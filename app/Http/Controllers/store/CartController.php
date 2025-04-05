@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\store;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestOrders;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,5 +103,64 @@ class CartController extends Controller
         $cart = Cart::where(['store_id' => $store->id, 'user_id' => Auth::id()])->with('product')->get();
         $template = $store->template->path_temp;
         return view("{$template}.checkout", compact('store', 'cart'));
+    }
+
+    public function order_create(RequestOrders $request)
+    {
+        $user = Auth::user();
+        $store_id = $request->store_id;
+        $store = Store::findOrFail($store_id);
+        $cart = Cart::where(['user_id' => $user->id, 'store_id' => $store_id])->with('product')->get();
+
+        if (!$cart || $cart->isEmpty()) {
+            return back()->withErrors(['cart' => 'السلة فارغة.']);
+        }
+
+        // احسب المجموع الفرعي
+        $subtotal = 0;
+        foreach ($cart as $item) {
+            $subtotal += $item->quantity * $item->product->price;
+        }
+
+        // احسب الشحن
+        $shipping = ($subtotal >= 250 || $subtotal == 0) ? 0 : 10;
+
+        // أنشئ الطلب
+        $order = Order::create([
+            'store_id' => $store_id,
+            'customer_id' => Auth::id(),
+            'recipient_name' => $request->recipient_name,
+            'recipient_phone' => $request->recipient_phone,
+            'recipient_address' => $request->recipient_address,
+            'note' => $request->note,
+            'status' => 'pending',
+            'total_price' => $subtotal + $shipping,
+            
+        ]);
+
+        // أضف عناصر الطلب
+        foreach ($cart as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+                'total_price' => $item->quantity * $item->product->price,
+            ]);
+        }
+        Cart::where('user_id', Auth::id())->delete();
+        return redirect()->route('show.orders',['name'=>$store->name])->with('success', 'تم إرسال الطلب بنجاح');
+    }
+    public function show_orders($name)
+    {
+        $store = Store::with('template')->where('name', $name)->firstOrFail();
+        $orders=Order::with('orderItems')->where(['customer_id'=>Auth::id(),'store_id'=>$store->id]) ->orderBy('created_at', 'desc')->get();
+        // $orders = Order::where(['customer_id'=>Auth::id(),'store_id'=>$store->id])
+        //     ->with('orderItems.product') // علاقات العناصر والمنتجات
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
+            $template = $store->template->path_temp;
+
+        return view("{$template}.orders", compact('store','orders'));
     }
 }

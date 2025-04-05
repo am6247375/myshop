@@ -128,5 +128,7 @@ Route::controller(CartController::class)->middleware('auth')->group(function(){
     Route::post('/store/cart/update','update_cart')->name('update.cart');
     Route::delete('/store/cart/delete','delete_cart')->name('delete.cart');
     Route::get('/store/{name}/checkout','checkout_view')->name('checkout.view');
+    Route::post('/store/checkout','order_create')->name('checkout');
+    Route::get('/store/{name}/orders','show_orders')->name('show.orders');
 
 });

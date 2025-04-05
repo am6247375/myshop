@@ -1,6 +1,7 @@
 @extends('layouts.template.master')
 
 @section('content')
+
     <!-- csheck out section -->
     <div class="checkout-section mt-150 mb-150">
         <div class="container">
@@ -22,33 +23,23 @@
                                     data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="billing-address-form">
-                                            <form id="addorder"  action="{{-- route('store_order') --}}" method="POST">
+                                            <form id="addorder"  action="{{ route('checkout') }}" method="POST">
                                                 @csrf
-                                                {{-- <input type="text" name="color" value="{{ $item->color ?? '' }}" hidden> --}}
-                                                {{-- <input type="text" name="product_color" value="{{ $product_color }}" hidden> --}}
-                                                <p>
+                                                <input type="text" hidden name="store_id"  value="{{ $store->id }}">
+                                                 <p>
                                                     <label style="font-size: 20px"  for="">{{ trans('string.name') }}</label>
-                                                    <input name="name" type="text" value="{{ old('name') }}" placeholder="{{ trans('string.name') }}">
+                                                    <input name="recipient_name" type="text" value="{{ old('recipient_name') }}" placeholder="{{ trans('string.name') }}">
                                                     <span class="text-danger">
-                                                        @error('name')
-                                                            {{ $message }}
-                                                        @enderror
-                                                    </span>
-                                                </p>
-                                                <p>
-                                                    <label style="font-size: 20px" for="">{{ trans('string.email') }}</label>
-                                                    <input name="email" type="email" value="{{ old('email') }}" placeholder="{{ trans('string.email') }}">
-                                                    <span class="text-danger">
-                                                        @error('email')
+                                                        @error('recipient_name')
                                                             {{ $message }}
                                                         @enderror
                                                     </span>
                                                 </p>
                                                 <p>
                                                     <label style="font-size: 20px" for="">{{ trans('string.address') }}</label>
-                                                    <input name="address" type="text" value="{{ old('address') }}" placeholder="{{ trans('string.address') }}">
+                                                    <input name="recipient_address" type="text" value="{{ old('recipient_address') }}" placeholder="{{ trans('string.address') }}">
                                                     <span class="text-danger">
-                                                        @error('address')
+                                                        @error('recipient_address')
                                                             {{ $message }}
                                                         @enderror
                                                     </span>
@@ -56,10 +47,10 @@
 
                                                 <p>
                                                     <label style="font-size: 20px" for=""> {{ trans('string.phone') }}</label>
-                                                    <input name="phone" type="tel" value="{{ old('phone') }}" style="text-align:{{trans('string.text-align')}}"
+                                                    <input name="recipient_phone" type="tel" value="{{ old('recipient_phone') }}" style="text-align:{{trans('string.text-align')}}"
                                                         placeholder="{{ trans('string.phone') }}">
                                                     <span class="text-danger">
-                                                        @error('address')
+                                                        @error('recipient_phone')
                                                             {{ $message }}
                                                         @enderror
                                                     </span>
@@ -67,6 +58,11 @@
                                                 <p>
                                                     <label style="font-size: 20px" for="">{{ trans('string.note') }} </label>
                                                     <textarea name="note" id="bill" cols="30" rows="10" placeholder="{{ trans('string.note') }}"> {{ old('note') }}</textarea>
+                                                    <span class="text-danger">
+                                                        @error('note')
+                                                            {{ $message }}
+                                                        @enderror
+                                                    </span>
                                                 </p>
                                             </form>
                                         </div>
@@ -155,7 +151,7 @@
                                     } elseif ($subtotal == 0) {
                                         $shipping = 0;
                                     } else {
-                                        $shipping = 100;
+                                        $shipping = 10;
                                     }
 
                                 @endphp
