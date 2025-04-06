@@ -6,32 +6,45 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function setupDataTable() {
-    let table = new DataTable('#myTable', {
-        "dom": 'Bfrtip',
-        "language": {
-            "search": "🔍 ابحث: ",
-            "lengthMenu": "عرض _MENU_ سجل لكل صفحة",
-            "info": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
-            "infoEmpty": "لا توجد سجلات متاحة",
-            "zeroRecords": "لم يتم العثور على نتائج",
-            "paginate": {
-                "first": "الأول",
-                "last": "الأخير",
-                "next": "التالي",
-                "previous": "السابق"
+    // تحقق من أن الجدول لم يتم تهيئته من قبل
+    if (!$.fn.dataTable.isDataTable('#myTable')) {
+        let table = new DataTable('#myTable', {
+            "dom": 'Bfrtip',
+            "language": {
+                "search": " ابحث 🔍 ",
+                "lengthMenu": "عرض _MENU_ سجل لكل صفحة",
+                "info": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
+                "infoEmpty": "لا توجد سجلات متاحة",
+                "zeroRecords": "لم يتم العثور على نتائج",
+                "paginate": {
+                    "first": "الأول",
+                    "last": "الأخير",
+                    "next": "التالي",
+                    "previous": "السابق"
+                }
             }
-        }
-    });
-    setTimeout(() => {
-        document.querySelector('.dataTables_filter').style.textAlign = "center";
-    }, 500);
-    setTimeout(() => {
-        document.querySelectorAll('.alert').forEach(alert => {
-            alert.style.opacity = "0";
-            setTimeout(() => alert.remove(), 500);
         });
-    }, 2000);
+
+        // إضافة الفلتر لحالة الطلب
+        $('#status-filter').on('change', function () {
+            var status = $(this).val();
+            table.column(4).search(status).draw(); // عمود "حالة الطلب"
+        });
+  
+        setTimeout(() => {
+            document.querySelector('.dataTables_filter').style.textAlign = "center";
+        }, 500);
+  
+        // حذف التنبيهات بعد فترة
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(alert => {
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 2000);
+    }
 }
+
 
 function setupStepNavigation() {
     const stepItems = document.querySelectorAll('li[data-step]');

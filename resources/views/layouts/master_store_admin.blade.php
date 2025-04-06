@@ -55,7 +55,7 @@
                         onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')">
                         <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i>
                         <span>
-                            {{ 'http://127.0.0.1:]/store/' . $store->name }}
+                            {{ 'http://127.0.0.1:/store/' . $store->name }}
                             نسخ رابط المتجر
                         </span>
                     </a>
@@ -111,6 +111,15 @@
                                 <p>إدارة المنتجات</p>
                             </a>
                         </li>
+                        <!-- إدارة الطلبات -->
+                        <li class="nav-item">
+                            <a href="{{ route('orders.manage', $store->id) }}" class="nav-link">
+                                <i class="fas fa-shopping-bag nav-icon"></i>
+                                <p>إدارة الطلبات</p>
+                            </a>
+                            
+                        </li>
+                        
                         <li class="nav-item">
                             <a href="{{ route('conditions.create.view', $store->id) }}" class="nav-link">
                                 <i class="fas fa-balance-scale-left nav-icon"></i>

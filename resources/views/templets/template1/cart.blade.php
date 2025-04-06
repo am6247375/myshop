@@ -144,7 +144,7 @@
                         <div class="cart-buttons" style="text-align: center">
                             @isset($store)
                                 <a href="{{ route('checkout.view',['name'=>$store->name]) }}" class="boxed-btn black">{{ trans('string.checkout') }}</a>
-                                <a href="{{--  --}}"class="boxed-btn black">{{ trans('string.previous-orders') }}</a>
+                                <a href="{{ route('show.orders',$store->name) }}"class="boxed-btn black">{{ trans('string.previous-orders') }}</a>
                             @else
                                 <a href="{{--  --}}" class="boxed-btn black">{{ trans('string.checkout') }}</a>
                                 <a href="{{--  --}}" class="boxed-btn black">{{ trans('string.previous-orders') }}</a>

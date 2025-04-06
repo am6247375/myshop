@@ -41,7 +41,6 @@
                                                                
                                                                 <tr class="table-body-row">
                                                                     <td class="product-image">
-                                                                      
                                                                         <img  src="{{ asset($item->product->image) }}"
                                                                             alt="">
                                                                     </td>

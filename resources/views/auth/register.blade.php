@@ -1,14 +1,16 @@
-@extends('layouts.master')
-
-@section('content')
+@extends('layouts.app')
+@section('content')  
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="auth-card shadow-lg rounded-4 overflow-hidden">
                     <div class="auth-header bg-primary text-white text-center py-4">
+                        <h2 class="mb-3 fw-bold">انشاء حساب جديد</h2>
+                    </div>
+                    {{-- <div class="auth-header bg-primary text-white text-center py-4">
                         <h2 class="mb-3 fw-bold">مرحبًا بك في منصة متجري</h2>
                         <p class="mb-0">ابدأ تجارتك بإنشاء حساب جديد</p>
-                    </div>
+                    </div> --}}
 
                     <div class="auth-body p-4" >
                         <form method="POST" action="{{ route('register') }}">
@@ -114,7 +116,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold">
+                            <button type="submit" class="btn btn-primary auth-header w-100 py-3 rounded-pill fw-bold">
                                 <i class="fas fa-user-plus me-2"></i>إنشاء حساب
                             </button>
 
@@ -131,62 +133,4 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .auth-card {
-            border: none;
-            overflow: hidden;
-            margin-top: 7rem;
-            border-radius: 3rem;
-        }
-
-        .auth-header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            padding: 2.5rem;
-        }
-
-        .auth-body {
-            background: #ffffff;
-        }
-
-        .form-floating {
-            position: relative;
-        }
-
-        .form-floating label {
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus~label,
-        .form-control:not(:placeholder-shown)~label {
-            transform: translateY(-1.5rem) scale(0.85);
-            opacity: 0.8;
-        }
-
-        .input-group button {
-            border-start-start-radius: 0;
-            border-end-start-radius: 0;
-        }
-
-        @media (max-width: 768px) {
-            .auth-header {
-                padding: 1.5rem;
-            }
-        }
-    </style>
-
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const eyeIcon = document.querySelector('.fa-eye');
-
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-    </script>
 @endsection

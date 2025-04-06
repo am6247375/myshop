@@ -8,6 +8,7 @@ use App\Http\Controllers\store_dashbaord\DashbaordStoreController;
 use App\Http\Controllers\store_dashbaord\ManageAdminController;
 use App\Http\Controllers\store_dashbaord\ManageCategoriesController;
 use App\Http\Controllers\store_dashbaord\ManageProductsController;
+use App\Models\Subscription;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,10 @@ Route::get('/', function () {
     session(['store_home' => route('welcome')]);
     return view('welcome');
 })->name('welcome');
+Route::get('/subscribe', function () {
+    $subscriptions = Subscription::all();
+    return view('sub', compact('subscriptions'));
+})->name('subscribe');
 
 // رابط تجريبي (ربما لأغراض التطوير)
 Route::get('/اسامة', function () {
@@ -113,6 +118,15 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/create/{store_id}', 'conditions_create_view')->name('conditions.create.view');
             Route::post('/create/{store_id}', 'conditions_create')->name('conditions.create');
         });
+        // إدارة الطلبات
+        Route::prefix('/orders')->controller(DashbaordStoreController::class)
+            ->middleware('store_manage:ادارة الطلبات')
+            ->group(function () {
+                Route::get('/{store_id}', 'orders_manage')->name('orders.manage');
+                Route::get('/{store_id}/show/{order_id}', 'order_show')->name('order.show');
+                Route::post('/update', 'order_update')->name('order.update');
+                Route::get('/delete/{order_id}', 'order_delete')->name('order.delete');
+            });
     });
 });
 
@@ -130,5 +144,4 @@ Route::controller(CartController::class)->middleware('auth')->group(function(){
     Route::get('/store/{name}/checkout','checkout_view')->name('checkout.view');
     Route::post('/store/checkout','order_create')->name('checkout');
     Route::get('/store/{name}/orders','show_orders')->name('show.orders');
-
 });

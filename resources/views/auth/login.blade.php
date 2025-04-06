@@ -17,9 +17,6 @@
                     <label class="form-label">كلمة المرور</label>
                     <div class="input-group">
                         <input type="password" name="password" id="passwordField" class="form-control @error('password') is-invalid @enderror" placeholder="أدخل كلمة المرور">
-                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
-                            <i class="bi bi-eye"></i>
-                        </button>
                     </div>
                     @error('password')
                          <span class="invalid-feedback" role="alert">

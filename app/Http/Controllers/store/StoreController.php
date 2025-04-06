@@ -18,7 +18,6 @@ class StoreController extends Controller
 
         // تحديد اللغة الافتراضية للمتجر
         $defaultLang = $store->languages->first()->code ?? 'ar';
-
         // إذا كان المتجر يدعم لغة واحدة فقط، استخدمها دائمًا
         if ($store->languages->count() < 2) {
             session(['locale' => $defaultLang]);

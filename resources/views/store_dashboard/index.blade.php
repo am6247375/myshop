@@ -149,6 +149,28 @@
                                 <a href="{{ $data['route'] }}"  class="btn rounded-pill menuu">متابعة</a>
                             </div>
                         @endforeach
+                        {{-- <div class="card shadow-sm border-0 rounded-lg text-center p-4" style="background-color: #ffffff;">
+                            <!-- أيقونة الصاروخ -->
+                            <div class="mb-3">
+                                <!-- استبدل مسار الصورة أدناه بمسار أيقونة الصاروخ لديك -->
+                                <img src="path/to/rocket-icon.png" alt="Rocket Icon" style="width: 60px;">
+                            </div>
+                        
+                            <!-- عنوان فرعي -->
+                            <h5 class="font-weight-bold mb-2" style="color: #444444;">متجرك لم يتم إطلاقه بعد</h5>
+                        
+                            <!-- نص توضيحي -->
+                            <p class="text-muted mb-4" style="line-height: 1.7;">
+                                قم بترقية المتجر، وضاعف أرباحك ومبيعاتك الآن
+                            </p>
+                        
+                            <!-- زر الإطلاق -->
+                            <a href="{{ route('subscribe') }}"
+                               class="btn btn-warning btn-lg rounded-pill font-weight-bold px-4">
+                               إطلاق المتجر
+                            </a>
+                        </div>
+                         --}}
                     </div>
                 </div>
             </div>

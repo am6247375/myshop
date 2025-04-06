@@ -1,3 +1,12 @@
+#myTable td {
+    max-width: 8ch !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+
 /* جعل نصوص القائمة الجانبية باللون الأبيض */
 .nav-sidebar .nav-link {
     color: #fff !important;
