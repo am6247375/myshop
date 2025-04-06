@@ -47,8 +47,17 @@
 
                                                 <p>
                                                     <label style="font-size: 20px" for=""> {{ trans('string.phone') }}</label>
-                                                    <input name="recipient_phone" type="tel" value="{{ old('recipient_phone') }}" style="text-align:{{trans('string.text-align')}}"
-                                                        placeholder="{{ trans('string.phone') }}">
+                                                    <input name="recipient_phone"
+                                                    type="text"
+                                                    value="{{ old('recipient_phone') }}"
+                                                    style="text-align:{{ trans('string.text-align') }}"
+                                                    placeholder="{{ trans('string.phone') }}"
+                                                    maxlength="9"
+                                                    pattern="\d{9}"
+                                                    inputmode="numeric"
+                                                    oninput="this.value = this.value.replace(/\D/g, '')"
+                                                    title="يرجى إدخال 9 أرقام فقط">
+                                             
                                                     <span class="text-danger">
                                                         @error('recipient_phone')
                                                             {{ $message }}

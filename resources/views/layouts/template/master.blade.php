@@ -62,7 +62,7 @@
                                     </a>
                                 @else
                                     <li style="    text-align: left;">
-                                        <a href={{ route('home_store', $store->name) }}" class="logoo">
+                                        <a href="{{ route('home_store', $store->name) }}" class="logoo">
                                             {{ $store->name }}
                                         </a>
                                     </li>

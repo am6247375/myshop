@@ -120,7 +120,6 @@ Route::middleware(['auth'])->group(function () {
         });
         // إدارة الطلبات
         Route::prefix('/orders')->controller(DashbaordStoreController::class)
-            ->middleware('store_manage:ادارة الطلبات')
             ->group(function () {
                 Route::get('/{store_id}', 'orders_manage')->name('orders.manage');
                 Route::get('/{store_id}/show/{order_id}', 'order_show')->name('order.show');

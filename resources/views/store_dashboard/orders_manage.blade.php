@@ -11,12 +11,13 @@
                             <div class="card-body">
 
                                 <!-- العنوان + الفلتر -->
-                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                    <h3 class="fw-bold mb-0">قائمة الطلبات</h3>
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+                                    <h3 class="fw-bold mb-0">ادارة الطلبات</h3>
 
-                                    <div class="mb-3" dir="ltr" style="min-width: 250px;">
-                                        <label for="status-filter" class="form-label fw-bold">فلاتر حسب حالة الطلب:</label>
-                                        <select name="status" class="form-select border-primary fw-bold text-center" id="status-filter">
+                                    <div class="mb-3 mt-2" dir="ltr" style="text-align: center;">
+                                        <label style="    display: block;" for="status-filter" class="form-label fw-bold">فلاتر حسب حالة الطلب</label>
+                                        <select name="status" class="form-select border-primary fw-bold text-center"
+                                            id="status-filter">
                                             <option value="">جميع الحالات</option>
                                             <option value="pending">⏳ قيد الانتظار</option>
                                             <option value="Shipped">🚚 تم الشحن</option>
@@ -42,33 +43,30 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($orders as $order)
-                                                @php
-                                                    $total = $order->total_price;
-                                                    $shipping = 0;
-                                                    if ($order->total_price < 100) {
-                                                        $shipping = 25;
-                                                        $total += $shipping;
-                                                    }
-                                                @endphp
+                                               
                                                 <tr>
                                                     <td>{{ $order->id }}</td>
                                                     <td>{{ $order->recipient_name }}</td>
-                                                    <td >{{ $order->recipient_phone }}</td>
+                                                    <td>{{ $order->recipient_phone }}</td>
                                                     <td class="address-cell" title="{{ $order->recipient_address }}">
                                                         {{ $order->recipient_address }}
                                                     </td>
-                                                    
-                                                    
+
+
                                                     <td data-search="{{ $order->status }}">
-                                                        {{ $order->status == 'pending' ? '⏳ قيد الانتظار' : 
-                                                            ($order->status == 'Shipped' ? '🚚 تم الشحن' : 
-                                                            ($order->status == 'Delivered' ? '✅ تم التسليم' : $order->status)) }}
+                                                        {{ $order->status == 'pending'
+                                                            ? '⏳ قيد الانتظار'
+                                                            : ($order->status == 'Shipped'
+                                                                ? '🚚 تم الشحن'
+                                                                : ($order->status == 'Delivered'
+                                                                    ? '✅ تم التسليم'
+                                                                    : $order->status)) }}
                                                     </td>
-                                                    <td>{{ number_format($total, 2) }} ر.س</td>
+                                                    <td>{{ $store->currency.' '. number_format($order->total_price, 2)}} </td>
                                                     <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
                                                     <td>
-                                                        <a href="{{ route('order.show', ['store_id' => $store->id, 'order_id' => $order->id]) }}" 
-                                                           class="btn btn-info btn-sm w-100 text-center">
+                                                        <a href="{{ route('order.show', ['store_id' => $store->id, 'order_id' => $order->id]) }}"
+                                                            class="btn btn-info btn-sm w-100 text-center">
                                                             <i class="fas fa-eye"></i> عرض
                                                         </a>
                                                     </td>
