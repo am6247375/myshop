@@ -1,5 +1,6 @@
 @extends('layouts.master_store_admin')
 @section('content_admin')
+
     @php
         // المتجر موجود دائماً
         $storeCreated = true;
@@ -91,8 +92,8 @@
                                         style="cursor: {{ $disabled ? 'not-allowed' : 'pointer' }}">
                                         <span>
                                             <i class="fas {{ $completed ? 'fa-check-circle' : 'fa-circle' }} mr-2"
-                                            style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); -webkit-background-clip: text; color: transparent;"></i>
-                                         
+                                                style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); -webkit-background-clip: text; color: transparent;"></i>
+
                                             {{ $label }}
                                         </span>
                                     </li>
@@ -111,7 +112,7 @@
                             <h5> {{ $completedSteps }}/{{ $totalSteps }} مكتمل</h5>
                         </div>
                     </div>
-                    
+
                     <div id="cards-container">
                         @foreach ([
             'category' => [
@@ -136,41 +137,39 @@
                 'icon' => 'file-contract',
                 'title' => 'سياسات و شروط واحكام متجرك',
                 'text' => 'قم بإنشاء صفحات الشروط والأحكام لتعزيز الثقة والشفافية.',
-                'route' => route('conditions.create.view',$store->id), 
+                'route' => route('conditions.create.view', $store->id),
             ],
         ] as $step => $data)
                             <div id="card-{{ $step }}"
                                 class="step-card card shadow-sm border-0 rounded-lg text-center p-4" style="display: none;">
-                               <i class="fas fa-{{ $data['icon'] }}" id="icons"></i>
+                                <i class="fas fa-{{ $data['icon'] }}" id="icons"></i>
 
 
                                 <h5 class="mt-3 font-weight-bold">{{ $data['title'] }}</h5>
                                 <p class="text-muted">{{ $data['text'] }}</p>
-                                <a href="{{ $data['route'] }}"  class="btn rounded-pill menuu">متابعة</a>
+                                <a href="{{ $data['route'] }}" class="btn rounded-pill menuu">متابعة</a>
                             </div>
                         @endforeach
-                        {{-- <div class="card shadow-sm border-0 rounded-lg text-center p-4" style="background-color: #ffffff;">
-                            <!-- أيقونة الصاروخ -->
-                            <div class="mb-3">
-                                <!-- استبدل مسار الصورة أدناه بمسار أيقونة الصاروخ لديك -->
-                                <img src="path/to/rocket-icon.png" alt="Rocket Icon" style="width: 60px;">
+                        @if ($completedSteps == 5)
+                            <div class="card shadow-sm border-0 rounded-lg text-center p-4"
+                                style="background-color: #ffffff;">
+                                    @if ($diff_days > 0 || $diff_hours > 0)
+                                    <h5 class="font-weight-bold mb-2" style="color: #444444;">
+                                        الوقت المتبقي لانتهاء تجربتك المجانية:
+                                        {{ $diff_days }} يوم و {{ $diff_hours }} ساعة
+                                    </h5>
+                                    @else
+                                    <h5 class="font-weight-bold mb-2" style="color: #444444;">
+                                        انتهت التجربة المجانية
+                                    </h5>
+                                        <a href="{{ route('subscribe') }}"
+                                            class="btn btn-warning btn-lg rounded-pill font-weight-bold px-4">
+                                            إطلاق المتجر
+                                        </a>
+                                    @endif
                             </div>
-                        
-                            <!-- عنوان فرعي -->
-                            <h5 class="font-weight-bold mb-2" style="color: #444444;">متجرك لم يتم إطلاقه بعد</h5>
-                        
-                            <!-- نص توضيحي -->
-                            <p class="text-muted mb-4" style="line-height: 1.7;">
-                                قم بترقية المتجر، وضاعف أرباحك ومبيعاتك الآن
-                            </p>
-                        
-                            <!-- زر الإطلاق -->
-                            <a href="{{ route('subscribe') }}"
-                               class="btn btn-warning btn-lg rounded-pill font-weight-bold px-4">
-                               إطلاق المتجر
-                            </a>
-                        </div>
-                         --}}
+                        @endif
+
                     </div>
                 </div>
             </div>

@@ -32,8 +32,6 @@ class CreateStoreController extends Controller
         $languages = Language::all();
         return view('store_create.store_create', compact('template_id', 'languages'));
     }
-
-    // Controller Method: store_create
     public function store_create(StoreRequest $request)
     {
         // إنشاء كائن المتجر
@@ -93,11 +91,6 @@ class CreateStoreController extends Controller
         $store_id=$store->id;
         return redirect()->route('dashboard.index', compact('store_id'))->with('success', 'تم الامر بنجاح');
     }
-
-
-
-
-
     public function conditions_create_view($store_id)
     {
         $store = Store::findOrFail($store_id);

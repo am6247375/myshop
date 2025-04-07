@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body text-center">
                     <h1 class="font-weight-bold my-4">US$ 250</h1>
-                    <p class="text-muted">سنويًا</p>
+                    <p class="text-muted"></p>
                     <button class="btn btn-primary btn-lg mb-4 w-75" style="color: white;">
                         جرب الآن
                     </button>

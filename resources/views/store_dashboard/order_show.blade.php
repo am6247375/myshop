@@ -141,7 +141,7 @@
                 <!-- تفاصيل المستلم -->
                 <hr>
                 <div class="col-lg-12">
-                    <h5 class="text-secondary text-center mb-4">👤 تفاصيل المستلم</h5>
+                    <h5 class="text-secondary text-center mb-4">👤 تفاصيل العميل(المستلم)</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <tbody>

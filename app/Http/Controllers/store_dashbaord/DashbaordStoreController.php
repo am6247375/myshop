@@ -16,22 +16,17 @@ use Illuminate\Support\Facades\Hash;
 
 class DashbaordStoreController extends Controller
 {
-    //
-
     public function index($store_id = null)
     {
         $store = Store::find($store_id);
-    
-        // مثال لجلب بيانات الرسم البياني (يمكنك تعديل الاستعلامات حسب متطلباتك)
-        $chartLabels = ['اليوم 1', 'اليوم 2', 'اليوم 3', 'اليوم 4', 'اليوم 5'];
-        $chartData = [120, 200, 150, 300, 250];
-    
-        // الحصول على المنتجات الأكثر مبيعًا
-        $topSellingProducts = product::orderBy('created_at', 'desc')
-            ->take(4)
-            ->get();
-    
-        return view('store_dashboard.index', compact('store', 'chartLabels', 'chartData', 'topSellingProducts'));
+        $end_date = $store->created_at->copy()->addDays(1); // نهاية التجربة المجانية
+        $now = now();
+        $diff_days = $now->diffInDays($end_date, false);
+        $diff_hours = $now->diffInHours($end_date, false) % 24;
+        if($diff_days < 0 && $diff_hours < 0){
+            
+        }
+        return view('store_dashboard.index', compact('store', 'diff_days', 'diff_hours', 'end_date'));
     }
     
     public function orders_manage($store_id = null)
