@@ -97,7 +97,7 @@
             <img src="{{ asset('assets/avatar3 (2).png') }}" class="rounded-circle" alt="عميل">
             <h4 class="mt-3">اسامة محمد قائد</h4>
             <p class="mt-2">"أفضل منصة عربية واجهتها، ساعدتني في إطلاق متجري خلال ساعات"</p>
-            <div class="rating">★★★★★</div>
+            <div class="rating" style="    color: #ff6a00;">★★★★★</div>
           </div>
         </div>
         <div class="col-md-3">
@@ -105,7 +105,7 @@
             <img src="{{ asset('assets/avatar2.png') }}" class="rounded-circle" alt="عميل">
             <h4 class="mt-3">امجد طالب الشيباني</h4>
             <p class="mt-2">"أفضل منصة عربية واجهتها، ساعدتني في إطلاق متجري خلال ساعات"</p>
-            <div class="rating">★★★★★</div>
+            <div class="rating" style="    color: #ff6a00;">★★★★★</div>
           </div>
         </div>
         <div class="col-md-3">
@@ -113,7 +113,7 @@
             <img src="{{ asset('assets/avatar3 (2).png') }}" class="rounded-circle" alt="عميل">
             <h4 class="mt-3"> حمزة جلال الصلوي</h4>
             <p class="mt-2">"أفضل منصة عربية واجهتها، ساعدتني في إطلاق متجري خلال ساعات"</p>
-            <div class="rating">★★★★★</div>
+            <div class="rating" style="    color: #ff6a00;">★★★★★</div>
           </div>
         </div>
         <div class="col-md-3">

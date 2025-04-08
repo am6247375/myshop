@@ -4,36 +4,18 @@
         <h1 class="page-title text-center mb-4">المتاجر</h1>
         <div class="row">
             @foreach ($allStores as $store)
-                @php
-                    $end_date = $store->created_at->copy()->addDays(1); // نهاية التجربة المجانية
-                    $now = now();
-                    $diff_days = $now->diffInDays($end_date, false);
-                    $diff_hours = $now->diffInHours($end_date, false) % 24;
-                @endphp
-
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="store-card shadow-lg rounded-3 h-100">
-                        <div class="store-header d-flex justify-content-between align-items-center mb-3">
-                            <div class="badge-container">
-                                <span class="badge bg-primary p-2 rounded-pill d-flex align-items-center">
-                                    <span class="me-2">TAMKEEN</span>
-                                    <span class="verified-icon">✔️</span>
-                                    <span class="crown-icon ms-1">👑</span>
-                                </span>
-                            </div>
-                            @if ($store->active == 0)
-                                <div class="store-status text-end">
-                                    <span class="badge bg-danger"> المتجر غير نشط' </span>
-                                </div>
-                            @else
-                                <div class="store-status text-end">
-                                    <span class="badge bg-success">
-                                        {{ $store->active == 1 ? 'المتجر نشط' : 'المتجر غير نشط' }}</span>
-                                </div>
-                            @endif
-
+                    
+                        @if ($store->active == 0)
+                        <div class="store-status text-end">
+                            <span class="badge bg-danger"> المتجر غير نشط</span>
                         </div>
-
+                    @else
+                        <div class="store-status text-end">
+                            <span class="badge bg-success">المتجر نشط</span>
+                        </div>
+                    @endif
                         <div class="store-body">
                             <h2 class="store-name mb-3 fs-5">اسم المتجر: {{ $store->name }}</h2>
                             <div class="mb-3">
@@ -44,16 +26,65 @@
 
                         <div class="store-footer border-top pt-3">
                             <div class="text-center">
-                                <a href="{{ route('subscribe') }}" class="btn btn-outline-renew py-2 px-4">
-                                    تجديد الاشتراك
-                                </a>
+                                @php
+                                    $remainingTime = $store->remainingTime();
+                                    $days  = $remainingTime['days'];
+                                    $hours = $remainingTime['hours'];
+                                    $type  = $remainingTime['type'];
+                                @endphp
+                            
+                                @if ($type === 'free_trial')
+                                    {{-- حالة التجربة المجانية --}}
+                                    @if ($days < 0 && $hours < 0)
+                                        <div class="alert alert-danger mb-3">
+                                            <strong>تنبيه:</strong>  انتهت صلاحية المتجر
+                                            <br> يرجى الاشتراك.
+                                        </div>
+                                        @php
+                                            $store->active = 0;
+                                            $store->save();
+                                        @endphp
+                                        <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}"
+                                           class="btn btn-outline-renew py-2 px-4">
+                                            تجديد الاشتراك
+                                        </a>
+                                    @else
+                                        <div class="alert alert-warning mb-3">
+                                            <strong>تنبيه:</strong> فترة التجربة المجانية تنتهي بعد
+                                            {{ $days }} يوم و{{ $hours }} ساعة.
+                                        </div>
+                                    @endif
+                                @elseif($type === 'subscription')
+                                    {{-- حالة الاشتراك الفعّال --}}
+                                    @if ($days < 0 || $hours < 0)
+                                        <div class="alert alert-danger mb-3">
+                                            <strong>تنبيه:</strong> اشتراكك انتهى.
+                                            <br> يرجى تجديد الاشتراك.
+                                        </div>
+                                        @php
+                                            $store->active = 0;
+                                            $store->save();
+                                        @endphp
+                                        <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}"
+                                           class="btn btn-outline-renew py-2 px-4">
+                                            تجديد الاشتراك
+                                        </a>
+                                    @else
+                                        <div class="alert alert-info mb-3">
+                                            <strong>تنبيه:</strong>  فترة اشتراك متجرك ينتهي بعد
+                                            {{ $days }} يوم و{{ $hours }} ساعة.
+                                        </div>
+                                    @endif
+                                @endif
+                            
                                 @if ($store->active == 1)
                                     <a href="{{ route('dashboard.index', ['store_id' => $store->id]) }}"
-                                        class="btn btn-outline-primary py-2 px-4">
+                                       class="btn btn-outline-primary py-2 px-4">
                                         لوحة التحكم
                                     </a>
                                 @endif
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -73,6 +104,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
             position: relative;
             text-decoration: none;
+            display: inline;
         }
 
         /* تأثير hover: يصبح الخلفية أصفر والنص أبيض */

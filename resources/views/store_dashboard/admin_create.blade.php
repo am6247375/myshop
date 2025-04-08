@@ -90,20 +90,6 @@
 
         <!-- Form Content -->
         <div class="card-body form-section">
-            @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show mb-4">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-exclamation-triangle me-3"></i>
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
             <form action="{{ route('admin.create') }}" method="POST" class="needs-validation" novalidate>
                 @csrf
 <input type="text" hidden name="store_id" value="{{ $store->id }}">

@@ -82,7 +82,7 @@
                                         <div class="modal-body text-end">
                                             <form action="{{ route('subscribe') }}" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="store_id" value="{{ Auth::user()->store->id }}">
+                                                <input type="hidden" name="store_id" value="{{$store_id }}">
                                                 <input type="hidden" name="subscrip_id" value="{{ $subscription->id }}">
                                             
                                                 <!-- بيانات البطاقة (وهمية فقط للعرض) -->
