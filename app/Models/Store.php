@@ -49,4 +49,16 @@ class Store extends Model
     {
         return $this->hasMany(Cart::class);
     }
+    public function subscribers()
+    {
+        return $this->hasMany(Subscriber::class);
+    }
+
+    public function currentSubscription()
+    {
+        return $this->subscribers()
+            ->where('end_date', '>=', now())
+            ->latest('end_date')
+            ->first();
+    }
 }

@@ -8,7 +8,9 @@ use App\Http\Controllers\store_dashbaord\DashbaordStoreController;
 use App\Http\Controllers\store_dashbaord\ManageAdminController;
 use App\Http\Controllers\store_dashbaord\ManageCategoriesController;
 use App\Http\Controllers\store_dashbaord\ManageProductsController;
+use App\Models\Subscriber;
 use App\Models\Subscription;
+use Carbon\Carbon;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,20 @@ Route::get('lang/{locale}', function ($locale) {
     }
     return back();
 })->name('lang');
+Route::get('/stores', function () {
+    $user = Auth::user();
+    $allStores = collect([$user->store])
+        ->filter()
+        ->merge($user->stores)
+        ->unique('id');
+
+    if ($allStores->isEmpty()) {
+        return redirect('/')->with('success', 'لا يوجد لديك متاجر');
+    }
+
+    return view('stores', compact('allStores'));
+})->middleware('auth')->name('stores');
+
 
 // روابط المصادقة (تسجيل دخول، تسجيل حساب، إلخ)
 Auth::routes();
@@ -73,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('/dashboard')->group(function () {
         Route::get('/{store_id}', [DashbaordStoreController::class, 'index'])
             ->name('dashboard.index');
+            Route::post('/subscribe/store',[ DashbaordStoreController::class, 'Subscriber'])->name('subscribe');
 
         // إدارة المنتجات
         Route::prefix('/management/products')->controller(ManageProductsController::class)
@@ -108,11 +125,11 @@ Route::middleware(['auth'])->group(function () {
 
         // الدعم والشروط
         Route::prefix('/support')->controller(CreateStoreController::class)
-        ->middleware('store_manage:ادارة الاعدادات')
-        ->group(function () {
-            Route::get('/create/{store_id}', 'support_create_view')->name('support.create.view');
-            Route::post('/create/{store_id}', 'support_create')->name('support.create');
-        });
+            ->middleware('store_manage:ادارة الاعدادات')
+            ->group(function () {
+                Route::get('/create/{store_id}', 'support_create_view')->name('support.create.view');
+                Route::post('/create/{store_id}', 'support_create')->name('support.create');
+            });
 
         Route::prefix('/conditions')->controller(CreateStoreController::class)->group(function () {
             Route::get('/create/{store_id}', 'conditions_create_view')->name('conditions.create.view');
@@ -135,12 +152,13 @@ Route::prefix('/store')->controller(StoreController::class)->group(function () {
     Route::get('/{name}/products/{category_id?}', 'products')->name('products');
     Route::get('/{name}/conditions', 'conditions')->name('conditions');
 });
-Route::controller(CartController::class)->middleware('auth')->group(function(){
-    Route::get('/store/{name}/cart','cart_view')->name('cart.view');
-    Route::post('/store','addcart')->name('add.cart');
-    Route::post('/store/cart/update','update_cart')->name('update.cart');
-    Route::delete('/store/cart/delete','delete_cart')->name('delete.cart');
-    Route::get('/store/{name}/checkout','checkout_view')->name('checkout.view');
-    Route::post('/store/checkout','order_create')->name('checkout');
-    Route::get('/store/{name}/orders','show_orders')->name('show.orders');
+Route::controller(CartController::class)->middleware('auth')->group(function () {
+    Route::get('/store/{name}/cart', 'cart_view')->name('cart.view');
+    Route::post('/store', 'addcart')->name('add.cart');
+    Route::post('/store/cart/update', 'update_cart')->name('update.cart');
+    Route::delete('/store/cart/delete', 'delete_cart')->name('delete.cart');
+    Route::get('/store/{name}/checkout', 'checkout_view')->name('checkout.view');
+    Route::post('/store/checkout', 'order_create')->name('checkout');
+    Route::get('/store/{name}/orders', 'show_orders')->name('show.orders');
 });
+

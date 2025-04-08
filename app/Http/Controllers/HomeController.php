@@ -15,11 +15,10 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->store) {
-            return redirect()->route("dashboard.index", $user->store->id);
-        } elseif ($user->stores->first()) {
-            return redirect()->route("dashboard.index", $user->stores->first()->id);
-        }
+
+        if ($user->store || $user->stores->first()) {
+            return redirect()->route('stores');
+        } 
         $storeHome = session('store_home');
         if ($storeHome) {
             session()->forget('store_home');

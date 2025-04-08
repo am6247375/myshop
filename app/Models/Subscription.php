@@ -9,10 +9,9 @@ class Subscription extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'price', 'duration', 'features', 'payment_link'];
-    public function getFeaturesArrayAttribute()
+    
+    public function subscribers()
     {
-        // مثال: إذا كانت القيم مخزنة هكذا: "الميزة الأولى,الميزة الثانية,الميزة الثالثة"
-        // يمكن تحويلها إلى مصفوفة بهذا الشكل:
-        return explode(',', $this->features);
+        return $this->hasMany(Subscriber::class, 'subscrip_id');
     }
 }
