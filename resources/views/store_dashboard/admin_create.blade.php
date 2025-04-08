@@ -94,7 +94,7 @@
                 @csrf
 <input type="text" hidden name="store_id" value="{{ $store->id }}">
                 <div class="row g-3">
-                    <!-- First Name -->
+                     <!-- First Name -->
                     <div class="col-md-6">
                         <label class="form-label">الاسم الأول</label>
                         <div class="input-field">
