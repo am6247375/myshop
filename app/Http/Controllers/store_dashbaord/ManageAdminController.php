@@ -22,7 +22,8 @@ class   ManageAdminController extends Controller
         return view('store_dashboard.manage_admin', compact('admins', 'store'));
     }
     public function admin_create_view($store_id)
-    {
+    { 
+        
         // جلب بيانات المتجر، وإرجاع خطأ 404 إذا لم يوجد المتجر
         $store = Store::findOrFail($store_id);
 
