@@ -1,15 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="container text-center mb-5" style="margin-top: 120px">
-        <h2 class="fw-bold mb-3">باقات وأسعار منصة متجري</h2>
-
+        <div style="margin-bottom: 50px; margin-top: 150px;">
+            <h2 class="fw-bold mb-3">باقات وأسعار منصة متجري</h2>
+        </div>
         <div class="row justify-content-center">
             @foreach ($subscriptions as $index => $subscription)
                 @php
@@ -48,7 +49,7 @@
 
                 <div class="col-md-4 mb-4 d-flex">
                     <div class="card flex-fill shadow border-0"
-                        style="background-color: {{ $cardBg }}; border-radius: 15px;">
+                         style="background-color: {{ $cardBg }}; border-radius: 15px;">
                         <div class="card-header text-center py-4" style="background-color: transparent; border: none;">
                             <h3 class="fw-bold mb-0" style="color: {{ $cardTextColor }};">
                                 {{ $title }}
@@ -63,56 +64,69 @@
                             </p>
 
                             <button class="btn mb-4 px-4 py-2 fw-bold"
-                                style="background-color: {{ $priceColor }}; color: {{ $bottomTextColor }}; border-radius: 30px;"
-                                data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $subscription->id }}">
+                                    style="background-color: {{ $priceColor }}; color: {{ $bottomTextColor }}; border-radius: 30px;"
+                                    data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $subscription->id }}">
                                 اشترك الآن
                             </button>
 
                             <!-- Modal الدفع -->
                             <div class="modal fade mt-5" id="paymentModal-{{ $subscription->id }}" tabindex="-1"
-                                aria-labelledby="paymentModalLabel" aria-hidden="true">
+                                 aria-labelledby="paymentModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content rounded-4">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="paymentModalLabel">بيانات الدفع -
+                                            <h5 class="modal-title" id="paymentModalLabel">
                                                 {{ $subscription->name }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="إغلاق"></button>
+                                                    aria-label="إغلاق"></button>
                                         </div>
                                         <div class="modal-body text-end">
                                             <form action="{{ route('subscribe') }}" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="store_id" value="{{$store_id }}">
-                                                <input type="hidden" name="subscrip_id" value="{{ $subscription->id }}">
-                                            
-                                                <!-- بيانات البطاقة (وهمية فقط للعرض) -->
-                                                <div class="mb-3">
-                                                    <label class="form-label">رقم البطاقة</label>
-                                                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">تاريخ الانتهاء</label>
-                                                    <input type="text" class="form-control" placeholder="MM/YY" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">رمز الأمان (CVV)</label>
-                                                    <input type="text" class="form-control" placeholder="123" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">اسم حامل البطاقة</label>
-                                                    <input type="text" class="form-control" placeholder="الاسم كما هو على البطاقة" required>
-                                                </div>
-                                            
-                                                <button type="submit" class="btn btn-success w-100">
-                                                    تأكيد الاشتراك
-                                                </button>
-                                            </form>
 
+                                                @php
+                                                    $user = Auth::user();
+                                                @endphp
+
+                                                @if (!Auth::check())
+                                                    <div class="alert alert-warning text-center">
+                                                        الرجاء <a href="{{ route('login') }}">تسجيل الدخول</a> لاختيار المتجر وإتمام الاشتراك.
+                                                        <a href="{{ route('login') }}" class="btn btn-primary mt-5 mb-5">تسجيل الدخول</a>
+                                                        
+                                                    </div>
+                                                @else
+                                                    @php
+                                                        $allStores = collect([$user->store])
+                                                            ->filter()
+                                                            ->merge($user->stores)
+                                                            ->unique('id');
+                                                    @endphp
+
+                                                    @if ($allStores->isEmpty())
+                                                        <div class="alert alert-info text-center">
+                                                            لا يوجد لديك متاجر حالياً. <a>قم بإنشاء متجر الآن</a> لإكمال الاشتراك.
+                                                            <a href="{{ route('templates') }}" class="btn btn-primary mt-5 mb-5">تسجيل الدخول</a>
+                                                        </div>
+                                                    @else
+                                                        <div class="mb-3">
+                                                            <label class="form-label">اختر المتجر</label>
+                                                            <select name="store_id" class="form-select" required>
+                                                                @foreach ($allStores as $store)
+                                                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <input type="hidden" name="subscrip_id" value="{{ $subscription->id }}">
+                                                        <button type="submit" class="btn btn-success w-100">
+                                                            تأكيد الاشتراك
+                                                        </button>
+                                                    @endif
+                                                @endif
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
 
                             <!-- قائمة المميزات -->
                             <ul class="list-unstyled text-start mx-auto" style="max-width: 200px;">
@@ -129,16 +143,14 @@
         </div>
     </div>
 
-    <!-- تنسيقات إضافية -->
     <style>
         .card:hover {
             transform: translateY(-5px);
             transition: transform 0.3s ease-in-out;
         }
-        body.modal-open .card:hover {
-    transform: none !important;
-}
 
+        body.modal-open .card:hover {
+            transform: none !important;
+        }
     </style>
-    
 @endsection

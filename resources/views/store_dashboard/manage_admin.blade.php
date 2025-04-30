@@ -11,7 +11,9 @@
                             <div class="card-body">
                                 <!-- عنوان الزر + العنوان -->
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                    <h3 class="fw-bold mb-0">قائمة الموظفين</h3>
+                                    <h3 class="fw-bold mb-0">
+                                        <i class="fas fa-users-cog fa-2x -white"></i>
+                                        ادارة الموظفين</h3>
                                     <a href="{{ route('admin.create.view', ['store_id' => $store->id])}}" class="btn btn-success btn-lg">
                                         <i class="fas fa-user-plus"></i> إضافة موظف جديد
                                     </a>
@@ -26,9 +28,7 @@
                                                 <th>الاسم</th>
                                                 <th>الجنس</th>
                                                 <th>الهاتف</th>
-                                                <th>البريد الالكتروني</th>
-                                                <th>الدور</th>
-                                                <th>الصلاحيات</th>
+                                                <th>البريد الالكتروني</th>                                                <th>الصلاحيات</th>
                                                 <th>الإجراء</th>
                                             </tr>
                                         </thead>
@@ -36,15 +36,13 @@
                                             @foreach ($admins as $adminGroup)
                                                 @php
                                                     $user = $adminGroup->first()->user; // الحصول على المستخدم الفعلي
-                                                    $roles = $adminGroup->pluck('role.name')->filter()->unique()->join(', ');
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $user->id }}</td>
                                                     <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                                                     <td>{{ $user->sex }}</td>
                                                     <td style="text-align: center">{{ $user->phone }}</td>
-                                                    <td>{{ $user->email}}</td>
-                                                    <td>{{ $roles ?: 'بدون دور' }}</td>
+                                                    <td >{{ $user->email}}</td>
                                                     <td>
                                                         @foreach ($adminGroup->pluck('permission.name') as $prm)
                                                              <span class="badge bg-info">

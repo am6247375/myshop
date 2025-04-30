@@ -85,19 +85,23 @@
                                     </li>
                                     <li><a href="{{ route('products', $store->name) }}"> {{ trans('string.products') }}
                                         </a></li>
-                                    <li><a href="{{ route('conditions',$store->name) }}">سياسة الخصوصية</a></li>
+                                    <li><a
+                                            href="{{ route('conditions', $store->name) }}">{{ trans('string.conditions') }}</a>
+                                    </li>
                                     <li><a href="#abut">{{ trans('string.about') }}</a></li>
 
                                     <li>
                                         <div class="header-icons" style="text-align:center;">
-                                            <a class="shopping-cart" href="{{ route('cart.view',['name'=>$store->name]) }}"><i
+                                            <a class="shopping-cart"
+                                                href="{{ route('cart.view', ['name' => $store->name]) }}"><i
                                                     class="fas fa-shopping-cart"></i></a>
                                             <a class="mobile-hide search-bar-icon" href="#"><i
                                                     class="fas fa-search"></i></a>
 
                                             @guest
                                                 @if (Route::has('login'))
-                                                    <a class="shopping-cart" href="{{ route('login', ['redirectTo' => url()->current()]) }}"><i
+                                                    <a class="shopping-cart"
+                                                        href="{{ route('login', ['redirectTo' => url()->current()]) }}"><i
                                                             class="fas fa-user"></i></a>
                                                 @endif
                                             @else
@@ -109,7 +113,8 @@
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                                     class="d-none">
                                                     @csrf
-                                                    <input type="hidden" name="redirectTo" value="{{ route('home_store', ['name' => $store->name]) }}">
+                                                    <input type="hidden" name="redirectTo"
+                                                        value="{{ route('home_store', ['name' => $store->name]) }}">
                                                 </form>
 
 
@@ -128,7 +133,7 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
-                                                
+
                                             </div>
                                         </div>
                                     </li>
@@ -139,8 +144,8 @@
                                     <li><a href="{{ route('template.show', [$template->id, 'products_all']) }}">
                                             {{ trans('string.products') }}
                                         </a></li>
-                                    <li><a href="#brandd">{{ trans('string.brand') }}</a></li>
                                     <li><a href="#abut">{{ trans('string.about') }}</a></li>
+
 
                                     <li>
                                         <div class="header-icons" style="text-align:center;">
@@ -148,22 +153,22 @@
                                                     class="fas fa-shopping-cart"></i></a>
                                             <a class="mobile-hide search-bar-icon" href="#"><i
                                                     class="fas fa-search"></i></a>
-                                            @guest
+                                            {{-- @guest
                                                 @if (Route::has('login'))
-                                                    <a class="shopping-cart" href="{{-- route('login') --}}"><i
+                                                    <a class="shopping-cart" href=""><i
                                                             class="fas fa-user"></i></a>
                                                 @endif
                                             @else
-                                                <a class="shopping-cart" href="{{-- route('logout') --}}"
+                                                <a class="shopping-cart" href=""
                                                     onclick="event.preventDefault();
 																	 document.getElementById('logout-form').submit();">
                                                     <i class="fas fa-sign-out-alt"></i>
                                                 </a>
-                                                <form id="logout-form" hidden action="{{-- route('logout') --}}" method="POST"
+                                                <form id="logout-form" hidden action="" method="POST"
                                                     class="d-none">
                                                     @csrf
                                                 </form>
-                                            @endguest
+                                            @endguest --}}
                                             <!-- تغيير اللغة -->
                                             <div class="dropdown">
                                                 <a class="shopping-cart" href="#" title="تغيير اللغة">
@@ -188,7 +193,7 @@
                         <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 
                         <div class="mobile-menu"></div>
-                        <!-- menu end -->
+
                     </div>
                 </div>
             </div>
@@ -203,15 +208,30 @@
                 <div class="col-lg-12">
                     <span class="close-btn"><i class="fas fa-window-close"></i></span>
                     <div class="search-bar">
-                        <div class="search-bar-tablecell">
-                            <form action="{{-- route('search') --}}" method="post">
-                                @csrf()
-                                <input placeholder="{{ trans('string.search') }}" type="text" id="name"
-                                    name="name">
-                                <button type="submit">{{ trans('string.search') }}<i
-                                        class="fas fa-search"></i></button>
-                            </form>
-                        </div>
+                        @if (isset($store))
+                            <div class="search-bar-tablecell">
+                                <form action="{{--  --}}" method="post">
+                                    @csrf()
+                                    <input placeholder="{{ trans('string.search') }}" type="text" id="name"
+                                        name="name">
+                                    <button type="submit">{{ trans('string.search') }}<i
+                                            class="fas fa-search"></i></button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="search-bar-tablecell">
+                                <form action="{{--  --}}">
+                                    @csrf()
+                                    <input placeholder="{{ trans('string.search') }}" type="text" id="name"
+                                        name="name">
+                                    <button type="submit">{{ trans('string.search') }}<i
+                                            class="fas fa-search"></i></button>
+                                </form>
+                            </div>
+                        @endif
+
+
+
                     </div>
                 </div>
             </div>
@@ -298,95 +318,81 @@
     <div id="contact" class="footer-area">
         <div class="container" dir="rtl">
             <div class="row">
-                @if (isset($store) && $store->about !== null)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="footer-box about-widget">
-                            <h2 class="widget-title">{{ trans('string.about') }}</h2>
-                            <p style="text-align: center">{{ $store->about }}</p>
-                        </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="footer-box about-widget">
+                        <h2 class="widget-title">{{ trans('string.about') }}</h2>
+                        <p style="text-align: center" id="abutt">
+                            @if (isset($store))
+                                {{ $store->about !== null ? $store->about : 'لا يوجد  محتوئ' }}
+                            @else
+                                {{ trans('string.text_about') }}
+                            @endif
+                        </p>
                     </div>
-                    <div class="col-lg-4 col-md-6" id="abut">
-                        <div class="footer-box get-in-touch">
-                            <h2 class="widget-title">{{ trans('string.contact') }}</h2>
-                            <ul>
-                                @if (isset($store) && ($store->email_link !== null || $store->whatsapp_link !== null))
-                                    @if ($store->email_link !== null)
-                                        <li>
-                                            <a href="mailto:{{ $store->email_link }}">
-                                                <i class="fas fa-envelope"></i>
-                                                {{ $store->email_link }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                    @if ($store->whatsapp_link !== null)
-                                        <li>
-                                            <a href="https://wa.me/967{{ $store->whatsapp_link }}">
-                                                <i class="fab fa-whatsapp"></i>
-                                                {{ $store->whatsapp_link }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                @else
-                                    <li>لايوجد معلومات لتواصل</li>
+                </div>
+
+                <div class="col-lg-6 col-md-6" id="abut">
+                    <div class="footer-box get-in-touch">
+                        <h2 class="widget-title">{{ trans('string.contact') }}</h2>
+                        <ul style="text-align: center;">
+                            @if (isset($store))
+                                @if ($store->email_link !== null)
+                                    <li
+                                        style="    display: flex
+;
+    flex-direction: row-reverse;
+    align-content: center;
+    justify-content: space-around;">
+                                        <a href="mailto:{{ $store->email_link }}">
+                                            <i class="fas fa-envelope"></i>
+                                            {{ $store->email_link }}
+                                        </a>
+                                    </li>
                                 @endif
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="footer-box subscribe">
-                            <h2 class="widget-title">{{ trans('string.review_add') }}</h2>
-                            <form action="{{-- route('review_add') --}}" method="POST" style="text-align: center">
-                                @csrf()
-                                <input class="name_review" type="text" name="name"
-                                    placeholder="{{ trans('string.name_review') }}">
-                                <textarea class="review" name="review" id="" cols="30" placeholder="{{ trans('string.review') }}"
-                                    rows="3"></textarea>
-                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                @else
-                    <div class="col-lg-6 col-md-6" id="abut">
-                        <div class="footer-box get-in-touch">
-                            <h2 class="widget-title">{{ trans('string.contact') }}</h2>
-                            <ul>
-                                @if (isset($store) && ($store->email_link !== null || $store->whatsapp_link !== null))
-                                    @if ($store->email_link !== null)
-                                        <li>
-                                            <a href="mailto:{{ $store->email_link }}">
-                                                <i class="fas fa-envelope"></i>
-                                                {{ $store->email_link }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                    @if ($store->whatsapp_link !== null)
-                                        <li>
-                                            <a href="https://wa.me/967{{ $store->whatsapp_link }}">
-                                                <i class="fab fa-whatsapp"></i>
-                                                {{ $store->whatsapp_link }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                @else
-                                    <li>لايوجد معلومات لتواصل</li>
+                                @if ($store->whatsapp_link !== null)
+                                    <li
+                                        style="    display: flex
+;
+    flex-direction: row-reverse;
+    align-content: center;
+    justify-content: space-around;">
+                                        <a href="https://wa.me/967{{ $store->whatsapp_link }}">
+                                            <i class="fab fa-whatsapp"></i>
+                                            {{ $store->whatsapp_link }}
+                                        </a>
+                                    </li>
                                 @endif
-                            </ul>
-                        </div>
+                                @if ($store->email_link === null && $store->whatsapp_link === null)
+                                    <li>لا يوجد معلومات للتواصل</li>
+                                @endif
+                            @else
+                                <li
+                                    style="    display: flex
+;
+    flex-direction: row-reverse;
+    align-content: center;
+    justify-content: space-around;">
+                                    <a href="mailto:example@example.com">
+                                        <i class="fas fa-envelope"></i>
+                                        example@example.com
+                                    </a>
+                                </li>
+                                <li
+                                    style="    display: flex
+                                ;
+                                    flex-direction: row-reverse;
+                                    align-content: center;
+                                    justify-content: space-around;">
+                                    <a href="https://wa.me/967777777777">
+                                        <i class="fab fa-whatsapp"></i>
+                                        777777777
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                     </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="footer-box subscribe">
-                            <h2 class="widget-title">{{ trans('string.review_add') }}</h2>
-                            <form action="{{-- route('review_add') --}}" method="POST" style="text-align: center">
-                                @csrf()
-                                <input class="name_review" type="text" name="name"
-                                    placeholder="{{ trans('string.name_review') }}">
-                                <textarea class="review" name="review" id="" cols="30" placeholder="{{ trans('string.review') }}"
-                                    rows="3"></textarea>
-                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                @endif
+                </div>
+
             </div>
         </div>
     </div>
@@ -411,9 +417,9 @@
     <script src="{{ asset('assets/assets_template1/js/sticker.js') }}"></script>
     <!-- main js -->
     <script src="{{ asset('assets/assets_template1/js/main.js') }}"></script>
-<script>
-    var updateCartUrl = "{{ route('update.cart') }}";
-</script>
+    <script>
+        var updateCartUrl = "{{ route('update.cart') }}";
+    </script>
 
 
 

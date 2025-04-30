@@ -50,81 +50,81 @@ class Store extends Model
         return $this->hasMany(Cart::class);
     }
 
+// في موديل Store
 
-    public function subscribers()
-    {
-        return $this->hasMany(Subscriber::class);
-    }
+public function subscribers()
+{
+    return $this->hasMany(Subscriber::class);
+}
 
-    // نهاية فترة التجربة المجانية
-    public function freeEnd()
-    {
-        return $this->created_at->copy()->addDays(30); // أو 5 حسب النظام
-    }
+// نهاية فترة التجربة المجانية
+public function freeEnd()
+{
+    return $this->created_at->copy()->addDays(14); // غيّر إلى 5 إذا كانت التجربة 5 أيام
+}
 
-    // هل انتهت فترة التجربة المجانية؟
-    public function hasfreeEnd(): bool
-    {
-        return now()->greaterThan($this->freeEnd());
-    }
+// هل انتهت فترة التجربة المجانية؟
+public function hasfreeEnd(): bool
+{
+    return now()->greaterThan($this->freeEnd());
+}
 
-    // الاشتراك الفعّال الحالي
-    public function activeSub()
-    {
-        return $this->subscribers()
-            ->where('end_date', '>=', now())
-            ->latest('end_date')
-            ->first();
-    }
-    public function Subtime(): ?array
-    {
+// آخر اشتراك (حتى لو منتهي)
+public function latestSub()
+{
+    return $this->subscribers()
+        ->latest('end_date')
+        ->first();
+}
 
-        $subscription = $this->activeSub();
+// الاشتراك الفعّال فقط
+public function activeSub()
+{
+    return $this->subscribers()
+        ->where('end_date', '>=', now())
+        ->latest('end_date')
+        ->first();
+}
+public function typesub()
+{
+    return $this->subscribers();
+    
+}
 
-        if (!$subscription) {
-            return null; // لا يوجد اشتراك فعّال
-        }
+// الوقت المتبقي للاشتراك الفعّال (أو التجربة المجانية)
+public function remainingTime(): ?array
+{
+    $subscription = $this->latestSub(); // نأخذ آخر اشتراك، حتى لو منتهي
 
+    if ($subscription) {
         $now = now();
         $end = $subscription->end_date;
+
         return [
+            'type' => 'subscription',
             'days' => $now->diffInDays($end, false),
             'hours' => $now->diffInHours($end, false) % 24,
         ];
     }
 
-    // الفرق بين الآن ونهاية التجربة
-    public function freetime(): array
-    {
-        $now = now();
-        $end = $this->freeEnd();
-        return [
-            'days' => $now->diffInDays($end, false),
-            'hours' => $now->diffInHours($end, false) % 24,
-        ];
-    }
-    // في موديل Store
-    public function remainingTime(): ?array
-    {
-        // إذا كان هناك اشتراك فعّال
-        $subscription = $this->activeSub();
-        if ($subscription) {
-            $now = now();
-            $end = $subscription->end_date;
+    // إذا لا يوجد أي اشتراك → نرجع معلومات التجربة المجانية
+    $freeTime = $this->freetime();
+    return [
+        'type' => 'free_trial',
+        'days' => $freeTime['days'],
+        'hours' => $freeTime['hours'],
+    ];
+}
 
-            return [
-                'type' => 'subscription',
-                'days' => $now->diffInDays($end, false),
-                'hours' => $now->diffInHours($end, false) % 24,
-            ];
-        }
+// الفرق بين الآن ونهاية التجربة المجانية
+public function freetime(): array
+{
+    $now = now();
+    $end = $this->freeEnd();
+    return [
+        'days' => $now->diffInDays($end, false),
+        'hours' => $now->diffInHours($end, false) % 24,
+    ];
+}
 
-        // إذا انتهت فترة التجربة المجانية ولم يكن هناك اشتراك فعّال
-        $freeTime = $this->freetime();
-        return [
-            'type' => 'free_trial',
-            'days' => $freeTime['days'],
-            'hours' => $freeTime['hours'],
-        ];
-    }
 }

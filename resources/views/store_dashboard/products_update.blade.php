@@ -1,163 +1,101 @@
-@extends('layouts.master_admin')
+@extends('layouts.master_store_admin')
+
 @section('content_admin')
-<div class="content-wrapper " style="text-align: center">
-    <div class="container mt-5 mb-5">
-        <div class="form-container p-4 shadow rounded bg-white">
-            <h2 class="form-title text-center mb-4">تعديل المنتج</h2>
+    <div class="container-fluid py-3">
+        <div class="glassmorphism-card mx-auto" style="max-width: 90%;">
+            <div class="card-header text-white py-4" id="card-header">
+                <h2 class="mb-0 fw-bold">
+                    <i class="fas fa-edit fa-2x text-white"></i>
+                    تعديل المنتج
+                </h2>
+            </div>
 
-            @if (session('success'))
-                <div class="alert alert-success text-center fade-out">{{ session('success') }}</div>
-            @endif
-
-            @if ($errors->any())
-                <div class="alert alert-danger text-center fade-out">
-                    <ul class="list-unstyled mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('products_save_update', $product->id) }}" method="POST" enctype="multipart/form-data" id="productForm">
+            <form action="{{ route('product.edit', ['store_id'=> $store->id, 'product_id' => $product->id]) }}" method="POST" enctype="multipart/form-data" id="productForm">
                 @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <input type="hidden" name="store_id" value="{{ $store->id }}">
 
-                <!-- تحميل الصورة الرئيسية -->
+                <!-- صورة المنتج -->
                 <div class="form-group text-center">
-                    <input type="file" class="d-none" id="image" name="image" accept="image/*" onchange="previewImage(event, 'currentImage')">
-                    <div class="image-preview mb-3">
-                        <img id="currentImage" src="{{ asset($product->image ?? 'default-image.jpg') }}" class="rounded border" alt="صورة المنتج" style="height: 100px;">
+                    <input type="file" class="d-none" id="image" name="image" accept="image/*"
+                        onchange="previewImage(event, 'currentImage')">
+                    <div class="image-preview mt-3">
+                        <img id="currentImage" src="{{ asset($product->image ?? 'default-image.jpg') }}"
+                            alt="صورة المنتج" class="img-thumbnail" style="height: 100px;">
                     </div>
-                    <label for="image" class="btn btn-success">تغيير الصورة</label>
+                    <label for="image" class="btn btn-success mt-2">تغيير صورة المنتج</label>
+                    <div>
+                        <span class="text-danger">@error('image') {{ $message }} @enderror</span>
+                    </div>
                 </div>
 
                 <!-- اسم المنتج -->
-                <div class="form-group">
-                    <label for="name" class="form-label">اسم المنتج</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $product->name) }}" required>
-                </div>
-
-                <!-- سعر المنتج -->
-                <div class="form-group">
-                    <label for="price" class="form-label">سعر المنتج</label>
-                    <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $product->price) }}" required>
-                </div>
-
-                <!-- القسم -->
-                <div class="form-group">
-                    <label for="category_id" class="form-label">القسم</label>
-                    <select class="form-control" id="category_id" name="category_id" required>
-                        <option value="" disabled>اختر القسم</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- الماركة -->
-                <div class="form-group">
-                    <label for="brand_id" class="form-label">الماركة</label>
-                    <select class="form-control" id="brand_id" name="brand_id" required>
-                        <option value="" disabled>اختر الماركة</option>
-                        @foreach ($brands as $brand)
-                            <option value="{{ $brand->id }}" {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
-                                {{ $brand->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- وصف المنتج -->
-                <div class="form-group">
-                    <label for="description" class="form-label">وصف المنتج</label>
-                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description', $product->description) }}</textarea>
-                </div>
-
-                <!-- الألوان المتاحة -->
-                <div class="form-group">
-                    <label class="form-label">الألوان المتاحة</label>
-                    <div class="d-flex flex-wrap">
-                        @foreach ($colors as $color)
-                            <div class="form-check me-3">
-                                <input class="form-check-input color-checkbox" type="checkbox"
-                                    id="color_{{ $color->id }}" name="colors[]" value="{{ $color->id }}"
-                                    {{ in_array($color->id, $product->colors->pluck('id')->toArray()) ? 'checked' : '' }}
-                                    onchange="toggleColorImage('{{ $color->id }}')">
-                                <label class="form-check-label" for="color_{{ $color->id }}">{{ $color->name }}</label>
-                            </div>
-                        @endforeach
+                <div class="d-flex justify-content-center">
+                    <div class="floating-input-group w-75">
+                        <input type="text" name="name" class="form-control modern-input @error('name') is-invalid @enderror"
+                            placeholder=" " value="{{ old('name', $product->name) }}">
+                        <label class="floating-label"><i class="fas fa-tag me-2"></i>اسم المنتج</label>
+                        <div class="text-center">
+                            <span class="text-danger">@error('name') {{ $message }} @enderror</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- تحميل صورة لكل لون محدد -->
-                <div id="colorImagesContainer" class="mt-3">
-                    @foreach ($product->colors as $color)
-                        <div id="colorImageDiv_{{ $color->id }}" class="form-group mt-2">
-                            <label class="form-label">صورة للون {{ $color->name }}</label>
-                            <input type="file" class="form-control" name="color_images[{{ $color->id }}]" accept="image/*">
-                            <img src="{{ asset($color->pivot->image) }}" class="mt-2 rounded border" style="height: 80px;">
+                <!-- سعر المنتج -->
+                <div class="d-flex justify-content-center">
+                    <div class="floating-input-group w-75">
+                        <input type="number" name="price" min="1"
+                            class="form-control modern-input @error('price') is-invalid @enderror"
+                            placeholder=" " value="{{ old('price', $product->price) }}">
+                        <label class="floating-label"><i class="fas fa-dollar-sign me-2"></i>سعر المنتج</label>
+                        <div class="text-center">
+                            <span class="text-danger">@error('price') {{ $message }} @enderror</span>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">حفظ التعديلات</button>
+                <!-- القسم -->
+                <div class="d-flex justify-content-center">
+                    <div class="floating-input-group w-75">
+                        <select name="category_id" class="form-select modern-input @error('category_id') is-invalid @enderror">
+                            <option value="" disabled></option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <label class="floating-label"><i class="fas fa-layer-group me-2"></i>القسم</label>
+                        <div class="text-center">
+                            <span class="text-danger">@error('category_id') {{ $message }} @enderror</span>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- وصف المنتج -->
+                <div class="d-flex justify-content-center">
+                    <div class="floating-input-group w-75">
+                        <textarea name="description" rows="4"
+                            class="form-control modern-input @error('description') is-invalid @enderror"
+                            placeholder=" ">{{ old('description', $product->description) }}</textarea>
+                        <label class="floating-label"><i class="fas fa-info-circle me-2"></i>وصف المنتج</label>
+                        <div>
+                            <span class="text-danger">@error('description') {{ $message }} @enderror</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- زر التحديث -->
+                <div class="d-flex justify-content-center mt-3">
+                    <div class="floating-input-group w-75">
+                        <button type="submit" class="btn btn-save">
+                            <span class="btn-text">حفظ التعديلات</span>
+                            <i class="fas fa-check-circle btn-icon"></i>
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-</div>
-
-<script>
-    // عرض الصورة المحددة قبل التحميل
-    function previewImage(event, targetId) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById(targetId).src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-
-    function toggleColorImage(colorId) {
-        let container = document.getElementById('colorImagesContainer');
-        let checkbox = document.getElementById(`color_${colorId}`);
-        let existingDiv = document.getElementById(`colorImageDiv_${colorId}`);
-
-        if (checkbox.checked) {
-            if (!existingDiv) {
-                let div = document.createElement('div');
-                div.id = `colorImageDiv_${colorId}`;
-                div.classList.add('form-group', 'mt-2');
-
-                let label = document.createElement('label');
-                label.textContent = `صورة للون ${checkbox.nextElementSibling.textContent}`;
-                label.classList.add('form-label');
-
-                let input = document.createElement('input');
-                input.type = 'file';
-                input.name = `color_images[${colorId}]`;
-                input.accept = 'image/*';
-                input.classList.add('form-control');
-
-                div.appendChild(label);
-                div.appendChild(input);
-                container.appendChild(div);
-            }
-        } else {
-            if (existingDiv) {
-                existingDiv.remove();
-            }
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        setTimeout(() => {
-            document.querySelectorAll('.fade-out').forEach(alert => {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            });
-        }, 2000);
-    });
-</script>
 @endsection

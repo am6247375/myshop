@@ -1,147 +1,148 @@
 @extends('layouts.master')
+
 @section('content')
-    <div class="container mb-5 " style="margin-top: 120px">
-        <h1 class="page-title text-center mb-4">المتاجر</h1>
-        <div class="row">
-            @foreach ($allStores as $store)
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="store-card shadow-lg rounded-3 h-100">
-                    
-                        @if ($store->active == 0)
-                        <div class="store-status text-end">
-                            <span class="badge bg-danger"> المتجر غير نشط</span>
-                        </div>
+<div class="container mb-5" style="margin-top: 150px">
+    <h1 class="page-title text-center mb-5 fw-bold  ">قائمة المتاجر</h1>
+    <div class="row g-4">
+        @foreach ($allStores as $store)
+        <div class="col-md-6 col-lg-4">
+            <div class="store-card shadow-sm border rounded-4 p-4 position-relative h-100 bg-white">
+                {{-- حالة المتجر --}}
+                <div class="position-absolute top-0 end-0 m-3">
+                    @if ($store->active == 0)
+                        <span class="badge bg-danger">غير نشط</span>
                     @else
-                        <div class="store-status text-end">
-                            <span class="badge bg-success">المتجر نشط</span>
-                        </div>
+                        <span class="badge bg-success">نشط</span>
                     @endif
-                        <div class="store-body">
-                            <h2 class="store-name mb-3 fs-5">اسم المتجر: {{ $store->name }}</h2>
-                            <div class="mb-3">
-                                <span class="text-muted">تاريخ الإنشاء:</span>
-                                <strong>{{ $store->created_at->format('d-m-Y') }}</strong>
-                            </div>
-                        </div>
-
-                        <div class="store-footer border-top pt-3">
-                            <div class="text-center">
-                                @php
-                                    $remainingTime = $store->remainingTime();
-                                    $days  = $remainingTime['days'];
-                                    $hours = $remainingTime['hours'];
-                                    $type  = $remainingTime['type'];
-                                @endphp
-                            
-                                @if ($type === 'free_trial')
-                                    {{-- حالة التجربة المجانية --}}
-                                    @if ($days < 0 && $hours < 0)
-                                        <div class="alert alert-danger mb-3">
-                                            <strong>تنبيه:</strong>  انتهت صلاحية المتجر
-                                            <br> يرجى الاشتراك.
-                                        </div>
-                                        @php
-                                            $store->active = 0;
-                                            $store->save();
-                                        @endphp
-                                        <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}"
-                                           class="btn btn-outline-renew py-2 px-4">
-                                            تجديد الاشتراك
-                                        </a>
-                                    @else
-                                        <div class="alert alert-warning mb-3">
-                                            <strong>تنبيه:</strong> فترة التجربة المجانية تنتهي بعد
-                                            {{ $days }} يوم و{{ $hours }} ساعة.
-                                        </div>
-                                    @endif
-                                @elseif($type === 'subscription')
-                                    {{-- حالة الاشتراك الفعّال --}}
-                                    @if ($days < 0 || $hours < 0)
-                                        <div class="alert alert-danger mb-3">
-                                            <strong>تنبيه:</strong> اشتراكك انتهى.
-                                            <br> يرجى تجديد الاشتراك.
-                                        </div>
-                                        @php
-                                            $store->active = 0;
-                                            $store->save();
-                                        @endphp
-                                        <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}"
-                                           class="btn btn-outline-renew py-2 px-4">
-                                            تجديد الاشتراك
-                                        </a>
-                                    @else
-                                        <div class="alert alert-info mb-3">
-                                            <strong>تنبيه:</strong>  فترة اشتراك متجرك ينتهي بعد
-                                            {{ $days }} يوم و{{ $hours }} ساعة.
-                                        </div>
-                                    @endif
-                                @endif
-                            
-                                @if ($store->active == 1)
-                                    <a href="{{ route('dashboard.index', ['store_id' => $store->id]) }}"
-                                       class="btn btn-outline-primary py-2 px-4">
-                                        لوحة التحكم
-                                    </a>
-                                @endif
-                            </div>
-                            
-                        </div>
-                    </div>
                 </div>
-            @endforeach
+
+                {{-- معلومات المتجر --}}
+                <h5 class="store-name mb-3 text-dark fw-semibold">اسم المتجر: {{ $store->name }}</h5>
+                <p class="text-muted mb-2">تاريخ الإنشاء: <strong>{{ $store->created_at->format('d-m-Y') }}</strong></p>
+
+                {{-- حالة الاشتراك --}}
+                @php
+                    $remainingTime = $store->remainingTime();
+                    $days  = $remainingTime['days'];
+                    $hours = $remainingTime['hours'];
+                    $type  = $remainingTime['type'];
+                @endphp
+
+                <div class="mt-3">
+                    @if ($type === 'free_trial')
+                        @if ($days < 0 && $hours < 0)
+                            <div class="alert alert-danger" id="alertt">
+                                <strong>تنبيه:</strong> 
+                                انتهت الفترة التجريبية للمتجر. يرجى الاشتراك.
+                            </div>
+                            @php
+                                $store->active = 0;
+                                $store->save();
+                            @endphp
+                            <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}" class="btn btn-renew w-100">
+                                <i class="fas fa-sync-alt me-2"></i> تجديد الاشتراك
+                            </a>
+                        @elseif ($days <= 3)
+                            <div class="alert alert-danger" id="alertt>
+                                <strong>تنبيه:</strong> تنتهي فترة التجربة خلال {{ $days }} يوم و{{ $hours }} ساعة.
+                            </div>
+                            <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}" class="btn btn-renew w-100">
+                                <i class="fas fa-shopping-cart me-2"></i> اشترك الآن
+                            </a>
+                        @else
+                            <div class="alert alert-warning" id="alertt">
+                                <strong>تنبيه:</strong> تنتهي فترة التجربة خلال {{ $days }} يوم و{{ $hours }} ساعة.
+                            </div>
+                        @endif
+                    @elseif($type === 'subscription')
+                        @if ($days < 0 || $hours < 0)
+                            <div class="alert alert-danger" id="alertt">
+                                <strong>تنبيه:</strong> انتهى الاشتراك. يرجى التجديد.
+                            </div>
+                            @php
+                                $store->active = 0;
+                                $store->save();
+                            @endphp
+                            <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}" class="btn btn-renew w-100">
+                                <i class="fas fa-sync-alt me-2"></i> تجديد الاشتراك
+                            </a>
+                        @elseif ($days <= 3)
+                            <div class="alert alert-danger" id="alertt">
+                                <strong>تنبيه:</strong> ينتهي الاشتراك خلال {{ $days }} يوم و{{ $hours }} ساعة.
+                            </div>
+                            <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}" class="btn btn-renew w-100">
+                                <i class="fas fa-sync-alt me-2"></i> تجديد الاشتراك
+                            </a>
+                        @else
+                            <div class="alert alert-info" id="alertt" >
+                                <strong>تنبيه:</strong> ينتهي الاشتراك خلال {{ $days }} يوم و{{ $hours }} ساعة.
+                            </div>
+                        @endif
+                    @endif
+                </div>
+
+                {{-- زر لوحة التحكم --}}
+                @if ($store->active == 1)
+                    <a href="{{ route('dashboard.index', ['store_id' => $store->id]) }}" class="btn btn-dashboard w-100 mt-3">
+                        <i class="fas fa-cogs me-2"></i> لوحة التحكم
+                    </a>
+                @endif
+
+            </div>
         </div>
+        @endforeach
     </div>
+</div>
 
-    <style>
-        .btn-outline-renew {
-            border: 2px solid #ffc107;
-            /* إطار بلون أصفر */
-            color: #ffc107;
-            /* لون النص أصفر */
-            background-color: transparent;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            position: relative;
-            text-decoration: none;
-            display: inline;
-        }
+{{-- تنسيقات CSS --}}
+<style>
+    #alertt {
+        font-size: 20px;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        height: 100px;
+        text-align: center;
+    }
+    .btn-renew {
+        background: linear-gradient(90deg, #ffca28, #ffc107);
+        color: #212529;
+        font-weight: bold;
+        border-radius: 10px;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+    }
 
-        /* تأثير hover: يصبح الخلفية أصفر والنص أبيض */
-        .btn-outline-renew:hover {
-            background-color: #ffc107;
-            color: #fff;
-        }
+    .btn-renew:hover {
+        background: #ffb300;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 193, 7, 0.5);
+    }
 
-        /* إضافة أيقونة قبل نص الزر باستخدام pseudo-element */
+    .btn-dashboard {
+        background: white;
+        color: #007bff;
+        font-weight: bold;
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        transition: 0.3s ease;
+    }
 
+    .btn-dashboard:hover {
+        background: #007bff;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+    }
 
-        .store-card {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            padding: 1.5rem;
-        }
+    .store-card {
+        background: #fefefe;
+        transition: box-shadow 0.3s ease;
+    }
 
-        .store-name {
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-        .verified-icon {
-            color: #28a745;
-            font-size: 1.2em;
-        }
-
-        .crown-icon {
-            color: #ffd700;
-            font-size: 1.1em;
-        }
-
-        .store-id code {
-            background: #e9ecef;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
-    </style>
+    .store-card:hover {
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    }
+</style>
 @endsection

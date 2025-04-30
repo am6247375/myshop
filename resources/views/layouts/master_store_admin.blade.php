@@ -35,22 +35,33 @@
     <link rel="stylesheet" href="{{ asset('assets_admin/css/main.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/datatables.min.css') }}" />
-  
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
+    @php
+        use App\Models\StoreManagement;
+        use App\Models\Permission;
+        $user = Auth::user();
+        if ($user->store && $user->store->id == $store->id) {
+            $permissions = permission::all();
+        } else {
+            $permissions = $user->permissions()->where('store_id', $store->id)->get();
+        }
+
+    @endphp
     <div class="wrapper">
 
         <!-- Navbar أعلى الصفحة -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- زر إخفاء وإظهار القائمة الجانبية -->
             <ul class="navbar-nav">
-                <li class="nav-item"  style="text-align: center; margin: 10px 10px;">
-                    <a  class="nav-link menuu" data-widget="pushmenu" href="#">
+                <li class="nav-item" style="text-align: center; margin: 10px 10px;">
+                    <a class="nav-link menuu" data-widget="pushmenu" href="#">
                         <i class="fas fa-bars"></i>
                     </a>
                 </li>
-                <li class="nav-item"  style="text-align: center; margin: 10px 0;">
+                <li class="nav-item" style="text-align: center; margin: 10px 0;">
                     <a class="nav-link" id="copy-link" href="#"
                         onclick="copyToClipboard('http://127.0.0.1:8000/store/{{ $store->name }}')">
                         <i class="fas fa-copy" style="margin-right: 8px; font-size: 18px;"></i>
@@ -59,30 +70,20 @@
                             نسخ رابط المتجر
                         </span>
                     </a>
-                  
                 </li>
-
-               
-
-
             </ul>
         </nav>
-        <!-- /.navbar -->
-
-        <!-- القائمة الجانبية -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4" id="uu">
             <!-- معاينة المتجر -->
             <div class="brand-container text-center py-3">
                 <div class="mt-2">
-                    <a href="{{ route('home_store', $store->name) }}" target="_blank" class="btn btn-outline-light btn-med ">
+                    <a href="{{ route('home_store', $store->name) }}" target="_blank"
+                        class="btn btn-outline-light btn-med ">
                         <i class="fas fa-eye mr-1"></i>
                         معاينة المتجر
                     </a>
                 </div>
             </div>
-        
-
-            <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
@@ -96,49 +97,35 @@
                                 <p>الرئيسية</p>
                             </a>
                         </li>
-                        <!-- إدارة الأقسام -->
-                        <li class="nav-item">
-                            <a href="{{ route('manage.categories', $store->id) }}" class="nav-link">
-                                <i class="fas fa-list-alt nav-icon"></i>
-                                <p>إدارة الأقسام</p>
-                            </a>
-                        </li>
-
-                        <!-- إدارة المنتجات -->
-                        <li class="nav-item">
-                            <a href="{{ route('manage.products', $store->id) }}" class="nav-link">
-                                <i class="fas fa-boxes nav-icon"></i>
-                                <p>إدارة المنتجات</p>
-                            </a>
-                        </li>
-                        <!-- إدارة الطلبات -->
-                        <li class="nav-item">
-                            <a href="{{ route('orders.manage', $store->id) }}" class="nav-link">
-                                <i class="fas fa-shopping-bag nav-icon"></i>
-                                <p>إدارة الطلبات</p>
-                            </a>
-                            
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('conditions.create.view', $store->id) }}" class="nav-link">
-                                <i class="fas fa-balance-scale-left nav-icon"></i>
-                                <p>الصفحات القانونية</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('manage.admin', $store->id) }}" class="nav-link">
-                                <i class="fas fa-users nav-icon"></i>
-                                <p>ادارة الموظفين</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('support.create.view', $store->id) }}" class="nav-link">
-                                <i class="fas fa-cogs nav-icon"></i>
-                                <p>الاعدادات</p>
-                            </a>
-                        </li>
-                        <!-- تسجيل الخروج -->
+                        @foreach ($permissions as $permission)
+                            @php
+                                if ($permission->name == 'ادارة الاقسام') {
+                                    $route = 'manage.categories';
+                                    $icon = 'fa-list-alt';
+                                } elseif ($permission->name == 'ادارة المنتجات') {
+                                    $route = 'manage.products';
+                                    $icon = 'fa-boxes';
+                                } elseif ($permission->name == 'ادارة الطلبات') {
+                                    $route = 'orders.manage';
+                                    $icon = 'fa-shopping-bag';
+                                } elseif ($permission->name == 'ادارة الصفحات القانونية') {
+                                    $route = 'conditions.create.view';
+                                    $icon = ' fa-balance-scale-left';
+                                } elseif ($permission->name == 'ادارة الموظفين') {
+                                    $route = 'manage.admin';
+                                    $icon = 'fa-users';
+                                } elseif ($permission->name == 'الاعدادات') {
+                                    $route = 'support.create.view';
+                                    $icon = 'fa-cogs';
+                                }
+                            @endphp
+                            <li class="nav-item">
+                                <a href="{{ route($route,['store_id'=> $store->id]) }}" class="nav-link">
+                                    <i class="fas  {{ $icon }}  nav-icon"></i>
+                                    <p>{{ $permission->name }}</p>
+                                </a>
+                            </li>
+                        @endforeach
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
@@ -162,18 +149,18 @@
         <!-- المحتوى الرئيسي -->
         <div class="content-wrapper">
             @if (session('success'))
-            <div class="alert alert-success text-center fade show">{{ session('success') }}</div>
-        @endif
+                <div class="alert alert-success text-center fade show">{{ session('success') }}</div>
+            @endif
 
-        @if ($errors->any())
-            <div class="alert alert-danger text-center fade show">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            @if ($errors->any())
+                <div class="alert alert-danger text-center fade show">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             @yield('content_admin')
         </div>
         <!-- /.content-wrapper -->
@@ -195,7 +182,7 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
-     <script>
+    <script>
         window.StoreName = "{{ $store->name }}";
     </script>
 

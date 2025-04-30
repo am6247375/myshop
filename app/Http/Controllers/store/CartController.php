@@ -129,7 +129,7 @@ class CartController extends Controller
         $order = Order::create([
             'store_id' => $store_id,
             'customer_id' => Auth::id(),
-            'recipient_name' => $request->recipient_name,
+            'recipient_name' => $request->x,
             'recipient_phone' => $request->recipient_phone,
             'recipient_address' => $request->recipient_address,
             'note' => $request->note,
@@ -138,6 +138,7 @@ class CartController extends Controller
             
         ]);
 
+        
         // أضف عناصر الطلب
         foreach ($cart as $item) {
             OrderItem::create([

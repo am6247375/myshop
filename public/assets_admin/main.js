@@ -201,7 +201,7 @@ function copyToClipboard(text) {
 }
 
 function confirmDelete(event, categoryName) {
-    if (!confirm(`هل أنت متأكد أنك تريد حذف المنتج "${categoryName}"؟`)) {
+    if (!confirm(`هل أنت متأكد أنك تريد حذف  "${categoryName}"؟`)) {
         event.preventDefault();
     }
 }

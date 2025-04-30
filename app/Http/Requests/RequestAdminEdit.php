@@ -29,7 +29,7 @@ class RequestAdminEdit extends FormRequest
             // 'email' => 'required|email|unique:users,email,' . $this->route('user'),
             'phone' => 'required|string|max:9|regex:/^\+?[0-9\s\-]+$/',
             'sex' => 'required|in:male,female',
-            'role_id' => 'required|exists:roles,id',
+           
             'permissions' => 'required|array|min:1',
             'permissions.*' => 'exists:permissions,id',
             'nullable|min:6',
@@ -59,8 +59,7 @@ class RequestAdminEdit extends FormRequest
             'sex.required' => 'يرجى تحديد الجنس.',
             'sex.in' => 'يجب أن يكون الجنس إما male أو female.',
     
-            'role_id.required' => 'يرجى اختيار دور المستخدم.',
-            'role_id.exists' => 'الدور المحدد غير موجود.',
+          
     
             'permissions.required' => 'يرجى تحديد الصلاحيات.',
             'permissions.array' => 'يجب أن تكون الصلاحيات في شكل قائمة.',

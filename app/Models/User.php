@@ -43,18 +43,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-
     public function store()
     {
         return $this->hasOne(Store::class, 'owner_id');
     }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'store_management');
-    }
-
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'store_management');

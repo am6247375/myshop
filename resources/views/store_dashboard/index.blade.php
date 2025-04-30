@@ -1,6 +1,5 @@
 @extends('layouts.master_store_admin')
 @section('content_admin')
-
     @php
         // المتجر موجود دائماً
         $storeCreated = true;
@@ -119,7 +118,7 @@
                 'icon' => 'layer-group',
                 'title' => 'إنشاء القسم الأول',
                 'text' => 'قم بإنشاء أول قسم لمتجرك.',
-                'route' => route('category.create.view', $store->id),
+                'route' => route('category.create.view', $store->id ),
             ],
             'product' => [
                 'icon' => 'box-open',
@@ -150,26 +149,6 @@
                                 <a href="{{ $data['route'] }}" class="btn rounded-pill menuu">متابعة</a>
                             </div>
                         @endforeach
-                        @if ($completedSteps == 5)
-                            <div class="card shadow-sm border-0 rounded-lg text-center p-4"
-                                style="background-color: #ffffff;">
-                                    @if ($diff_days > 0 || $diff_hours > 0)
-                                    <h5 class="font-weight-bold mb-2" style="color: #444444;">
-                                        الوقت المتبقي لانتهاء تجربتك المجانية:
-                                        {{ $diff_days }} يوم و {{ $diff_hours }} ساعة
-                                    </h5>
-                                    @else
-                                    <h5 class="font-weight-bold mb-2" style="color: #444444;">
-                                        انتهت التجربة المجانية
-                                    </h5>
-                                        <a href="{{ route('subscribe') }}"
-                                            class="btn btn-warning btn-lg rounded-pill font-weight-bold px-4">
-                                            إطلاق المتجر
-                                        </a>
-                                    @endif
-                            </div>
-                        @endif
-
                     </div>
                 </div>
             </div>

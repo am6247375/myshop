@@ -5,20 +5,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestAdminCreate;
 use App\Http\Requests\RequestAdminEdit;
 use App\Models\Permission;
-use App\Models\Role;
+
 use App\Models\Store;
 use App\Models\StoreManagement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-class ManageAdminController extends Controller
+class   ManageAdminController extends Controller
 {
     public function manage_admin($store_id = null)
     {
         $store = Store::find($store_id);
 
         $admins = StoreManagement::where('store_id', $store_id)
-            ->with(['role', 'permission', 'user'])->get()->groupBy('user_id');
+            ->with(['permission', 'user'])->get()->groupBy('user_id');
         return view('store_dashboard.manage_admin', compact('admins', 'store'));
     }
     public function admin_create_view($store_id)
@@ -28,10 +28,10 @@ class ManageAdminController extends Controller
 
         // يمكن تعديل استعلام المستخدمين ليستبعد الموظفين الموجودين بالفعل في المتجر
         $users = User::all();
-        $roles = Role::all();
+    
         $permissions = Permission::all();
 
-        return view('store_dashboard.admin_create', compact('store', 'users', 'roles', 'permissions'));
+        return view('store_dashboard.admin_create', compact('store', 'users', 'permissions'));
     }
     public function admin_create(RequestAdminCreate $request)
     {
@@ -60,7 +60,6 @@ class ManageAdminController extends Controller
             $store_management = new StoreManagement();
             $store_management->user_id = $user->id;
             $store_management->store_id = $request->store_id;
-            $store_management->role_id = $request->role_id;
             $store_management->permission_id = $permission_id;
             $store_management->save();
         }
@@ -78,10 +77,10 @@ class ManageAdminController extends Controller
             // dd($storeManagement);
 
         $user=User::findOrFail($admin_id);
-        $roles = Role::all();
+    
         $permissions = Permission::all();
 
-        return view('store_dashboard.admin_update', compact('storeManagement','store', 'user', 'roles', 'permissions'));
+        return view('store_dashboard.admin_update', compact('storeManagement','store', 'user', 'permissions'));
     }
 
     public function admin_edit(RequestAdminEdit $request)
@@ -120,7 +119,6 @@ class ManageAdminController extends Controller
                     'permission_id' => $permission_id,
                 ],
                 [
-                    'role_id' => $request->role_id,
                     'updated_at' => now(),
                 ]
             );

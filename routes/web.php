@@ -73,37 +73,39 @@ Route::middleware(['auth'])->group(function () {
     | لوحة تحكم المتجر (Dashboard)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('/dashboard')->group(function () {
-        Route::get('/{store_id}', [DashbaordStoreController::class, 'index'])
+    Route::prefix('/dashboard/{store_id}')->group(function () {
+        Route::get('/', [DashbaordStoreController::class, 'index'])
             ->name('dashboard.index');
-
         // إدارة المنتجات
         Route::prefix('/management/products')->controller(ManageProductsController::class)
             ->middleware('store_manage:ادارة المنتجات')
             ->group(function () {
-                Route::get('/{store_id}', 'index')->name('manage.products');
-                Route::get('/create/{store_id}', 'product_create_view')->name('product.create.view');
+                Route::get('/', 'index')->name('manage.products');
+                Route::get('/create', 'product_create_view')->name('product.create.view');
                 Route::post('/create', 'product_create')->name('product.create');
+                Route::get('/edit/{product_id}', 'product_edit_view')->name('product.edit.view');
+                Route::post('/edit', 'product_edit')->name('product.edit');
+                Route::get('/delete/{product_id}', 'product_delete')->name('product.delete');
             });
 
         // إدارة المشرفين (الموظفين)
         Route::prefix('/management/manage_admin')->controller(ManageAdminController::class)
             ->middleware('store_manage:ادارة الموظفين')
             ->group(function () {
-                Route::get('/{store_id}', 'manage_admin')->name('manage.admin');
-                Route::get('/{store_id}/create', 'admin_create_view')->name('admin.create.view');
-                Route::post('/', 'admin_create')->name('admin.create');
-                Route::get('/{store_id}/edit/{admin_id}', 'admin_edit_view')->name('admin.edit.view');
+                Route::get('/', 'manage_admin')->name('manage.admin');
+                Route::get('/create', 'admin_create_view')->name('admin.create.view');
+                Route::post('/created', 'admin_create')->name('admin.create');
+                Route::get('/edit/{admin_id}', 'admin_edit_view')->name('admin.edit.view');
                 Route::post('/edit', 'admin_edit')->name('admin.edit');
-                Route::get('/{store_id}/delete/{admin_id}', 'admin_delete')->name('admin.delete');
+                Route::get('/delete/{admin_id}', 'admin_delete')->name('admin.delete');
             });
 
         // إدارة الأقسام
         Route::prefix('/management/categories')->controller(ManageCategoriesController::class)
             ->middleware('store_manage:ادارة الاقسام')
             ->group(function () {
-                Route::get('/{store_id}', 'index')->name('manage.categories');
-                Route::get('/create/{store_id}', 'category_create_view')->name('category.create.view');
+                Route::get('/', 'index')->name('manage.categories');
+                Route::get('/create', 'category_create_view')->name('category.create.view');
                 Route::post('/create', 'category_create')->name('category.create');
                 Route::get('/edit/{category_id}', 'category_edit_view')->name('category.edit.view');
                 Route::post('/edit', 'category_edit')->name('category.edit');
@@ -114,23 +116,23 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('/management/support')->controller(CreateStoreController::class)
             ->middleware('store_manage:ادارة الاعدادات')
             ->group(function () {
-                Route::get('/create/{store_id}', 'support_create_view')->name('support.create.view');
-                Route::post('/create/{store_id}', 'support_create')->name('support.create');
+                Route::get('/create', 'support_create_view')->name('support.create.view');
+                Route::post('/create', 'support_create')->name('support.create');
             });
 
         Route::prefix('/conditions')->controller(CreateStoreController::class)
         ->middleware('store_manage:ادارة الصفحات القانونية')
         ->group(function () {
-            Route::get('/create/{store_id}', 'conditions_create_view')->name('conditions.create.view');
-            Route::post('/create/{store_id}', 'conditions_create')->name('conditions.create');
+            Route::get('/create/', 'conditions_create_view')->name('conditions.create.view');
+            Route::post('/createed', 'conditions_create')->name('conditions.create');
         });
 
         // إدارة الطلبات
         Route::prefix('/management/orders')->controller(ManageOrderController::class)
-            ->middleware('store_manage:ادارة الطلبات')
+         ->middleware('store_manage:ادارة الطلبات')
             ->group(function () {
-                Route::get('/{store_id}', 'orders_manage')->name('orders.manage');
-                Route::get('/{store_id}/show/{order_id}', 'order_show')->name('order.show');
+                Route::get('', 'orders_manage')->name('orders.manage');
+                Route::get('/show/{order_id}', 'order_show')->name('order.show');
                 Route::post('/update', 'order_update')->name('order.update');
                 Route::get('/delete/{order_id}', 'order_delete')->name('order.delete');
             });

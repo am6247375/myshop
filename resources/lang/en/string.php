@@ -12,11 +12,11 @@ return
 'elctronn' => 'Elctron',
 'brand' => 'Brands',
 'about' => 'About',
-
+'conditions' =>'Conditions',
 
 'shop' => 'Shop now ',
 'contact' => 'Contact us',
-'products'=>'products',
+'products'=>'Products',
 
 'all'=>'All',
 'dept' => 'Departments',

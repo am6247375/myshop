@@ -30,7 +30,7 @@ class RequestAdminCreate extends FormRequest
             'email' => 'required|email',
             'phone' => 'required|string|max:20|regex:/^\+?[0-9\s\-]+$/',
             'sex' => 'required|in:male,female',
-            'role_id' => 'required|exists:roles,id',
+          
             'permissions' => 'required|array|min:1',
 'permissions.*' => 'exists:permissions,id',
             'store_id' => 'required|exists:stores,id',
@@ -60,8 +60,7 @@ class RequestAdminCreate extends FormRequest
         'sex.required' => 'يرجى تحديد الجنس.',
         'sex.in' => 'يجب أن يكون الجنس إما male أو female.',
 
-        'role_id.required' => 'يرجى اختيار دور المستخدم.',
-        'role_id.exists' => 'الدور المحدد غير موجود.',
+       
 
         'permissions.required' => 'يرجى اختيار صلاحية واحدة على الأقل.',
         'permissions.array' => 'الرجاء تحديد صلاحيات صحيحة.',
