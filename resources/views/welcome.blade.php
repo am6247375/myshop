@@ -2,22 +2,23 @@
 @section('content')
   <section class="hero text-white">
     <div class="container">
-      <div class="row align-items-center g-5 mt-1"  >
+      <div class="row align-items-center g-5 mt-1" style=" direction: ltr;text-align: end;" >
+        <div class="col-lg-5">
+          <img src="{{ asset('assets/logoo-removebg.png') }}" class="hero-img" alt="واجهة المنصّة">
+        </div>
         <div class="col-lg-6">
           <h1 class="display-4 fw-bold animate__animated animate__fadeInUp">
-            أنشئ متجرك الإلكتروني خلال دقائق!
+            أنشئ متجرك الإلكتروني خلال دقائق
           </h1>
           <p class="lead animate__animated animate__fadeInUp animate__delay-1s">
             منصة عربية متكاملة مع كل ما تحتاجه لبدء تجارتك الإلكترونية
           </p>
-          <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
+          <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s" dir="rtl">
             <a href="{{ route('templates') }}" class="btn btn-light btn-lg rounded-pill">ابدأ مجانًا</a>
             <a href="#features" class="btn btn-outline-light btn-lg rounded-pill">استكشاف المميزات</a>
           </div>
         </div>
-        <div class="col-lg-5">
-          <img src="{{ asset('assets/logoo-removebg.png') }}" class="hero-img" alt="واجهة المنصّة">
-        </div>
+        
       </div>
     </div>
   </section>

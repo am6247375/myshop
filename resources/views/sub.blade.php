@@ -49,7 +49,7 @@
 
                 <div class="col-md-4 mb-4 d-flex">
                     <div class="card flex-fill shadow border-0"
-                         style="background-color: {{ $cardBg }}; border-radius: 15px;">
+                        style="background-color: {{ $cardBg }}; border-radius: 15px;">
                         <div class="card-header text-center py-4" style="background-color: transparent; border: none;">
                             <h3 class="fw-bold mb-0" style="color: {{ $cardTextColor }};">
                                 {{ $title }}
@@ -64,21 +64,21 @@
                             </p>
 
                             <button class="btn mb-4 px-4 py-2 fw-bold"
-                                    style="background-color: {{ $priceColor }}; color: {{ $bottomTextColor }}; border-radius: 30px;"
-                                    data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $subscription->id }}">
+                                style="background-color: {{ $priceColor }}; color: {{ $bottomTextColor }}; border-radius: 30px;"
+                                data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $subscription->id }}">
                                 اشترك الآن
                             </button>
 
                             <!-- Modal الدفع -->
                             <div class="modal fade mt-5" id="paymentModal-{{ $subscription->id }}" tabindex="-1"
-                                 aria-labelledby="paymentModalLabel" aria-hidden="true">
+                                aria-labelledby="paymentModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content rounded-4">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="paymentModalLabel">
                                                 {{ $subscription->name }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="إغلاق"></button>
+                                                aria-label="إغلاق"></button>
                                         </div>
                                         <div class="modal-body text-end">
                                             <form action="{{ route('subscribe') }}" method="POST">
@@ -88,13 +88,33 @@
                                                     $user = Auth::user();
                                                 @endphp
 
+                                                {{-- التحقق مما إذا لم يكن المستخدم مسجلاً دخوله --}}
                                                 @if (!Auth::check())
+                                                    @php
+                                                        session()->forget('subscribe');
+                                                        session()->forget('welcome');
+                                                        session()->forget('store_home');
+
+                                                        // حفظ رابط الاشتراك في الجلسة ليتم إعادة التوجيه له بعد تسجيل الدخول
+                                                        session(['subscribe' => 'subscribe.view']);
+                                                    @endphp
                                                     <div class="alert alert-warning text-center">
-                                                        الرجاء <a href="{{ route('login') }}">تسجيل الدخول</a> لاختيار المتجر وإتمام الاشتراك.
-                                                        <a href="{{ route('login') }}" class="btn btn-primary mt-5 mb-5">تسجيل الدخول</a>
-                                                        
+                                                        {{-- عرض رسالة تطلب من المستخدم تسجيل الدخول --}}
+                                                        الرجاء <a href="{{ route('login') }}">تسجيل الدخول</a> لاختيار
+                                                        المتجر وإتمام الاشتراك.
+
+                                                        {{-- زر تسجيل الدخول --}}
+                                                        <a href="{{ route('login') }}"
+                                                            class="btn btn-primary mt-5 mb-5">تسجيل الدخول</a>
+
+                                                        @php
+                                                            // حفظ رابط الاشتراك في الجلسة ليتم إعادة التوجيه له بعد تسجيل الدخول
+                                                            session(['subscribe' => route('subscribe.view')]);
+                                                        @endphp
                                                     </div>
                                                 @else
+                                                    {{-- في حالة كان المستخدم مسجلاً دخوله، ينفذ باقي الكود --}}
+
                                                     @php
                                                         $allStores = collect([$user->store])
                                                             ->filter()
@@ -104,19 +124,24 @@
 
                                                     @if ($allStores->isEmpty())
                                                         <div class="alert alert-info text-center">
-                                                            لا يوجد لديك متاجر حالياً. <a>قم بإنشاء متجر الآن</a> لإكمال الاشتراك.
-                                                            <a href="{{ route('templates') }}" class="btn btn-primary mt-5 mb-5">تسجيل الدخول</a>
+                                                            لا يوجد لديك متاجر حالياً. <a>قم بإنشاء متجر الآن</a> لإكمال
+                                                            الاشتراك.
+                                                            <a href="{{ route('templates') }}"
+                                                                class="btn btn-primary mt-5 mb-5">انشاء متجر</a>
+
                                                         </div>
                                                     @else
                                                         <div class="mb-3">
                                                             <label class="form-label">اختر المتجر</label>
                                                             <select name="store_id" class="form-select" required>
                                                                 @foreach ($allStores as $store)
-                                                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                                                    <option value="{{ $store->id }}">
+                                                                        {{ $store->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <input type="hidden" name="subscrip_id" value="{{ $subscription->id }}">
+                                                        <input type="hidden" name="subscrip_id"
+                                                            value="{{ $subscription->id }}">
                                                         <button type="submit" class="btn btn-success w-100">
                                                             تأكيد الاشتراك
                                                         </button>
@@ -127,15 +152,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- قائمة المميزات -->
-                            <ul class="list-unstyled text-start mx-auto" style="max-width: 200px;">
-                                @foreach ($features as $feature)
-                                    <li class="mb-2">
-                                        <span style="font-size: 1.2rem;">✔️</span> {{ trim($feature) }}
-                                    </li>
-                                @endforeach
-                            </ul>
                         </div>
                     </div>
                 </div>

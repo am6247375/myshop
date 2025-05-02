@@ -39,16 +39,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    @php
-        use App\Models\StoreManagement;
-        use App\Models\Permission;
-        $user = Auth::user();
-        if ($user->store && $user->store->id == $store->id) {
-            $permissions = permission::all();
-        } else {
-            $permissions = $user->permissions()->where('store_id', $store->id)->get();
-        }
-    @endphp
+
     <div class="wrapper">
 
         <!-- Navbar أعلى الصفحة -->
@@ -85,10 +76,23 @@
             </div>
             <div class="sidebar">
                 <!-- Sidebar Menu -->
+                @php
+                    $permissionMap = [
+                        'ادارة الاقسام' => ['route' => 'manage.categories', 'icon' => 'fa-list-alt'],
+                        'ادارة المنتجات' => ['route' => 'manage.products', 'icon' => 'fa-boxes'],
+                        'ادارة الطلبات' => ['route' => 'orders.manage', 'icon' => 'fa-shopping-bag'],
+                        'ادارة الصفحات القانونية' => [
+                            'route' => 'conditions.create.view',
+                            'icon' => 'fa-balance-scale-left',
+                        ],
+                        'ادارة الموظفين' => ['route' => 'manage.admin', 'icon' => 'fa-users'],
+                        'الاعدادات' => ['route' => 'store.settings.view', 'icon' => 'fa-cogs'],
+                    ];
+                @endphp
+
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-
                         <!-- الرئيسية -->
                         <li class="nav-item">
                             <a href="{{ route('dashboard.index', $store->id) }}" class="nav-link">
@@ -96,39 +100,27 @@
                                 <p>الرئيسية</p>
                             </a>
                         </li>
-                        @foreach ($permissions as $permission)
+
+                        @foreach ($permissions ?? [] as $permission)
                             @php
-                                if ($permission->name == 'ادارة الاقسام') {
-                                    $route = 'manage.categories';
-                                    $icon = 'fa-list-alt';
-                                } elseif ($permission->name == 'ادارة المنتجات') {
-                                    $route = 'manage.products';
-                                    $icon = 'fa-boxes';
-                                } elseif ($permission->name == 'ادارة الطلبات') {
-                                    $route = 'orders.manage';
-                                    $icon = 'fa-shopping-bag';
-                                } elseif ($permission->name == 'ادارة الصفحات القانونية') {
-                                    $route = 'conditions.create.view';
-                                    $icon = ' fa-balance-scale-left';
-                                } elseif ($permission->name == 'ادارة الموظفين') {
-                                    $route = 'manage.admin';
-                                    $icon = 'fa-users';
-                                } elseif ($permission->name == 'الاعدادات') {
-                                    $route = 'store.settings.view';
-                                    $icon = 'fa-cogs';
-                                }
+                                $config = $permissionMap[$permission->name] ?? null;
                             @endphp
-                            <li class="nav-item">
-                                <a href="{{ route($route,['store_id'=> $store->id]) }}" class="nav-link">
-                                    <i class="fas  {{ $icon }}  nav-icon"></i>
-                                    <p>{{ $permission->name }}</p>
-                                </a>
-                            </li>
+
+                            @if ($config)
+                                <li class="nav-item">
+                                    <a href="{{ route($config['route'], ['store_id' => $store->id]) }}"
+                                        class="nav-link">
+                                        <i class="fas {{ $config['icon'] }} nav-icon"></i>
+                                        <p>{{ $permission->name }}</p>
+                                    </a>
+                                </li>
+                            @endif
                         @endforeach
+
+                        <!-- تسجيل الخروج -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt nav-icon"></i>
                                 <p>تسجيل الخروج</p>
                             </a>
@@ -136,9 +128,9 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
-
                     </ul>
                 </nav>
+
                 <!-- /.sidebar-menu -->
             </div>
             <!-- /.sidebar -->
@@ -148,18 +140,41 @@
         <!-- المحتوى الرئيسي -->
         <div class="content-wrapper">
             @if (session('success'))
-                <div class="alert alert-success text-center fade show">{{ session('success') }}</div>
+                <div class="alert alert-custom alert-success alert-dismissible fade show" role="alert"
+                    id="success-alert">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <span>{{ session('success') }}</span>
+                        </div>
+                        <button type="button" class="btn-close-custom" onclick="closeAlert('success-alert')"
+                            aria-label="Close">
+                            &times;
+                        </button>
+                    </div>
+                </div>
             @endif
 
             @if ($errors->any())
-                <div class="alert alert-danger text-center fade show">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                <div class="alert alert-custom alert-danger alert-dismissible fade show" role="alert"
+                    id="error-alert">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-x-circle-fill me-2"></i>
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-close-custom" onclick="closeAlert('error-alert')"
+                            aria-label="Close">
+                            &times;
+                        </button>
+                    </div>
                 </div>
             @endif
+
             @yield('content_admin')
         </div>
         <!-- /.content-wrapper -->

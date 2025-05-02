@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجري - منصة إنشاء المتاجر الإلكترونية</title>
+    
     <!-- Bootstrap RTL & أيقونات -->
     <!-- 1) ملفّ Bootstrap RTL الأساسي -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap.rtl.min.css') }}">
@@ -15,17 +16,17 @@
     <!-- 3) أيقونات أو ملفات إضافية أخرى (icon.css مثلاً) -->
     <link rel="stylesheet" href="{{ asset('assets/icon.css') }}">
 
-    <!-- 4) مكتبة الأنيميشن (إن كنت تستخدمها) -->
+
     <link rel="stylesheet" href="{{ asset('assets/animate.min.css') }}">
     <link href="{{ asset('assets/css22.css') }}" rel="stylesheet">
 
 
-    <!-- 5) ملفات التنسيق المخصّصة بمشروعك -->
     <link rel="stylesheet" href="{{ asset('assets/css2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/main.css') }}">
 </head>
 
 <body>
+
     <!-- شريط التقدّم -->
     <div id="progress-bar"></div>
 
@@ -33,7 +34,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="{{ asset('assets/logoo-removebg.png') }}" alt="شعار المنصّة">
+                <img src="{{ asset('assets/logoo-removebg.png') }}"  alt="شعار المنصّة">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -52,11 +53,17 @@
                         <a class="nav-link" href="#testimonials">الآراء</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#use">الدعم</a>
+                        <a class="nav-link" href="{{ route('subscribe.view') }}">الاسعار</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#use">تواصل معنا</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cont">من نحن</a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
-                   
+
                     <a href="#" class="btn btn-success">ابدأ تجربتك المجانية</a>
                     @guest
                         @if (Route::has('login'))
@@ -78,52 +85,74 @@
             </div>
         </div>
     </nav>
+    
 
     @yield('content')
 
+    <!-- الفوتر --> 
     <!-- الفوتر -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row gy-4">
-                <div class="col-md-4">
-                    <h4 class="mb-3">عن وبلت</h4>
-                    <p>نساعدك في بناء وجودك الرقمي باحترافية وسهولة</p>
+    <footer class="footer mt-5">
+        <div class="container text-start text-md-center">
+            <div class="row">
+                <!-- معلومات المنصة -->
+                <div class="col-md-4 mb-4" id="cont">
+                    <h5>منصة متجري</h5>
+                    <p>متجري هي منصة عربية مبتكرة تتيح لأي شخص إنشاء متجر إلكتروني
+                        احترافي خلال دقائق، دون الحاجة لأي خبرة تقنية.
+                        صممت لتكون سهلة، سريعة، وآمنة،
+                        لتناسب احتياجاتك.</p>
                 </div>
-                <div class="col-md-2">
-                    <h4 class="mb-3">روابط سريعة</h4>
+                <!-- روابط سريعة -->
+                <div class="col-md-4 mb-4">
+                    <h5>روابط سريعة</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#">المميزات</a></li>
-                        <li class="mb-2"><a href="#">الأسعار</a></li>
-                        <li class="mb-2"><a href="#">المدونة</a></li>
+                        <li><a href="/">الرئيسية</a></li>
+                        <li><a href="#features">المميزات</a></li>
+                        <li><a href="#testimonials">الآراء</a></li>
+                        <li><a href="#use">تواصل معنا</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3">
-                    <h4 class="mb-3">الدعم</h4>
-                    <ul id="use" class="list-unstyled">
-                        <li class="mb-2"><a href="#">الأسئلة الشائعة</a></li>
-                        <li class="mb-2"><a href="#">الدردشة المباشرة</a></li>
-                        <li class="mb-2"><a href="#">تواصل معنا</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4 class="mb-3">تابعنا</h4>
-                    <div class="social-icons">
+                <!-- تواصل اجتماعي -->
+                <div class="col-md-4 mb-4" id="use">
+                    <h5>تواصل معنا</h5>
+                    <div class="social-icons d-flex justify-content-md-center justify-content-center">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://wa.me/123456789" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
+                    <p class="mt-3"><i class="fas fa-envelope me-2"></i> info@matjary.com</p>
+                    <p><i class="fas fa-phone me-2"></i> 123456789</p>
                 </div>
             </div>
-            <div class="text-center mt-4 pt-4 border-top border-secondary">
-                <p class="mb-0">© 2024 . جميع الحقوق محفوظة</p>
+            <div class="copyright text-center mt-3">
+                <small>جميع الحقوق محفوظة &copy; {{ date('Y') }} متجري</small>
             </div>
         </div>
     </footer>
 
+
     <!-- سكريبتات -->
     <script src="{{ asset('assets/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/bootstrap.bundle.min.js') }}"></script>
-   <script src="{{ asset('assets/styleJS.js') }}"></script>
+    <script src="{{ asset('assets/styleJS.js') }}"></script>
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+    
+        window.addEventListener("scroll", () => {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+            if (currentScroll > lastScrollTop) {
+                navbar.style.top = "-100px"; // إخفاء الشريط
+            } else {
+                navbar.style.top = "0"; // إظهار الشريط
+            }
+    
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
+    </script>
+    
 </body>
 
 </html>

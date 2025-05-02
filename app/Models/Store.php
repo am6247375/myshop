@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 // Model: Store
 class Store extends Model
@@ -33,7 +32,6 @@ class Store extends Model
     {
         return $this->belongsTo(Currency::class);
     }
-    
 
     // العلاقة مع اللغات عبر `store_language`
     public function languages()

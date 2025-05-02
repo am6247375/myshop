@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRequest;
 use App\Models\Currency;
 use App\Models\Language;
-use App\Models\languages;
 use App\Models\Store;
 use App\Models\Template;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CreateStoreController extends Controller
@@ -50,14 +47,6 @@ class CreateStoreController extends Controller
         return redirect()->route('dashboard.index', compact('store_id'))
             ->with('success', 'تم إنشاء المتجر بنجاح!');
     }
-
-    // public function store_settings_view($store_id)
-    // {
-    //     $store = Store::findOrFail($store_id);
-    //     $languages = Language::all();
-    //     $currencies = Currency::all();
-    //     return view('store_dashboard.store_settings', compact('store','languages','currencies'));
-    // }
 
     public function store_settings_view($store_id)
     {

@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    session(['store_home' => route('welcome')]);
+    session()->forget('subscribe');
+    session()->forget('welcome');
+    session()->forget('store_home');
+
+    session(['welcome' => route('welcome')]);
     return view('welcome');
 })->name('welcome');
 

@@ -1,3 +1,25 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const successAlert = document.getElementById('success-alert');
+    const errorAlert = document.getElementById('error-alert');
+
+    if (successAlert) {
+        successAlert.style.display = 'block';
+        setTimeout(() => successAlert.style.opacity = '1', 100);
+    }
+
+    if (errorAlert) {
+        errorAlert.style.display = 'block';
+        setTimeout(() => errorAlert.style.opacity = '1', 100);
+    }
+});
+
+function closeAlert(alertId) {
+    const alert = document.getElementById(alertId);
+    alert.style.opacity = '0';
+    setTimeout(function () {
+        alert.style.display = 'none';
+    }, 500);
+}
 document.addEventListener('DOMContentLoaded', function () {
     setupDataTable();
     setupStepNavigation();
@@ -36,12 +58,7 @@ function setupDataTable() {
         }, 500);
   
         // حذف التنبيهات بعد فترة
-        setTimeout(() => {
-            document.querySelectorAll('.alert').forEach(alert => {
-                alert.style.opacity = "0";
-                setTimeout(() => alert.remove(), 500);
-            });
-        }, 2000);
+        
     }
 }
 
