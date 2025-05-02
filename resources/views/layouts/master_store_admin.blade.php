@@ -48,7 +48,6 @@
         } else {
             $permissions = $user->permissions()->where('store_id', $store->id)->get();
         }
-
     @endphp
     <div class="wrapper">
 
@@ -115,7 +114,7 @@
                                     $route = 'manage.admin';
                                     $icon = 'fa-users';
                                 } elseif ($permission->name == 'الاعدادات') {
-                                    $route = 'support.create.view';
+                                    $route = 'store.settings.view';
                                     $icon = 'fa-cogs';
                                 }
                             @endphp

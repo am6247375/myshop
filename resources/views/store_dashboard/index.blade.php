@@ -130,7 +130,7 @@
                 'icon' => 'headset',
                 'title' => 'الدعم الفني ونبذة عن المتجر',
                 'text' => 'قم بإعداد صفحة الدعم الفني وإضافة نبذة عن متجرك لتعزيز ثقة عملائك و لتوفير المعلومات والدعم لعملائك.',
-                'route' => route('support.create.view', $store->id),
+                'route' => route('store.settings.view', $store->id),
             ],
             'conditions' => [
                 'icon' => 'file-contract',

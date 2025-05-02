@@ -72,11 +72,11 @@
                                                 </h5>
                                             </div>
                                             <div class="card-body">
-                                                <select name="currency" class="form-select" required>
-                                                    @foreach (['SAR' => 'الريال السعودي', 'USD' => 'الدولار الأمريكي', 'YER' => 'الريال اليمني'] as $code => $name)
-                                                        <option value="{{ $code }}"
-                                                            {{ $store->currency == $code ? 'selected' : '' }}>
-                                                            {{ $name }} ({{ $code }})
+                                                <select name="currency_id" class="form-select" required>
+                                                    @foreach ($currencies as $currency)
+                                                        <option value="{{ $currency->id }}"
+                                                            {{ $store->currency_id == $currency->id ? 'selected' : '' }}>
+                                                            {{ $currency->name }} ({{ $currency->code }})
                                                         </option>
                                                     @endforeach
                                                 </select>

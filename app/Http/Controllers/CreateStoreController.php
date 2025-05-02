@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRequest;
+use App\Models\Currency;
 use App\Models\Language;
 use App\Models\languages;
 use App\Models\Store;
@@ -30,7 +31,8 @@ class CreateStoreController extends Controller
     {
         $template_id = $template_id;
         $languages = Language::all();
-        return view('store_create.store_create', compact('template_id', 'languages'));
+        $currencies = Currency::all();
+        return view('store_create.store_create', compact('template_id', 'languages', 'currencies'));
     }
     public function store_create(StoreRequest $request)
     {
@@ -38,7 +40,7 @@ class CreateStoreController extends Controller
         $store = new Store();
         $store->name = $request->name;
         $store->template_id = $request->template_id;
-        $store->currency = $request->currency;
+        $store->currency_id = $request->currency_id;
         $store->owner_id = $request->owner_id;
         // حفظ المتجر في قاعدة البيانات
         $store->save();
@@ -49,18 +51,21 @@ class CreateStoreController extends Controller
             ->with('success', 'تم إنشاء المتجر بنجاح!');
     }
 
+    // public function store_settings_view($store_id)
+    // {
+    //     $store = Store::findOrFail($store_id);
+    //     $languages = Language::all();
+    //     $currencies = Currency::all();
+    //     return view('store_dashboard.store_settings', compact('store','languages','currencies'));
+    // }
+
     public function store_settings_view($store_id)
     {
         $store = Store::findOrFail($store_id);
         $languages = Language::all();
-        return view('store_dashboard.store_settings', compact('store','languages'));
-    }
+        $currencies = Currency::all();
+        return view('store_dashboard.store_settings', compact('store','languages','currencies'));
 
-    public function support_create_view($store_id)
-    {
-        $store = Store::findOrFail($store_id);
-        $languages = Language::all();
-        return view('store_create.support_create', compact('store','languages'));
     }
     public function store_settings(Request $request)
     {
@@ -69,7 +74,7 @@ class CreateStoreController extends Controller
         $store->whatsapp_link = $request->whatsapp_link;
         $store->about = $request->about;
         $store->name = $request->name;
-        $store->currency = $request->currency;
+        $store->currency_id = $request->currency_id;
         // معالجة رفع الشعار
         $logoPath = null;
         if ($request->hasFile('logo')) {

@@ -61,14 +61,15 @@
                                     <label class="form-label fw-bold"><i class="fas fa-money-bill-wave me-2"></i> العملات
                                         المدعومة</label>
                                     <div class="form-floating">
-                                        <select name="currency" id="currency" class="form-select" required>
-                                            <option value="SAR">🇸🇦 الريال السعودي</option>
-                                            <option value="USD">🇺🇸 الدولار الأمريكي</option>
-                                            <option value="YER" selected>🇾🇪 الريال اليمني</option>
+                                        <select name="currency_id" id="currency_id" class="form-select" required>
+                                            <option value="" disabled selected>اختر العملة</option>
+                                            @foreach ($currencies as $currency)
+                                                <option value="{{ $currency->id }}" >{{ $currency->name }} ({{ $currency->code }})</option>
+                                            @endforeach
                                         </select>
                                         <label for="currency"><i class="fas fa-money-bill-wave me-2"></i>العملة</label>
                                         <small class="form-text text-muted">يمكن تغيير العملة لاحقًا من الإعدادات</small>
-                                        @error('currency')
+                                        @error('currency_id')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
                                             </div>

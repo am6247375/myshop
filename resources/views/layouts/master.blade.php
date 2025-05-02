@@ -44,21 +44,19 @@
                         <a class="nav-link " href="/">الرئيسية</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="#features">
                             المميزات
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">الآراء</a>
+                        <a class="nav-link" href="#testimonials">الآراء</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#use">الدعم</a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
-                    <a href="#" class="nav-link d-flex align-items-center">
-                        <span class="material-icons me-1">language</span> English
-                    </a>
+                   
                     <a href="#" class="btn btn-success">ابدأ تجربتك المجانية</a>
                     @guest
                         @if (Route::has('login'))

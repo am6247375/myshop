@@ -112,12 +112,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/delete/{category_id}', 'category_delete')->name('category.delete');
             });
 
-        // الدعم والشروط
-        Route::prefix('/management/support')->controller(CreateStoreController::class)
+
+        Route::prefix('/management/settings')->controller(CreateStoreController::class)
             ->middleware('store_manage:ادارة الاعدادات')
             ->group(function () {
-                Route::get('/create', 'support_create_view')->name('support.create.view');
-                Route::post('/create', 'support_create')->name('support.create');
+                Route::get('/', 'store_settings_view')->name('settings.create.view');
+                Route::post('/create', 'settings')->name('settings.create');
             });
 
         Route::prefix('/conditions')->controller(CreateStoreController::class)

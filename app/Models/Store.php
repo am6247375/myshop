@@ -29,7 +29,11 @@ class Store extends Model
     {
         return $this->hasMany(StoreManagement::class);
     }
-
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+    
 
     // العلاقة مع اللغات عبر `store_language`
     public function languages()

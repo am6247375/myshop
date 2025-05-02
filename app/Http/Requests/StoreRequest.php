@@ -29,7 +29,7 @@ class StoreRequest extends FormRequest
             'owner_id' => 'unique:stores,owner_id',
             'template_id' => 'required|exists:templates,id',
             'languages' => 'required|array',
-            'currency' => 'required|string|max:10'
+            'currency_id' => 'required|exists:currencies,id'
         ];
     }
     public function messages()
@@ -44,9 +44,8 @@ class StoreRequest extends FormRequest
             'template_id.exists'   => 'القالب المحدد غير موجود.',
             'languages.required'   => 'يجب اختيار لغة واحدة على الأقل.',
             'languages.array'      => 'صيغة اللغات المختارة غير صحيحة.',
-            'currency.required'    => 'يرجى تحديد العملة.',
-            'currency.string'      => 'العملة يجب أن تكون نصاً.',
-            'currency.max'         => 'اسم العملة غير صحيح.'
+            'currency_id.required'    => 'يرجى تحديد العملة.',
+            'currency_id.exists'      => 'العملة المحددة غير موجودة.',
         ];
     }
 }
