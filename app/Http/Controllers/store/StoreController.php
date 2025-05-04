@@ -9,71 +9,119 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
-    
-    //   عرض الصفحة الرئيسية للمتجر.
-    public function home_store($name)
+    // تعريف الخصائص التي سيتم مشاركتها بين الدوال
+    protected $store;
+    protected $template;
+    protected $languages;
+
+    /**
+     * دالة البناء: تقوم بتحميل بيانات المتجر ومسار القالب واللغات.
+     */
+    public function __construct(Request $request)
     {
-        // جلب بيانات المتجر مع القالب والفئات واللغات
-        $store = Store::with(['template', 'categories', 'languages'])->where('name', $name)->firstOrFail();
+        try {
+            // إذا وُجد اسم المتجر في الرابط (route)، نقوم بتحميل بياناته
+            if ($request->route('name')) {
+                $this->store = Store::with(['template', 'categories', 'languages'])
+                    ->where('name', $request->route('name'))
+                    ->firstOrFail();
+                    if ($this->store->status == 0) {
+                        abort(404, 'المتجر موقف مؤقتا.');
+                    }
+                // استخراج مسار القالب
+                $this->template = $this->store->template->path_temp;
 
-        // تحديد اللغة الافتراضية للمتجر
-        $defaultLang = $store->languages->first()->code ?? 'ar';
-        // إذا كان المتجر يدعم لغة واحدة فقط، استخدمها دائمًا
-        if ($store->languages->count() < 2) {
-            session(['locale' => $defaultLang]);
+                // تخزين اللغات المتوفرة للمتجر
+                $this->languages = $this->store->languages;
+
+                // تحديد اللغة الافتراضية للمتجر
+                $defaultLang = $this->languages->first()->code ?? 'ar';
+
+                // إذا كان المتجر يحتوي على لغة واحدة، اجعلها لغة الجلسة
+                if ($this->languages->count() < 2) {
+                    session(['locale' => $defaultLang]);
+                }
+
+                // تعيين اللغة النشطة للتطبيق
+                app()->setLocale(session('locale', $defaultLang));
+            }
+        } catch (\Exception $e) {
+            // في حال حدوث أي خطأ أثناء تحميل المتجر، نُظهر خطأ عام
+            abort(404, 'المتجر غير موجود أو حدث خطأ.');
         }
-
-        // ضبط اللغة - احترام اللغة المحفوظة في الجلسة أو استخدام الافتراضية
-        app()->setLocale(session('locale', $defaultLang));
-
-        // جلب المنتجات الجديدة لكل فئة
-        $new_products = $store->categories->flatMap(function ($category) {
-            return Product::where('category_id', $category->id)
-                ->orderBy('created_at', 'desc')
-                ->take(3)
-                ->get();
-        });
-
-        // جلب اللغات المتاحة للمتجر
-        $languages = $store->languages;
-
-        // جلب مسار القالب
-        $template = $store->template->path_temp;
-
-        // تخزين رابط الصفحة الرئيسية للمتجر في الجلسة
-        session(['store_home' => route('home_store', ['name' => $store->name])]);
-
-        // عرض الصفحة الرئيسية باستخدام القالب المناسب
-        return view("{$template}.welcome", compact('store', 'new_products', 'languages'));
     }
 
     /**
-     * عرض صفحة المنتجات الخاصة بالمتجر.
-     *
-     * @param string $name اسم المتجر
-     * @param int|null $category_id معرف الفئة (اختياري)
-     * @return \Illuminate\View\View
+     * عرض الصفحة الرئيسية للمتجر.
+     */
+    public function home_store($name)
+    {
+        try {
+            $store = $this->store;
+            $template = $this->template;
+            $languages = $this->languages;
+
+            // جلب المنتجات الجديدة (آخر 3 منتجات من كل فئة)
+            $new_products = $store->categories->flatMap(function ($category) {
+                return Product::where('category_id', $category->id)
+                    ->orderBy('created_at', 'desc')
+                    ->take(3)
+                    ->get();
+            });
+
+            // تخزين رابط الصفحة الرئيسية في الجلسة
+            session(['store_home' => route('home_store', ['name' => $store->name])]);
+
+            // عرض صفحة القالب الرئيسي للمتجر
+            return view("{$template}.welcome", compact('store', 'new_products', 'languages'));
+
+        } catch (\Exception $e) {
+            // في حالة حدوث خطأ غير متوقع
+            return abort(500, 'حدث خطأ أثناء تحميل الصفحة الرئيسية للمتجر.');
+        }
+    }
+
+    /**
+     * عرض صفحة جميع المنتجات (حسب الفئة إن وُجدت).
      */
     public function products($name, $category_id = null)
     {
-        // جلب بيانات المتجر مع القالب
-        $store = Store::with('template')->where('name', $name)->firstOrFail();
-
-        // جلب مسار القالب
-        $template = $store->template->path_temp;
-
-        // عرض صفحة المنتجات حسب الفئة إذا وُجدت
-        return view($category_id ? "{$template}.products_all" : "{$template}.products_all", compact('store', 'category_id'));
+        return view("{$this->template}.products_all", [
+            'store' => $this->store,
+            'category_id' => $category_id,
+            'languages' => $this->languages,
+        ]);
     }
+
+    /**
+     * عرض صفحة الشروط والأحكام الخاصة بالمتجر.
+     */
     public function conditions($name)
     {
-        // جلب بيانات المتجر مع القالب
-        $store = Store::with('template')->where('name', $name)->firstOrFail();
+        return view("{$this->template}.conditions", [
+            'store' => $this->store,
+            'languages' => $this->languages,
+        ]);
+    }
 
-        // جلب مسار القالب
-        $template = $store->template->path_temp;
+    /**
+     * عرض صفحة منتج مفرد.
+     */
+    public function single_product($name, $product_id)
+    {
+        try {
+            // جلب المنتج بناءً على معرفه
+            $product = Product::with('category')->where('id', $product_id)->firstOrFail();
 
-        // عرض صفحة المنتجات حسب الفئة إذا وُجدت
-        return view("{$template}.conditions", compact('store'));
+            return view("{$this->template}.single_prod", [
+                'store' => $this->store,
+                'product' => $product,
+                'languages' => $this->languages,
+            ]);
+
+        } catch (\Exception $e) {
+            // في حال لم يتم العثور على المنتج
+            return abort(404, 'المنتج غير موجود.');
+        }
     }
 }

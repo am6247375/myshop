@@ -45,13 +45,13 @@
                                                                             alt="">
                                                                     </td>
                                                                     <td class="product-name">{{ $item->product->name }}</td>
-                                                                    <td class="product-price">${{ $item->price }}
+                                                                    <td class="product-price">{{ $store->currency->code }}    {{ $item->price }}
                                                                     </td>
                                                                     <td class="product-quantity">
                                                                         {{ $item->quantity }}
                                                                     </td>
                                                                     <td class="product-total">
-                                                                        ${{ $item->total_price }}</td>
+                                                                        {{ $store->currency->code }}    {{ $item->total_price }}</td>
 
                                                                 </tr>
                                                             @endforeach
@@ -88,18 +88,9 @@
                                                             </tr>
                                                             <tr class="total-data">
                                                                 <td><strong>{{ trans('string.sub-total') }}</strong></td>
-                                                                <td>${{ $order->total_price }}</td>
+                                                                <td>{{ $store->currency->code }}    {{ $order->total_price }}</td>
                                                             </tr>
                                                            
-                                                            {{-- <tr class="total-data">
-                                                                <td><strong>{{ trans('string.shipping') }}</strong></td>
-                                                                <td>${{  $order->total_price  }}</td>
-                                                            </tr>
-                                                            <tr class="total-data">
-                                                                <td><strong>{{ trans('string.total') }}</strong></td>
-                                                                <td>${{ $order->total_price }}</td>
-                                                            </tr> --}}
-                                                        </tbody>
                                                     </table>
                                                    
                                                 </div>

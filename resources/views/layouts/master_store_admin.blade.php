@@ -140,41 +140,40 @@
         <!-- المحتوى الرئيسي -->
         <div class="content-wrapper">
             @if (session('success'))
-                <div class="alert alert-custom alert-success alert-dismissible fade show" role="alert"
-                    id="success-alert">
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-check-circle-fill me-2"></i>
-                            <span>{{ session('success') }}</span>
-                        </div>
-                        <button type="button" class="btn-close-custom" onclick="closeAlert('success-alert')"
-                            aria-label="Close">
-                            &times;
-                        </button>
+            <div class="alert alert-custom alert-success alert-dismissible fade show" role="alert" id="success-alert">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <span>{{ session('success') }}</span>
                     </div>
+                    <button type="button" class="btn-close-custom" onclick="closeAlert('success-alert')" aria-label="Close">
+                        &times;
+                    </button>
                 </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="alert alert-custom alert-danger alert-dismissible fade show" role="alert"
-                    id="error-alert">
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex align-items-center">
+            </div>
+        @endif
+        
+        @if ($errors->any())
+            <div class="alert alert-custom alert-danger alert-dismissible fade show" role="alert" id="error-alert">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-x-circle-fill me-2"></i>
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                            <strong>حدثت الأخطاء التالية:</strong>
                         </div>
-                        <button type="button" class="btn-close-custom" onclick="closeAlert('error-alert')"
-                            aria-label="Close">
-                            &times;
-                        </button>
+                        <ul class="mb-0 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
+                    <button type="button" class="btn-close-custom" onclick="closeAlert('error-alert')" aria-label="Close">
+                        &times;
+                    </button>
                 </div>
-            @endif
-
+            </div>
+        @endif
+        
             @yield('content_admin')
         </div>
         <!-- /.content-wrapper -->

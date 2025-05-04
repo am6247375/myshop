@@ -118,11 +118,10 @@
                                                                         alt="">
                                                                 </td>
                                                                 <td class="product-name">{{ $item->product->name }}</td>
-                                                                <td class="product-price">${{ $item->product->price }}</td>
+                                                                <td class="product-price">{{ $store->currency->code }}    {{ $item->product->price }}</td>
                                                                 <td class="product-quantity">{{ $item->quantity }} </td>
                                                                 <td class="product-total">
-                                                                    ${{ $item->quantity * $item->product->price }}</td>
-
+                                                                    {{ $store->currency->code }}    {{ $item->quantity * $item->product->price }}</td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

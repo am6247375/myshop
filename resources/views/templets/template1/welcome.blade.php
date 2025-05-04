@@ -129,24 +129,24 @@
                         <div class="col-lg-4 col-md-6 text-center">
                             <div class="single-product-item">
                                 <div class="product-image">
-                                    <a href="#">
+                                    <a href="{{ route('single.product',['name'=>$store->name,'product_id'=> $new['id']]) }}">
                                         <img src="{{ asset($new['image']) }}" alt="{{ $new['name'] }}">
                                     </a>
                                 </div>
                                 <h3>{{ $new['name'] }}</h3>
-                                    <form hidden action="{{ route('add.cart') }}" method="POST" id="addtocart_{{ $new['id'] }}">
-                                        @csrf
-                                        <input type="hidden" name="store_id" id="selectedColor" value="{{ $store->id }}">
-                                        {{-- <input type="hidden" name="price" id="selectedPrice" value="{{ $new['price'] }}"> --}}
-                                        <input type="hidden" name="product_id" value="{{ $new['id'] }}">
-                                        {{-- <select id="colorSelect" class="form-control"></select> --}}
-                                    </form>
-                                <p class="product-price">${{ $new['price'] }}</p>
+                                <form action="{{ route('add.cart') }}" method="POST" id="addtocart_{{ $new['id'] }}">
+                                    @csrf
+                                    <input type="hidden" name="store_id" value="{{ $store->id }}">
+                                    <input type="hidden" name="product_id" value="{{ $new['id'] }}">
+                                </form>
+                                
+                                <p class="product-price">{{  $store->currency->code}}      {{ $new['price'] }}</p>
                                 <a href='#'
-                                    onclick="event.preventDefault(); 
-                                    document.getElementById('addtocart_{{ $new['id'] }}').submit();"
-                                    class="cart-btn"><i class="fas fa-shopping-cart"></i>
-                                    {{ trans('string.cart') }}</a>
+                                onclick="event.preventDefault(); 
+                                document.getElementById('addtocart_{{ $new['id'] }}').submit();"
+                                class="cart-btn"><i class="fas fa-shopping-cart"></i>
+                                {{ trans('string.cart') }}</a>
+                             
                             </div>
                         </div>
                     @endforeach

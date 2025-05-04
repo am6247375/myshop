@@ -34,14 +34,14 @@
                                                     src="{{ asset($item->product->image) }}" alt="">
                                             </td>
                                             <td class="product-name">{{ $item->product->name }}</td>
-                                            <td class="product-price">${{ $item->product->price }}</td>
+                                            <td class="product-price">{{ $store->currency->code }}    {{ $item->product->price }}</td>
                                             <td class="product-quantity">
                                                 <input type="number" class="quantity-input" min="1"
                                                     value="{{ $item->quantity }}" data-cart-id="{{ $item->id }}"
                                                     data-price="{{ $item->product->price }}" data-store="{{ $store->id }}">
                                             </td>
                                             <td class="product-total">
-                                                ${{ number_format($item->quantity * $item->product->price, 2) }}</td>
+                                                {{ $store->currency->code }}    {{ number_format($item->quantity * $item->product->price, 2) }}</td>
                                             <td>
                                                 <form action="{{ route('delete.cart') }}" method="POST"
                                                     style="display: inline;">

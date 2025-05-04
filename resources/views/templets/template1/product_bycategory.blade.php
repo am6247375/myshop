@@ -23,12 +23,12 @@
                  <form hidden action="{{ route('cart_store') }}" method="POST" id="addtocart">
                     @csrf
                     <input type="hidden" name="color" id="selectedColor" value="اللون الافتراضي">
-                    <input type="hidden" name="price" id="selectedPrice" value="{{ $item->price }}">
+                    <input type="hidden" name="price" id="selectedPrice" value="{{ $store->currency->code }}{{ $item->price }}">
                     <input type="hidden" name="product_id" value="{{ $item->id }}">
                     <select id="colorSelect" class="form-control">
                     </select>
                 </form>
-                <p class="product-price">${{ $item->price }} </p>
+                <p class="product-price">{{ $store->currency->code }}    {{ $item->price }} </p>
                 <a href='#' onclick="event.preventDefault(); 
                 document.getElementById('addtocart').submit();"
                  class="cart-btn"><i
