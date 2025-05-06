@@ -62,7 +62,7 @@
                                                                     ? '✅ تم التسليم'
                                                                     : $order->status)) }}
                                                     </td>
-                                                    <td>{{ $store->currency.' '. number_format($order->total_price, 2)}} </td>
+                                                    <td>{{ $store->currency->code.' '. number_format($order->total_price, 2)}} </td>
                                                     <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
                                                     <td>
                                                         <a href="{{ route('order.show', ['store_id' => $store->id, 'order_id' => $order->id]) }}"

@@ -20,14 +20,13 @@ class StoreController extends Controller
     public function __construct(Request $request)
     {
         try {
+            $this->middleware('check.store.active');
             // إذا وُجد اسم المتجر في الرابط (route)، نقوم بتحميل بياناته
             if ($request->route('name')) {
                 $this->store = Store::with(['template', 'categories', 'languages'])
                     ->where('name', $request->route('name'))
                     ->firstOrFail();
-                    if ($this->store->status == 0) {
-                        abort(404, 'المتجر موقف مؤقتا.');
-                    }
+                   
                 // استخراج مسار القالب
                 $this->template = $this->store->template->path_temp;
 
@@ -92,6 +91,32 @@ class StoreController extends Controller
             'languages' => $this->languages,
         ]);
     }
+    public function search(Request $request, $name)
+{
+    // التحقق من وجود الكلمة المفتاحية
+    $query = $request->input('name');
+
+    // التأكد أن المتجر تم تحميله من __construct
+    $store = $this->store;
+
+    // البحث في منتجات المتجر بحسب الاسم أو الوصف
+    $products = Product::whereHas('category', function($q) use ($store) {
+            $q->whereIn('id', $store->categories->pluck('id'));
+        })
+        ->where(function($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%")
+              ->orWhere('description', 'LIKE', "%{$query}%");
+        })
+        ->get();
+
+    return view("{$this->template}.search_results", [
+        'store' => $store,
+        'products' => $products,
+        'query' => $query,
+        'languages' => $this->languages,
+    ]);
+}
+
 
     /**
      * عرض صفحة الشروط والأحكام الخاصة بالمتجر.

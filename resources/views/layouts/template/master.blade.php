@@ -45,13 +45,29 @@
         </div>
     </div>
     <!--PreLoader Ends-->
+    @if (session('success'))
+    <div class="alert alert-success text-center text-white">
+        {{ session('success') }}
+    </div>
 
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-danger text-center text-white">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+     
+    </div>
+@endif
 
     <!-- header -->
     <div class="top-header-area" id="sticker" style="height: 100px;">
         <div class="container-fluid ">
             <div class="row">
-                <div class="col-lg-12 col-sm-12 text-center">
+                <div class="col-lg-12 col-sm-12  text-center">
                     <div class="main-menu-wrap">
                         <!-- logo -->
                         <div class="site-logo" style="    width: 250px !important;     max-width: 250px !important; ">
@@ -210,13 +226,20 @@
                     <div class="search-bar">
                         @if (isset($store))
                             <div class="search-bar-tablecell">
-                                <form action="{{--  --}}" method="post">
-                                    @csrf()
-                                    <input placeholder="{{ trans('string.search') }}" type="text" id="name"
-                                        name="name">
-                                    <button type="submit">{{ trans('string.search') }}<i
-                                            class="fas fa-search"></i></button>
-                                </form>
+                                <form action="{{ route('search',['name'=>$store->name]) }}" method="post">
+                                @csrf()
+                                <input name="name" id="diploma" list="diplomaList"
+                                    placeholder="{{ trans('string.search') }}">
+                                <datalist id="diplomaList">
+                                    @foreach ($store->categories as $category)
+                                    @foreach ($category->products as $item)
+                                        <option value="{{ $item->name }}"></option>
+                                    @endforeach
+                                    @endforeach
+                                </datalist>
+                                <button type="submit">{{ trans('string.search') }}<i
+                                        class="fas fa-search"></i></button>
+                            </form>
                             </div>
                         @else
                             <div class="search-bar-tablecell">
@@ -252,10 +275,10 @@
 
 
     <!-- testimonail-section -->
-    <div id="abut" class="testimonail-section mt-150 mb-150">
+    {{-- <div id="abut" class="testimonail-section mt-150 mb-150">
         <div class="container">
             <div class="row">
-                {{-- <div class="col-lg-10 offset-lg-1 text-center">
+                <div class="col-lg-10 offset-lg-1 text-center">
                     <div class="testimonial-sliders">
                         @foreach ($reviews as $item)
                             <div class="single-testimonial-slider">
@@ -273,10 +296,10 @@
                             </div>
                         @endforeach
                     </div>
-                </div> --}}
+                </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- end testimonail-section -->
 
 

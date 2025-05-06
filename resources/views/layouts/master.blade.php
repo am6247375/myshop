@@ -64,7 +64,7 @@
                 </ul>
                 <div class="d-flex align-items-center gap-3">
 
-                    <a href="#" class="btn btn-success">ابدأ تجربتك المجانية</a>
+                 
                     @guest
                         @if (Route::has('login'))
                             <a href="{{ route('login') }}" class="nav-link d-flex align-items-center">

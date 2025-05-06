@@ -1,5 +1,4 @@
 @extends('layouts.master_store_admin')
-
 @section('content_admin')
     <div class="container-fluid py-3">
         <div class="card shadow-lg border-0">
@@ -15,7 +14,6 @@
                                         <i class="fas fa-plus"></i> إضافة منتج
                                     </a>
                                 </div>
-
                                 <!-- جدول عرض المنتجات -->
                                 <div class="table-responsive text-center">
                                     <table id="myTable" class="table table-striped table-bordered text-center mt-2 mb-4">
@@ -36,7 +34,7 @@
                                                             <img src="{{ asset($item->image) }}" class="img-thumbnail rounded" style="height: 90px;" alt="{{ $item->name }}">
                                                         </td>
                                                         <td>{{ $item->name }}</td>
-                                                        <td>{{ $item->price }} $</td>
+                                                        <td>{{ $item->price }} {{ $store->currency->code }}</td>
                                                         <td>{{ $category->name }}</td>
                                                         <td>
                                                             <div class="d-flex gap-2 justify-content-center">
@@ -62,6 +60,4 @@
             </div>
         </div>
     </div>
-
-
 @endsection

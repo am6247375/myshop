@@ -17,44 +17,38 @@ class CartController extends Controller
      protected $store;
      protected $template;
      protected $languages;
+     protected $storeIsInactive = false; 
+
  
      /**
       * دالة البناء: تقوم بتحميل بيانات المتجر ومسار القالب واللغات.
       */
-     public function __construct(Request $request)
-     {
-         try {
-             // إذا وُجد اسم المتجر في الرابط (route)، نقوم بتحميل بياناته
-             if ($request->route('name')) {
-                 $this->store = Store::with(['template', 'categories', 'languages'])
-                     ->where('name', $request->route('name'))
-                     ->firstOrFail();
-                     if ($this->store->status == 0) {
-                         abort(404, 'المتجر موقف مؤقتا.');
-                     }
- 
-                 // استخراج مسار القالب
-                 $this->template = $this->store->template->path_temp;
- 
-                 // تخزين اللغات المتوفرة للمتجر
-                 $this->languages = $this->store->languages;
- 
-                 // تحديد اللغة الافتراضية للمتجر
-                 $defaultLang = $this->languages->first()->code ?? 'ar';
- 
-                 // إذا كان المتجر يحتوي على لغة واحدة، اجعلها لغة الجلسة
-                 if ($this->languages->count() < 2) {
-                     session(['locale' => $defaultLang]);
-                 }
- 
-                 // تعيين اللغة النشطة للتطبيق
-                 app()->setLocale(session('locale', $defaultLang));
-             }
-         } catch (\Exception $e) {
-             // في حال حدوث أي خطأ أثناء تحميل المتجر، نُظهر خطأ عام
-             abort(404, 'المتجر غير موجود أو حدث خطأ.');
-         }
-     }
+      public function __construct(Request $request)
+      {
+        $this->middleware('check.store.active');
+          try {
+              if ($request->route('name')) {
+                  $this->store = Store::with(['template', 'categories', 'languages'])
+                      ->where('name', $request->route('name'))
+                      ->firstOrFail();
+      
+                
+      
+                  $this->template = $this->store->template->path_temp;
+                  $this->languages = $this->store->languages;
+                  $defaultLang = $this->languages->first()->code ?? 'ar';
+      
+                  if ($this->languages->count() < 2) {
+                      session(['locale' => $defaultLang]);
+                  }
+      
+                  app()->setLocale(session('locale', $defaultLang));
+              }
+          } catch (\Exception $e) {
+              abort(404, 'المتجر غير موجود أو حدث خطأ.');
+          }
+      }
+      
     public function cart_view($name)
     {
         $store = Store::with('template')->where('name', $name)->firstOrFail();

@@ -1,51 +1,7 @@
 @extends('layouts.template.master')
 {{-- قسم الأنماط الخاصة بهذه الصفحة --}}
 @section('content')
-    <!-- منطقة الهيرو -->
-    {{-- <div class="hero-area herox-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 offset-lg-2 text-center">
-                    <div class="hero-text">
-                        <!-- يمكنك وضع رسالة ترحيبية أو عنوان رئيسي هنا -->
-                        <div class="hero-text-tablecell">
 
-                            <div class="hero-btns">
-
-
-                                <a href="{{route('product_all') }}"class="boxed-btn">
-                                    {{ trans('string.shop') }}
-                                </a>
-                                <a href="#contact" class="bordered-btn">
-                                    {{ trans('string.contact') }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="hero-area hero-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 offset-lg-2 text-center">
-                    <div class="hero-text">
-                        <div class="hero-text-tablecell">
-                            <p class="subtitle">Fresh & Organic</p>
-                            <h1>Delicious Seasonal Fruits</h1>
-                            <div class="hero-btns">
-                                <a href="shop.html" class="boxed-btn">Fruit Collection</a>
-                                <a href="contact.html" class="bordered-btn">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- قسم الفئات (المنتجات حسب القسم) -->
     <div class="product-section mt-150 mb-50">
         <div class="container">
             <div class="row">

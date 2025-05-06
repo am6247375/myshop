@@ -19,7 +19,7 @@
                 {{-- معلومات المتجر --}}
                 <h5 class="store-name mb-3 text-dark fw-semibold">اسم المتجر: {{ $store->name }}</h5>
                 <p class="text-muted mb-2">تاريخ الإنشاء: <strong>{{ $store->created_at->format('d-m-Y') }}</strong></p>
-
+ 
                 {{-- حالة الاشتراك --}}
                 @php
                     $remainingTime = $store->remainingTime();
@@ -33,7 +33,7 @@
                         @if ($days < 0 && $hours < 0)
                             <div class="alert alert-danger" id="alertt">
                                 <strong>تنبيه:</strong> 
-                                انتهت الفترة التجريبية للمتجر. يرجى الاشتراك.
+                                انتهى الاشتراك. يرجى التجديد.
                             </div>
                             @php
                                 $store->active = 0;

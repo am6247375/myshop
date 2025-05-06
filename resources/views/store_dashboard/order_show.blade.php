@@ -40,7 +40,7 @@
                     تغيير حالة الطلب
                 </h6>
     
-                <form action="{{ route('order.update') }}" method="POST" class="row g-3 align-items-end">
+                <form action="{{ route('order.update',['store_id'=>$store->id]) }}" method="POST" class="row g-3 align-items-end">
                     @csrf
                     <input  type="hidden" name="order_id" value="{{ $order->id }}">
     

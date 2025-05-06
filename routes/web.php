@@ -77,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
     | لوحة تحكم المتجر (Dashboard)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('/dashboard/{store_id}')->group(function () {
+    Route::prefix('/dashboard/{store_id}')->middleware('check.store.active')->group(function () {
         Route::get('/', [DashbaordStoreController::class, 'index'])
             ->name('dashboard.index');
         // إدارة المنتجات
@@ -125,15 +125,15 @@ Route::middleware(['auth'])->group(function () {
             });
 
         Route::prefix('/conditions')->controller(CreateStoreController::class)
-        ->middleware('store_manage:ادارة الصفحات القانونية')
-        ->group(function () {
-            Route::get('/create/', 'conditions_create_view')->name('conditions.create.view');
-            Route::post('/createed', 'conditions_create')->name('conditions.create');
-        });
+            ->middleware('store_manage:ادارة الصفحات القانونية')
+            ->group(function () {
+                Route::get('/create/', 'conditions_create_view')->name('conditions.create.view');
+                Route::post('/createed', 'conditions_create')->name('conditions.create');
+            });
 
         // إدارة الطلبات
         Route::prefix('/management/orders')->controller(ManageOrderController::class)
-         ->middleware('store_manage:ادارة الطلبات')
+            ->middleware('store_manage:ادارة الطلبات')
             ->group(function () {
                 Route::get('', 'orders_manage')->name('orders.manage');
                 Route::get('/show/{order_id}', 'order_show')->name('order.show');
@@ -148,24 +148,27 @@ Route::middleware(['auth'])->group(function () {
 | روابط المتجر العامة (Store Public Routes)
 |--------------------------------------------------------------------------
 */
-Route::prefix('/store')->controller(StoreController::class)->group(function () {
-    Route::get('/{name}', 'home_store')->name('home_store');
-    Route::get('/{name}/products/{category_id?}', 'products')->name('products');
-    Route::get('/{name}/conditions', 'conditions')->name('conditions');
-    Route::get('/{name}/single_product/{product_id}', 'single_product')->name('single.product');
-});
+Route::middleware('check.store.active')->group(function () {
+    Route::prefix('/store')->controller(StoreController::class)->group(function () {
+        Route::get('/{name}', 'home_store')->name('home_store');
+        Route::get('/{name}/products/{category_id?}', 'products')->name('products');
+        Route::get('/{name}/conditions', 'conditions')->name('conditions');
+        Route::get('/{name}/single_product/{product_id}', 'single_product')->name('single.product');
+        Route::post('/{name}/search', 'search')->name('search');  
+    });
 
-/*
-|--------------------------------------------------------------------------
-| روابط عربة التسوق والدفع (Cart & Checkout) - تتطلب تسجيل الدخول
-|--------------------------------------------------------------------------
-*/
-Route::controller(CartController::class)->middleware('auth')->group(function () {
-    Route::get('/store/{name}/cart', 'cart_view')->name('cart.view');
-    Route::post('/store/add-to-cart', 'addcart')->name('add.cart');
-    Route::post('/store/cart/update', 'update_cart')->name('update.cart');
-    Route::delete('/store/cart/delete', 'delete_cart')->name('delete.cart');
-    Route::get('/store/{name}/checkout', 'checkout_view')->name('checkout.view');
-    Route::post('/store/checkout', 'order_create')->name('checkout');
-    Route::get('/store/{name}/orders', 'show_orders')->name('show.orders');
+    /*
+    |--------------------------------------------------------------------------
+    | روابط عربة التسوق والدفع (Cart & Checkout) - تتطلب تسجيل الدخول
+    |--------------------------------------------------------------------------
+    */
+    Route::controller(CartController::class)->middleware('auth')->group(function () {
+        Route::get('/store/{name}/cart', 'cart_view')->name('cart.view');
+        Route::post('/store/add-to-cart', 'addcart')->name('add.cart');
+        Route::post('/store/cart/update', 'update_cart')->name('update.cart');
+        Route::delete('/store/cart/delete', 'delete_cart')->name('delete.cart');
+        Route::get('/store/{name}/checkout', 'checkout_view')->name('checkout.view');
+        Route::post('/store/checkout', 'order_create')->name('checkout');
+        Route::get('/store/{name}/orders', 'show_orders')->name('show.orders');
+    });
 });
