@@ -106,9 +106,7 @@ class StoreController extends Controller
         ->where(function($q) use ($query) {
             $q->where('name', 'LIKE', "%{$query}%")
               ->orWhere('description', 'LIKE', "%{$query}%");
-        }) 
-        
-        ->get();
+        })->get();
 
     return view("{$this->template}.search_results", [
         'store' => $store,

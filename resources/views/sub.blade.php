@@ -76,7 +76,7 @@
                                     <div class="modal-content rounded-4">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="paymentModalLabel">
-                                                {{ $subscription->name }}</h5>
+                                              تنبية!</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="إغلاق"></button>
                                         </div>
@@ -90,14 +90,6 @@
 
                                                 {{-- التحقق مما إذا لم يكن المستخدم مسجلاً دخوله --}}
                                                 @if (!Auth::check())
-                                                    @php
-                                                        session()->forget('subscribe');
-                                                        session()->forget('welcome');
-                                                        session()->forget('store_home');
-
-                                                        // حفظ رابط الاشتراك في الجلسة ليتم إعادة التوجيه له بعد تسجيل الدخول
-                                                        session(['subscribe' => 'subscribe.view']);
-                                                    @endphp
                                                     <div class="alert alert-warning text-center">
                                                         {{-- عرض رسالة تطلب من المستخدم تسجيل الدخول --}}
                                                         الرجاء <a href="{{ route('login') }}">تسجيل الدخول</a> لاختيار

@@ -15,28 +15,25 @@ class HomeController extends Controller
     public function index()
     {
         try {
-            // استرجاع المستخدم الحالي
             $user = Auth::user();
-    
-            // التحقق مما إذا كان للمستخدم متجر مرتبط
+
             if ($user->store || $user->stores->first()) {
                 return redirect()->route('stores');
             }
-    
-            // التحقق من وجود روابط مخزنة في الجلسة لإعادة التوجيه بعد تسجيل الدخول
             $storeHome = session('store_home');
             $subscribe = session('subscribe');
             $welcome = session('welcome');
-    // dd($storeHome, $subscribe);
+           
             if ($storeHome  ) {
                 session()->forget('store_home');
                 return redirect()->intended($storeHome);
             } elseif ($subscribe) {
                 session()->forget('subscribe');
+            //   dd(redirect()->intended($subscribe));  
                 return redirect()->intended($subscribe);
             }
             session()->forget('welcome');
-            // إعادة التوجيه إلى الصفحة الرئيسية إذا لم يوجد شيء في الجلسة
+             // إعادة التوجيه إلى الصفحة الرئيسية إذا لم يوجد شيء في الجلسة
             return redirect()->intended($welcome);
     
         } catch (\Exception $e) {
@@ -44,7 +41,7 @@ class HomeController extends Controller
             // \Log::error('Error in HomeController@index: ' . $e->getMessage());
     
             // إعادة التوجيه مع رسالة خطأ
-            return redirect()->route('home')->withErrors('حدث خطأ، يرجى المحاولة لاحقًا.');
+            return redirect()->intended('/') ->withErrors('حدث خطأ، يرجى المحاولة لاحقًا.');
         }
     }
     
