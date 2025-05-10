@@ -363,6 +363,22 @@
 
 }
 
+@media (max-width: 576px) {
+    #copy-link, .menuu {
+      
+        text-align: center;
+        padding: 10px;
+        word-wrap: break-word;
+    }
+
+    #copy-link span {
+       
+        word-wrap: break-word;
+        white-space: normal;
+    }
+}
+
+
 .policy-tabs .nav-link {
     border: none;
     border-radius: 15px;

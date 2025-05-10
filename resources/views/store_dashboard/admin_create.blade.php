@@ -10,7 +10,8 @@
             </div>
             <!-- جسم النموذج مع تخطيط متقدم -->
             <div class="card-body p-4">
-                <form action="{{ route('admin.create',['store_id'=>$store->id]) }}" method="POST" class="needs-validation" novalidate>
+                <form action="{{ route('admin.create', ['store_id' => $store->id]) }}" method="POST" id="registerForm" class="needs-validation"
+                    novalidate>
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <!-- شبكة متجاوبة بعرض عمودين لكل حقلين -->
@@ -33,7 +34,7 @@
                         <!-- الاسم الأخير -->
                         <div class="floating-input-group">
                             <input type="text" name="last_name"
-                                class="form-control modern-input @error('last_name') is-invalid @enderror" placeholder=" "
+                                class="form-control modern-input @error('last_name')  is-invalid @enderror" placeholder=" "
                                 value="{{ old('last_name') }}" required>
                             <label class="floating-label">
                                 <i class="fas fa-user-tag me-2"></i>الاسم الأخير
@@ -76,13 +77,51 @@
                         <!-- رقم الجوال -->
                         <div class="floating-input-group with-flag">
                             <div class="input-group">
-                                <input type="tel" name="phone"
+                                <input type="tel" name="phone" id="phone"
                                     class="form-control modern-input @error('phone') is-invalid @enderror" placeholder=" "
-                                    value="{{ old('phone') }}" pattern="[5-7]{1}[0-9]{7}" required>
+                                    value="{{ old('phone') }}"  required
+                                    style="direction: ltr !important;
+    text-align: end;" required>
                             </div>
                             <label class="floating-label">
                                 <i class="fas fa-mobile-alt me-2"></i>رقم الجوال
                             </label>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const phoneInput = document.getElementById("phone");
+                                    const form = document.getElementById("registerForm");
+
+                                    // قناع الإدخال أثناء الكتابة
+                                    phoneInput.addEventListener("input", function(e) {
+                                        let value = e.target.value.replace(/\D/g, ""); // إزالة الأحرف غير الرقمية
+                                        value = value.slice(0, 9); // تحديد الطول بـ 9 أرقام فقط
+
+                                        // تنسيق: 3 أرقام + مسافة + 3 أرقام + مسافة + 3 أرقام
+                                        let formatted = '';
+                                        if (value.length <= 3) {
+                                            formatted = value;
+                                        } else if (value.length <= 6) {
+                                            formatted = value.slice(0, 3) + ' ' + value.slice(3);
+                                        } else {
+                                            formatted = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+                                        }
+
+                                        e.target.value = formatted;
+                                    });
+
+                                    // التحقق عند إرسال النموذج
+                                    form.addEventListener("submit", function(e) {
+                                        const rawValue = phoneInput.value.replace(/\s/g, ""); // إزالة المسافات للتحقق
+                                        const validPrefixes = ["70", "71", "73", "77", "78"];
+
+                                        if (rawValue.length !== 9 || !validPrefixes.includes(rawValue.substring(0, 2))) {
+                                            e.preventDefault(); // منع الإرسال
+                                            alert("رقم الهاتف يجب أن يتكون من 9 أرقام ويبدأ بـ 70 أو 71 أو 73 أو 77 أو 78");
+                                            phoneInput.focus();
+                                        }
+                                    });
+                                });
+                            </script>
                             @error('phone')
                                 <div class="invalid-tooltip d-block text-danger mt-1">
                                     {{ $message }}
@@ -112,15 +151,16 @@
                         <h5 class="section-title mb-4">
                             <i class="fas fa-shield-alt me-2"></i>الصلاحيات الممنوحة
                             @error('permissions')
-                            <div class="invalid-tooltip d-block text-danger mt-2">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                                <div class="invalid-tooltip d-block text-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </h5>
-                    
+
                         <div class="permissions-grid">
                             @foreach ($permissions as $permission)
-                                <div class="permission-card {{ $errors->has('permissions') ? 'border border-danger rounded' : '' }}">
+                                <div
+                                    class="permission-card {{ $errors->has('permissions') ? 'border border-danger rounded' : '' }}">
                                     <input type="checkbox" name="permissions[]" id="perm-{{ $permission->id }}"
                                         value="{{ $permission->id }}" class="permission-checkbox"
                                         {{ in_array($permission->id, old('permissions', [])) ? 'checked' : '' }}>
@@ -134,10 +174,10 @@
                                 </div>
                             @endforeach
                         </div>
-                    
-                      
+
+
                     </div>
-                   
+
 
                     <!-- زر الحفظ مع تأثيرات متقدمة -->
                     <div class="form-footer mt-5">

@@ -22,8 +22,8 @@ class RegisterController extends Controller
         return Validator::make(
             $data,
             [
-               'first_name' => ['required', 'string', 'alpha', 'max:255'],
-               'last_name' => ['required', 'string', 'alpha', 'max:255'],
+                'first_name' => ['required', 'string', 'alpha', 'max:255'],
+                'last_name' => ['required', 'string', 'alpha', 'max:255'],
                 'phone'      => ['required', '', 'max:255'],
                 'sex'        => ['required'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/@.+\.[a-zA-Z]{1,}$/i'],
@@ -57,7 +57,7 @@ class RegisterController extends Controller
             'email.email'         => 'يرجى إدخال بريد إلكتروني صحيح.',
             'email.max'           => 'يجب ألا يتجاوز البريد الإلكتروني 255 حرفاً.',
             'email.unique'        => 'البريد الإلكتروني مستخدم بالفعل.',
-'email.regex' => 'يجب أن يحتوي البريد الإلكتروني على نقطة (.) بعد @ ويتبعها حرف واحد على الأقل.',
+            'email.regex' => 'يجب أن يحتوي البريد الإلكتروني على نقطة (.) بعد @ ويتبعها حرف واحد على الأقل.',
             'password.required'   => 'يرجى إدخال كلمة المرور.',
             'password.string'     => 'كلمة المرور يجب أن تكون نصاً.',
         ];

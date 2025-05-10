@@ -26,13 +26,13 @@ class RequestAdminEdit extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            // 'email' => 'required|email|unique:users,email,' . $this->route('user'),
-            'phone' => 'required|string|max:9|regex:/^\+?[0-9\s\-]+$/',
-            'sex' => 'required|in:male,female',
+            'email' => ['required', 'string', 'email', 'max:255', 'regex:/@.+\.[a-zA-Z]{1,}$/i'],
+            'phone' => 'required|string|max:20|regex:/^\+?[0-9\s\-]+$/',
+             'sex' => 'required|in:male,female',
            
             'permissions' => 'required|array|min:1',
             'permissions.*' => 'exists:permissions,id',
-            'nullable|min:6',
+            'nullable|min:6', 
         ];
     }
     
@@ -47,14 +47,16 @@ class RequestAdminEdit extends FormRequest
             'last_name.string' => 'يجب أن يكون الاسم الأخير نصًا.',
             'last_name.max' => 'يجب ألا يتجاوز الاسم الأخير 255 حرفًا.',
     
-            'email.required' => 'يرجى إدخال البريد الإلكتروني.',
-            'email.email' => 'يرجى إدخال بريد إلكتروني صالح.',
-            'email.unique' => 'هذا البريد الإلكتروني مستخدم بالفعل.',
-    
             'phone.required' => 'يرجى إدخال رقم الهاتف.',
             'phone.string' => 'يجب أن يكون رقم الهاتف نصيًا.',
-            'phone.max' => 'يجب ألا يتجاوز رقم الهاتف 15 رقمًا.',
-            'phone.regex' => 'يرجى إدخال رقم هاتف صالح.',
+            'phone.max' => 'يجب ألا يتجاوز رقم الهاتف 9  رقمًا.',
+            'phone.regex' => 'يرجى إدخال رقم هاتف صالح باستخدام الأرقام فقط.',
+    
+            'sex.required' => 'يرجى تحديد الجنس.',
+            'sex.in' => 'يجب أن يكون الجنس إما male أو female.',
+    
+            'email.regex' => 'يجب أن يحتوي البريد الإلكتروني على نقطة (.) بعد @ ويتبعها حرف واحد على الأقل.',
+            'email.required' => 'يرجى إدخال البريد الإلكتروني.',
     
             'sex.required' => 'يرجى تحديد الجنس.',
             'sex.in' => 'يجب أن يكون الجنس إما male أو female.',

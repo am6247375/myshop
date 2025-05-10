@@ -110,43 +110,43 @@
                                         </label>
 
                                         <!-- JavaScript -->
-                                        <script>
-                                            document.addEventListener("DOMContentLoaded", function () {
-                                                const phoneInput = document.getElementById("phone");
-                                                const form = document.getElementById("registerForm");
-                                            
-                                                // قناع الإدخال أثناء الكتابة
-                                                phoneInput.addEventListener("input", function (e) {
-                                                    let value = e.target.value.replace(/\D/g, ""); // إزالة الأحرف غير الرقمية
-                                                    value = value.slice(0, 9); // تحديد الطول بـ 9 أرقام فقط
-                                            
-                                                    // تنسيق: 3 أرقام + مسافة + 3 أرقام + مسافة + 3 أرقام
-                                                    let formatted = '';
-                                                    if (value.length <= 3) {
-                                                        formatted = value;
-                                                    } else if (value.length <= 6) {
-                                                        formatted = value.slice(0, 3) + ' ' + value.slice(3);
-                                                    } else {
-                                                        formatted = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
-                                                    }
-                                            
-                                                    e.target.value = formatted;
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function() {
+                                                    const phoneInput = document.getElementById("phone");
+                                                    const form = document.getElementById("registerForm");
+
+                                                    // قناع الإدخال أثناء الكتابة
+                                                    phoneInput.addEventListener("input", function(e) {
+                                                        let value = e.target.value.replace(/\D/g, ""); // إزالة الأحرف غير الرقمية
+                                                        value = value.slice(0, 9); // تحديد الطول بـ 9 أرقام فقط
+
+                                                        // تنسيق: 3 أرقام + مسافة + 3 أرقام + مسافة + 3 أرقام
+                                                        let formatted = '';
+                                                        if (value.length <= 3) {
+                                                            formatted = value;
+                                                        } else if (value.length <= 6) {
+                                                            formatted = value.slice(0, 3) + ' ' + value.slice(3);
+                                                        } else {
+                                                            formatted = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+                                                        }
+
+                                                        e.target.value = formatted;
+                                                    });
+
+                                                    // التحقق عند إرسال النموذج
+                                                    form.addEventListener("submit", function(e) {
+                                                        const rawValue = phoneInput.value.replace(/\s/g, ""); // إزالة المسافات للتحقق
+                                                        const validPrefixes = ["70", "71", "73", "77", "78"];
+
+                                                        if (rawValue.length !== 9 || !validPrefixes.includes(rawValue.substring(0, 2))) {
+                                                            e.preventDefault(); // منع الإرسال
+                                                            alert("رقم الهاتف يجب أن يتكون من 9 أرقام ويبدأ بـ 70 أو 71 أو 73 أو 77 أو 78");
+                                                            phoneInput.focus();
+                                                        }
+                                                    });
                                                 });
-                                            
-                                                // التحقق عند إرسال النموذج
-                                                form.addEventListener("submit", function (e) {
-                                                    const rawValue = phoneInput.value.replace(/\s/g, ""); // إزالة المسافات للتحقق
-                                                    const validPrefixes = ["70", "71", "73", "77", "78"];
-                                            
-                                                    if (rawValue.length !== 9 || !validPrefixes.includes(rawValue.substring(0, 2))) {
-                                                        e.preventDefault(); // منع الإرسال
-                                                        alert("رقم الهاتف يجب أن يتكون من 9 أرقام ويبدأ بـ 70 أو 71 أو 73 أو 77 أو 78");
-                                                        phoneInput.focus();
-                                                    }
-                                                });
-                                            });
                                             </script>
-                                            
+
                                         @error('phone')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}

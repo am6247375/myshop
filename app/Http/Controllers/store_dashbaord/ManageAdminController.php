@@ -40,7 +40,7 @@ class ManageAdminController extends Controller
             return view('store_dashboard.admin_create', compact('store', 'users', 'permissions'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء جلب البيانات: ' . $e->getMessage());
-        }
+        } 
     }
 
     public function admin_create(RequestAdminCreate $request)
