@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,4 +69,10 @@ class Kernel extends HttpKernel
         'check.store.active' => \App\Http\Middleware\CheckStoreIsActive::class,
 
     ];
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('send:weekly-store-report')->weeklyOn(6, '10:00'); // كل سبت الساعة 10 صباحًا
+    }
+    
+
 }

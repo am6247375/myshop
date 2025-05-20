@@ -10,74 +10,55 @@ class CheckStoreIsActive
 {
     public function handle(Request $request, Closure $next)
     {
-        // جلب اسم المتجر ومعرفه من الرابط
-        $storeName = $request->route('name');
-        $storeId = $request->route('store_id');
+        // جلب المعرف أو الاسم من الرابط
+        $storeIdentifier = $request->route('store_id') ?? $request->route('name');
     
-        // الدالة التي ستُستخدم للتحقق من حالة المتجر
-        $checkStoreActive = function($store) {
-            // حساب الوقت المتبقي للمتجر
-            $remainingTime = $store->remainingTime();
-            $days = $remainingTime['days'];
-            $hours = $remainingTime['hours'];
-    
-            // إذا انتهت الفترة الزمنية للمتجر، يتم تعطيله
-            if ($days < 0 && $hours < 0) {
-                $store->active = 0;
-            }
-    
-            // إذا كان المتجر غير مفعل، يرجع رسالة خطأ
-            if (!$store->active) {
-                return response()->view('error.general', [
-                    'statusCode' => 403,
-                    'errorMessage' => 'هذا المتجر موقف مؤقتاً.'
-                ]);
-            }
-    
-            return null; // لا يوجد خطأ
-        };
-    
-        // إذا كان اسم المتجر موجودًا في الرابط
-        if ($storeName) {
-            $store = Store::where('name', $storeName)->first();
-            if (!$store) {
-                return response()->view('error.general', [
-                    'statusCode' => 404,
-                    'errorMessage' => 'المتجر غير موجود.'
-                ]);
-            }
-    
-            // التحقق من حالة المتجر
-            $response = $checkStoreActive($store);
-            if ($response) {
-                return $response;
-            }
-    
-            // إضافة المتجر إلى الطلب
-            $request->attributes->add(['store' => $store]);
-        } 
-        // إذا كان معرف المتجر موجودًا في الرابط
-        elseif ($storeId) {
-            $store = Store::find($storeId);
-            if (!$store) {
-                return response()->view('error.general', [
-                    'statusCode' => 404,
-                    'errorMessage' => 'المتجر غير موجود.'
-                ]);
-            }
-    
-            // التحقق من حالة المتجر
-            $response = $checkStoreActive($store);
-            if ($response) {
-                return $response;
-            }
-    
-            // إضافة المتجر إلى الطلب
-            $request->attributes->add(['store' => $store]);
+        if (!$storeIdentifier) {
+            return $next($request); // لا يوجد معرف أو اسم متجر في الرابط
         }
     
-        // إذا كان كل شيء على ما يرام، تابع تنفيذ الطلب
+        // جلب المتجر إما بالاسم أو المعرف
+        $store = is_numeric($storeIdentifier)
+            ? Store::find($storeIdentifier)
+            : Store::where('name', $storeIdentifier)->first();
+    
+        // إذا لم يتم العثور على المتجر
+        if (!$store) {
+            return response()->view('error.general', [
+                'statusCode' => 404,
+                'errorMessage' => 'المتجر غير موجود.'
+            ]);
+        }
+    
+        // التحقق من حالة المتجر
+        if ($this->checkStoreStatus($store)) {
+            return response()->view('error.general', [
+                'statusCode' => 403,
+                'errorMessage' => 'هذا المتجر موقف مؤقتاً.'
+            ]);
+        }
+    
+        // تمرير المتجر للطلب
+        $request->attributes->add(['store' => $store]);
+    
         return $next($request);
     }
+    
+    /**
+     * التحقق من حالة المتجر وتحديثه إذا لزم الأمر
+     */
+    protected function checkStoreStatus(Store $store): bool
+    {
+        $remaining = $store->remainingTime();
+        $days = $remaining['days'];
+        $hours = $remaining['hours'];
+    
+        // تحديث حالة التفعيل حسب الوقت المتبقي
+        $store->active = ($days > 0 || $hours > 0) ? 1 : 0;
+        $store->save();
+    
+        return !$store->active;
+    }
+    
     
 }    

@@ -182,6 +182,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+
 
         /*
          * Package Service Providers...
@@ -210,9 +213,14 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
-
+    'aliases' => [
+        // Other aliases...
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+    ],
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+
+
     ])->toArray(),
 
 ];

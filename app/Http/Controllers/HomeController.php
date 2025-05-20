@@ -17,13 +17,13 @@ class HomeController extends Controller
         try {
             $user = Auth::user();
 
-            if ($user->store || $user->stores->first()) {
-                return redirect()->route('stores');
-            }
+           
             $storeHome = session('store_home');
             $subscribe = session('subscribe');
             $welcome = session('welcome');
-           
+            if (($user->store || $user->stores->first())&&$subscribe==null) {
+                return redirect()->route('stores');
+            }
             if ($storeHome  ) {
                 session()->forget('store_home');
                 return redirect()->intended($storeHome);

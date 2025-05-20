@@ -1,11 +1,10 @@
 @extends('layouts.template.master')
 
 @section('content')
-
     <!-- csheck out section -->
     <div class="checkout-section mt-150 mb-150">
         <div class="container">
-            <div class="row" style="text-align:{{trans('string.text-align')}}" dir="{{trans('string.dir')}}">
+            <div class="row" style="text-align:{{ trans('string.text-align') }}" dir="{{ trans('string.dir') }}">
                 <div class="col-lg-8">
                     <div class="checkout-accordion-wrap">
                         <div class="accordion" id="accordionExample">
@@ -14,7 +13,7 @@
                                     <h5 class="mb-0" style="    width: 100%;">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
                                             data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        {{ trans('string.shipping-data') }} 
+                                            {{ trans('string.shipping-data') }}
                                         </button>
                                     </h5>
                                 </div>
@@ -23,12 +22,15 @@
                                     data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="billing-address-form">
-                                            <form id="addorder"  action="{{ route('checkout') }}" method="POST">
+                                            <form id="addorder" action="{{ route('checkout') }}" method="POST">
                                                 @csrf
-                                                <input type="text" hidden name="store_id"  value="{{ $store->id }}">
-                                                 <p>
-                                                    <label style="font-size: 20px"  for="">{{ trans('string.name') }}</label>
-                                                    <input name="recipient_name" type="text" value="{{ old('recipient_name') }}" placeholder="{{ trans('string.name') }}">
+                                                <input type="text" hidden name="store_id" value="{{ $store->id }}">
+                                                <p>
+                                                    <label style="font-size: 20px"
+                                                        for="">{{ trans('string.name') }}</label>
+                                                    <input name="recipient_name" type="text"
+                                                        value="{{ old('recipient_name') }}"
+                                                        placeholder="{{ trans('string.name') }}">
                                                     <span class="text-danger">
                                                         @error('recipient_name')
                                                             {{ $message }}
@@ -36,8 +38,11 @@
                                                     </span>
                                                 </p>
                                                 <p>
-                                                    <label style="font-size: 20px" for="">{{ trans('string.address') }}</label>
-                                                    <input name="recipient_address" type="text" value="{{ old('recipient_address') }}" placeholder="{{ trans('string.address') }}">
+                                                    <label style="font-size: 20px"
+                                                        for="">{{ trans('string.address') }}</label>
+                                                    <input name="recipient_address" type="text"
+                                                        value="{{ old('recipient_address') }}"
+                                                        placeholder="{{ trans('string.address') }}">
                                                     <span class="text-danger">
                                                         @error('recipient_address')
                                                             {{ $message }}
@@ -46,18 +51,49 @@
                                                 </p>
 
                                                 <p>
-                                                    <label style="font-size: 20px" for=""> {{ trans('string.phone') }}</label>
-                                                    <input name="recipient_phone"
-                                                    type="text"
-                                                    value="{{ old('recipient_phone') }}"
-                                                    style="text-align:{{ trans('string.text-align') }}"
-                                                    placeholder="{{ trans('string.phone') }}"
-                                                    maxlength="9"
-                                                    pattern="\d{9}"
-                                                    inputmode="numeric"
-                                                    oninput="this.value = this.value.replace(/\D/g, '')"
-                                                    title="يرجى إدخال 9 أرقام فقط">
-                                             
+                                                    <label style="font-size: 20px" for="">
+                                                        {{ trans('string.phone') }}</label>
+                                                    <input name="recipient_phone" type="text" id="phone"
+                                                        value="{{ old('recipient_phone') }}"
+                                                        style="text-align:{{ trans('string.text-align') }}"
+                                                        placeholder="{{ trans('string.phone') }}">
+                                                    <script>
+                                                        document.addEventListener("DOMContentLoaded", function() {
+                                                            const phoneInput = document.getElementById("phone");
+                                                            const form = document.getElementById("addorder");
+
+                                                            // قناع الإدخال أثناء الكتابة
+                                                            phoneInput.addEventListener("input", function(e) {
+                                                                let value = e.target.value.replace(/\D/g, ""); // إزالة الأحرف غير الرقمية
+                                                                value = value.slice(0, 9); // تحديد الطول بـ 9 أرقام فقط
+
+                                                                // تنسيق: 3 أرقام + مسافة + 3 أرقام + مسافة + 3 أرقام
+                                                                let formatted = '';
+                                                                if (value.length <= 3) {
+                                                                    formatted = value;
+                                                                } else if (value.length <= 6) {
+                                                                    formatted = value.slice(0, 3) + ' ' + value.slice(3);
+                                                                } else {
+                                                                    formatted = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+                                                                }
+
+                                                                e.target.value = formatted;
+                                                            });
+
+                                                            // التحقق عند إرسال النموذج
+                                                            form.addEventListener("submit", function(e) {
+                                                                const rawValue = phoneInput.value.replace(/\s/g, ""); // إزالة المسافات للتحقق
+                                                                const validPrefixes = ["70", "71", "73", "77", "78"];
+
+                                                                if (rawValue.length !== 9 || !validPrefixes.includes(rawValue.substring(0, 2))) {
+                                                                    e.preventDefault(); // منع الإرسال
+                                                                    alert("رقم الهاتف يجب أن يتكون من 9 أرقام ويبدأ بـ 70 أو 71 أو 73 أو 77 أو 78");
+                                                                    phoneInput.focus();
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>
+
                                                     <span class="text-danger">
                                                         @error('recipient_phone')
                                                             {{ $message }}
@@ -65,7 +101,8 @@
                                                     </span>
                                                 </p>
                                                 <p>
-                                                    <label style="font-size: 20px" for="">{{ trans('string.note') }} </label>
+                                                    <label style="font-size: 20px"
+                                                        for="">{{ trans('string.note') }} </label>
                                                     <textarea name="note" id="bill" cols="30" rows="10" placeholder="{{ trans('string.note') }}"> {{ old('note') }}</textarea>
                                                     <span class="text-danger">
                                                         @error('note')
@@ -83,7 +120,7 @@
                                     <h5 class="mb-0" style="    width: 100%;">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                                             data-target="#collapseThree" aria-expanded="false"
-                                            aria-controls="collapseThree">   {{ trans('string.order-detals') }}
+                                            aria-controls="collapseThree"> {{ trans('string.order-detals') }}
                                         </button>
                                     </h5>
                                 </div>
@@ -96,17 +133,22 @@
                                                     <thead class="cart-table-head">
                                                         <tr class="table-head-row">
 
-                                                            <th class="product-image">{{ trans('string.product-image') }}</th>
-                                                            <th class="product-name">{{ trans('string.product-name') }}</th>
-                                                            <th class="product-price">{{ trans('string.product-price') }}</th>
-                                                            <th class="product-quantity">{{ trans('string.product-quantity') }}</th>
-                                                            <th class="product-total">{{ trans('string.product-total') }}</th>
+                                                            <th class="product-image">{{ trans('string.product-image') }}
+                                                            </th>
+                                                            <th class="product-name">{{ trans('string.product-name') }}
+                                                            </th>
+                                                            <th class="product-price">{{ trans('string.product-price') }}
+                                                            </th>
+                                                            <th class="product-quantity">
+                                                                {{ trans('string.product-quantity') }}</th>
+                                                            <th class="product-total">{{ trans('string.product-total') }}
+                                                            </th>
 
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @php
-                                                                $subtotal = 0;
+                                                            $subtotal = 0;
                                                         @endphp
                                                         @foreach ($cart as $item)
                                                             @php
@@ -114,14 +156,17 @@
                                                             @endphp
                                                             <tr class="table-body-row">
                                                                 <td class="product-image">
-                                                                    <img id="cartProductImage-{{ $item->id }}" src="{{ asset($item->product->image) }}"
+                                                                    <img id="cartProductImage-{{ $item->id }}"
+                                                                        src="{{ asset($item->product->image) }}"
                                                                         alt="">
                                                                 </td>
                                                                 <td class="product-name">{{ $item->product->name }}</td>
-                                                                <td class="product-price">{{ $store->currency->code }}    {{ $item->product->price }}</td>
+                                                                <td class="product-price">{{ $store->currency->code }}
+                                                                    {{ $item->product->price }}</td>
                                                                 <td class="product-quantity">{{ $item->quantity }} </td>
                                                                 <td class="product-total">
-                                                                    {{ $store->currency->code }}    {{ $item->quantity * $item->product->price }}</td>
+                                                                    {{ $store->currency->code }}
+                                                                    {{ $item->quantity * $item->product->price }}</td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

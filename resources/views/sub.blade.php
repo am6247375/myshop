@@ -69,14 +69,13 @@
                                 اشترك الآن
                             </button>
 
-                            <!-- Modal الدفع -->
                             <div class="modal fade mt-5" id="paymentModal-{{ $subscription->id }}" tabindex="-1"
                                 aria-labelledby="paymentModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content rounded-4">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="paymentModalLabel">
-                                              تنبية!</h5>
+                                                تنبيه!</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="إغلاق"></button>
                                         </div>
@@ -88,25 +87,17 @@
                                                     $user = Auth::user();
                                                 @endphp
 
-                                                {{-- التحقق مما إذا لم يكن المستخدم مسجلاً دخوله --}}
                                                 @if (!Auth::check())
                                                     <div class="alert alert-warning text-center">
-                                                        {{-- عرض رسالة تطلب من المستخدم تسجيل الدخول --}}
                                                         الرجاء <a href="{{ route('login') }}">تسجيل الدخول</a> لاختيار
                                                         المتجر وإتمام الاشتراك.
-
-                                                        {{-- زر تسجيل الدخول --}}
                                                         <a href="{{ route('login') }}"
                                                             class="btn btn-primary mt-5 mb-5">تسجيل الدخول</a>
-
                                                         @php
-                                                            // حفظ رابط الاشتراك في الجلسة ليتم إعادة التوجيه له بعد تسجيل الدخول
                                                             session(['subscribe' => route('subscribe.view')]);
                                                         @endphp
                                                     </div>
                                                 @else
-                                                    {{-- في حالة كان المستخدم مسجلاً دخوله، ينفذ باقي الكود --}}
-
                                                     @php
                                                         $allStores = collect([$user->store])
                                                             ->filter()
@@ -119,8 +110,7 @@
                                                             لا يوجد لديك متاجر حالياً. <a>قم بإنشاء متجر الآن</a> لإكمال
                                                             الاشتراك.
                                                             <a href="{{ route('templates') }}"
-                                                                class="btn btn-primary mt-5 mb-5">انشاء متجر</a>
-
+                                                                class="btn btn-primary mt-5 mb-5">إنشاء متجر</a>
                                                         </div>
                                                     @else
                                                         <div class="mb-3">
@@ -132,10 +122,34 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <input type="hidden" name="subscrip_id"
-                                                            value="{{ $subscription->id }}">
+
+                                                        <input type="hidden" name="subscrip_id" value="{{ $subscription->id }}">
+
+                                                     <h5 class="mt-4 mb-3 fw-bold text-center">بيانات الدفع</h5>
+
+<div class="mb-3">
+    <label class="form-label">اسم حامل البطاقة</label>
+    <input type="text" name="card_name" class="form-control" placeholder="مثال: محمد أحمد" required oninput="this.value=this.value.replace(/[^أ-يa-zA-Z\s]/g,'')">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">رقم البطاقة</label>
+    <input type="text" name="card_number" class="form-control" placeholder="**** **** **** ****" required maxlength="19" oninput="formatCardNumber(this)">
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label class="form-label">تاريخ الانتهاء</label>
+        <input type="text" name="expiry_date" class="form-control" placeholder="MM/YY" required maxlength="5" oninput="formatExpiry(this)">
+    </div>
+    <div class="col-md-6 mb-3">
+        <label class="form-label">CVV</label>
+        <input type="text" name="cvv" class="form-control" placeholder="***" required maxlength="4" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    </div>
+</div>
+
                                                         <button type="submit" class="btn btn-success w-100">
-                                                            تأكيد الاشتراك
+                                                            تأكيد الاشتراك والدفع
                                                         </button>
                                                     @endif
                                                 @endif
@@ -151,6 +165,24 @@
         </div>
     </div>
 
+
+<script>
+    function formatCardNumber(input) {
+        // إزالة أي حرف غير رقم
+        let value = input.value.replace(/\D/g, '');
+        // تقسيم كل 4 أرقام بمسافة
+        value = value.match(/.{1,4}/g)?.join(' ') || '';
+        input.value = value;
+    }
+
+    function formatExpiry(input) {
+        let value = input.value.replace(/\D/g, '');
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        input.value = value;
+    }
+</script>
     <style>
         .card:hover {
             transform: translateY(-5px);

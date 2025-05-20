@@ -30,7 +30,7 @@
 
                 <div class="mt-3">
                     @if ($type === 'free_trial')
-                        @if ($days < 0 && $hours < 0)
+                        @if ($days <= 0 && $hours <= 0)
                             <div class="alert alert-danger" id="alertt">
                                 <strong>تنبيه:</strong> 
                                 انتهى الاشتراك. يرجى التجديد.
@@ -43,7 +43,7 @@
                                 <i class="fas fa-sync-alt me-2"></i> تجديد الاشتراك
                             </a>
                         @elseif ($days <= 3)
-                            <div class="alert alert-danger" id="alertt>
+                            <div class="alert alert-danger" id="alertt">
                                 <strong>تنبيه:</strong> تنتهي فترة التجربة خلال {{ $days }} يوم و{{ $hours }} ساعة.
                             </div>
                             <a href="{{ route('subscribe.view', ['store_id' => $store->id, 'store_name' => $store->name]) }}" class="btn btn-renew w-100">

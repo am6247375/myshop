@@ -10,8 +10,15 @@ use App\Http\Controllers\store_dashbaord\ManageCategoriesController;
 use App\Http\Controllers\store_dashbaord\ManageOrderController;
 use App\Http\Controllers\store_dashbaord\ManageProductsController;
 use App\Http\Controllers\store_dashbaord\ManagesubscripController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+
+use Twilio\Rest\Client;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Store;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     session()->forget('subscribe');
@@ -154,7 +161,7 @@ Route::middleware('check.store.active')->group(function () {
         Route::get('/{name}/products/{category_id?}', 'products')->name('products');
         Route::get('/{name}/conditions', 'conditions')->name('conditions');
         Route::get('/{name}/single_product/{product_id}', 'single_product')->name('single.product');
-        Route::post('/{name}/search', 'search')->name('search');  
+        Route::post('/{name}/search', 'search')->name('search');
     });
 
     /*
@@ -171,4 +178,86 @@ Route::middleware('check.store.active')->group(function () {
         Route::post('/store/checkout', 'order_create')->name('checkout');
         Route::get('/store/{name}/orders', 'show_orders')->name('show.orders');
     });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+route::get('/report', function () {
+    $stores = Store::with('owner')->get();
+    return view('reports.stores_weekly', ['stores' => $stores]);
+})->name('send.weekly.report');
+
+
+// ارسال التقرير الأسبوعي عبر واتساب
+Route::get('/send-weekly-report', function () {
+    // الحصول على المتاجر
+ 
+        $stores = Store::with('owner')->get();
+
+        // توليد التقرير على شكل PDF
+        $pdf = Barryvdh\DomPDF\Facade\Pdf::loadView('reports.stores_weekly', ['stores' => $stores]);
+        // مسار حفظ الملف
+        $pdfPath = storage_path('app/public/store_report.pdf');
+
+        // حفظ التقرير
+        file_put_contents($pdfPath, $pdf->output());
+
+        // إعدادات Twilio
+        $sid = env('TWILIO_SID');
+        $token = env('TWILIO_AUTH_TOKEN');
+        $from = env('TWILIO_WHATSAPP_FROM');
+        $to = env('MANAGER_PHONE');
+
+        // إنشاء عميل Twilio
+        $client = new Client($sid, $token);
+
+        // رابط الملف
+        $publicUrl = "http://127.0.0.1:8000/report";
+
+        // إرسال التقرير عبر واتساب
+        try {
+            $client->messages->create($to, [
+                'from' => $from,
+                'body' => "تم توليد تقرير المتاجر الأسبوعي. يمكنك عرضة من الرابط التالي:\n\n   " .
+                    $publicUrl . "\n\n  اضغط على الرابط لعر التقرير التقرير.",
+            ]);
+
+            return "تم إرسال التقرير بنجاح";
+        } catch (\Exception $e) {
+            return "حدث خطأ: " . $e->getMessage();
+        }
+    
+});
+
+
+Route::get('/send-test-message', function () {
+    $sid = env('TWILIO_SID');  // SID من ملف .env
+    $token = env('TWILIO_AUTH_TOKEN');  // Auth Token من ملف .env
+    $from = env('TWILIO_WHATSAPP_FROM');  // رقم واتساب Twilio
+    $to = 'whatsapp:+967714592487';  // الرقم المرسل إليه
+
+    $client = new Client($sid, $token);
+
+    try {
+        $client->messages->create($to, [
+            'from' => $from,
+            'body' => "اختبار إرسال من لارافيل إلى واتساب عبر Twilio"
+        ]);
+
+
+        return "Message sent successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
 });
